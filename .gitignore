@@ -1,0 +1,22 @@
+.DS_Store
+frontend/node_modules
+/dist
+
+# Editor directories and files
+.idea
+.vscode
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Django files
+db.sqlite3
+
+#node.js files
+/frontend/node_modules
+
+# custom
+blog/production_settings.py
+*/migrations/*
+/media/*
+/static/
