@@ -1,18 +1,37 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+    <div class="home-wrap">
+        <div class="home">
+            <el-row class="btn-row" :gutter="20">
+                <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1" :offset="8">
+                    <el-button type="primary" icon="el-icon-download">我要收文件</el-button>
+                </el-col>
+                <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
+                    <el-button type="primary" icon="el-icon-upload2">我要交文件</el-button>
+                </el-col>
+            </el-row>
+        </div>
+    </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
-export default {
-  name: 'home',
-  components: {
-    HelloWorld
-  }
-}
+    export default {
+        name: 'home',
+        components: {}
+    }
 </script>
+
+<style lang="stylus">
+    .home-wrap {
+        height 100%
+        margin-left 150px
+
+        .home {
+
+
+            .btn-row {
+                padding-top 430px
+            }
+        }
+    }
+</style>

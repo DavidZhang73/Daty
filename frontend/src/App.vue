@@ -3,11 +3,6 @@
         <Header></Header>
         <Aside></Aside>
 
-        <div id="nav">
-            <router-link to="/">Home</router-link>
-            |
-            <router-link to="/about">About</router-link>
-        </div>
         <router-view/>
 
         <Footer></Footer>
@@ -112,5 +107,10 @@
 
     [v-cloak] {
         display: none
+    }
+
+    #app {
+        background: #F8F9FB url("assets/background.jpg") no-repeat;
+        height: 100%;
     }
 </style>
