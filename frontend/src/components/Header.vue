@@ -1,23 +1,21 @@
 <template>
     <div class="header-wrap">
         <el-menu
-                :default-active="activeIndex"
-                class="el-menu-demo"
+                router
+                :default-active="$route.path"
+                class="header"
                 mode="horizontal"
                 background-color="#DCDCDC"
                 text-color="#000"
                 active-text-color="#000000">
-            <img id="logo" src="../assets/logo.png" height="40px" width="40px">
-            <el-button id="logoin" type="info" plain>登录</el-button>
-            <el-button id="register" type="info" plain>注册</el-button>
-            <el-menu-item index="1">
-                <router-link :to="{name : 'home'}">主页</router-link>
-            </el-menu-item>
-            <el-menu-item index="2">
-                <router-link :to="{name : 'about'}">关于</router-link>
-            </el-menu-item>
+            <img id="logo" src="../assets/logo.png" height="40px" width="80px">
+            <el-button class="btn-header" type="info" plain v-if="!isAuthorized">注册</el-button>
+            <el-button class="btn-header" type="info" plain v-if="!isAuthorized">登录</el-button>
+            <el-button class="btn-header" type="info" plain v-if="isAuthorized">登出</el-button>
+            <el-button class="btn-header" type="info" plain v-if="isAuthorized">user</el-button>
+            <el-menu-item index="/">主页</el-menu-item>
+            <el-menu-item index="/about">关于</el-menu-item>
         </el-menu>
-
     </div>
 </template>
 
@@ -26,25 +24,34 @@
         name: "Header",
         data() {
             return {
-                activeIndex: '1'
+                isAuthorized: false,
             };
         }
     }
 </script>
 
 <style lang="stylus">
-    #logo {
-        float left
-        padding 10px
-    }
+    .header-wrap {
+        margin-bottom 60px
 
-    #logoin {
-        float right
-        margin 10px
-    }
+        .header {
+            width 100%
+            position fixed
+            top 0
 
-    #register {
-        float right
-        margin 10px
+            #logo {
+                float left
+                padding 10px
+            }
+
+            .btn-header {
+                float right
+                margin 10px
+            }
+
+            .el-menu-item {
+                font-size 20px
+            }
+        }
     }
 </style>

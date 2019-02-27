@@ -8,16 +8,20 @@
             <router-link to="/about">About</router-link>
         </div>
         <router-view/>
+
+        <Footer></Footer>
     </div>
 </template>
 
 <script>
     import Header from '@/components/Header.vue'
+    import Footer from '@/components/Footer.vue'
 
     export default {
         name: 'App',
         components: {
-            Header
+            Header,
+            Footer
         }
     }
 </script>
@@ -26,11 +30,36 @@
     html, body {
         height: 100%;
         background-color: #f4f4f4;
+        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     }
 
     body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td {
         margin: 0;
         padding: 0;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    h3 {
+        font-size: 16px;
+    }
+
+    h4 {
+        font-size: 14px;
+    }
+
+    h5 {
+        font-size: 13px;
+    }
+
+    h6 {
+        font-size: 12px;
     }
 
     body, button, input, select, textarea {
@@ -42,7 +71,7 @@
     }
 
     code, kbd, pre, samp {
-        font-family: couriernew, courier, monospace;
+        font-family: Helvetica Neue, couriernew, courier, monospace;
     }
 
     small {
