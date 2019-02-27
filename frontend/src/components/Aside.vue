@@ -1,6 +1,6 @@
 <template>
     <div class="aside-wrap">
-        <el-col class="aside">
+        <el-col class="aside" :span="4">
             <el-menu
                     router
                     default-active="1"
@@ -21,7 +21,7 @@
 
 <style lang="stylus">
     .aside-wrap {
-        width 20%
+
 
     }
 </style>
