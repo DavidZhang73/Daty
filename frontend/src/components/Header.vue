@@ -16,6 +16,7 @@
             <el-menu-item index="/">主页</el-menu-item>
             <el-menu-item index="/about">关于</el-menu-item>
         </el-menu>
+
     </div>
 </template>
 
@@ -46,7 +47,7 @@
 
             .btn-header {
                 float right
-                margin 10px
+                margin 10px 3px 10px 3px
             }
 
             .el-menu-item {
