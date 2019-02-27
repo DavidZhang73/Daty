@@ -21,7 +21,9 @@
 
 <style lang="stylus">
     .aside-wrap {
-
+        position relative
+        height 100%
+        left 0
 
     }
 </style>
