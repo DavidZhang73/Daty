@@ -46,7 +46,7 @@
 
             .btn-header {
                 float right
-                margin 10px
+                margin 10px 3px 10px 3px
             }
 
             .el-menu-item {

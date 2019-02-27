@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <Header></Header>
+        <Aside></Aside>
 
         <div id="nav">
             <router-link to="/">Home</router-link>
@@ -16,12 +17,14 @@
 <script>
     import Header from '@/components/Header.vue'
     import Footer from '@/components/Footer.vue'
+    import Aside from '@/components/Aside.vue'
 
     export default {
         name: 'App',
         components: {
             Header,
-            Footer
+            Footer,
+            Aside
         }
     }
 </script>
