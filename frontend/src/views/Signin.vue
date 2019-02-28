@@ -37,13 +37,13 @@
 				</el-form-item>
 				<el-form-item prop="password">
 					<el-tooltip class="item" effect="light" content="密码包含" placement="top">
-						<el-input type="text" v-model.trim="signinForm.password">
+						<el-input type="text" v-model.trim="signinForm.password" placeholder="********">
 							<template slot="prepend">密码</template>
 						</el-input>
 					</el-tooltip>
 				</el-form-item>
 				<el-form-item prop="confirmPassword">
-					<el-input type="password" v-model.trim="signinForm.confirmPassword">
+					<el-input type="password" v-model.trim="signinForm.confirmPassword" placeholder="********">
 						<template slot="prepend">确认密码</template>
 					</el-input>
 				</el-form-item>
@@ -99,11 +99,18 @@
                 return callback()
             };
             var validatePassword = (rule, value, callback) => {
+                let passwordRex = /^\d+$/;
                 if (!value) {
                     return callback(new Error('请输入密码'))
                 }
-                if (value.length > 32) {
-                    return callback(new Error('密码过长, 应该小于32位'))
+                if (value.length > 32 || value.length < 8) {
+                    return callback(new Error('密码应该大于8位小于32位'))
+                }
+                if (value === this.signinForm.name) {
+                    return callback(new Error('密码不能和姓名相同'))
+                }
+                if (passwordRex.test(value)) {
+                    return callback(new Error('密码不能全是数字'))
                 }
                 return callback()
             };
@@ -164,7 +171,7 @@
             getBGImageURL() {
                 // TODO
                 let url = 'https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN';
-                return url;
+                return 'url(' + url + ')';
             }
         }
     }
