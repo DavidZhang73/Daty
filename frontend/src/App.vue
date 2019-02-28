@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <Header></Header>
-        <Aside></Aside>
+        <!--<Aside></Aside>-->
 
         <router-view/>
 
@@ -111,6 +111,7 @@
 
     #app {
         background: #F8F9FB url("assets/background.jpg") no-repeat;
+        background-size: contain;
         height: 100%;
     }
 </style>
