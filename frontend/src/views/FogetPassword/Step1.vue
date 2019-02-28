@@ -1,12 +1,10 @@
 <template>
-	<div class="home-wrap">
-
-	</div>
+	<p>Step1</p>
 </template>
 
 <script>
     export default {
-        name: 'home',
+        name: "ForgetPassword"
     }
 </script>
 

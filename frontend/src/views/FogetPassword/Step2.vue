@@ -1,12 +1,10 @@
 <template>
-	<div class="home-wrap">
-
-	</div>
+	<p>Step2</p>
 </template>
 
 <script>
     export default {
-        name: 'home',
+        name: "Step2"
     }
 </script>
 
