@@ -4,11 +4,16 @@
             <el-row class="btn-row">
                 <el-col :offset="10" :span="4">
                     <el-button-group>
-                        <router-link :to="{ name : 'fileDetail'}">
-                            <el-button type="primary" icon="el-icon-download">我要收文件</el-button>
+                        <router-link
+                                :to="{ name : 'fileDetail'}"
+                                class="el-button el-button--primary">
+                            <i class="el-icon-download"></i>
+                            我要收文件
                         </router-link>
-                        <router-link :to="{ name : 'about'}">
-                            <el-button type="primary" icon="el-icon-upload2">我要交文件</el-button>
+                        <router-link :to="{ name : 'about'}"
+                                     class="el-button el-button--primary">
+                            <i class="el-icon-upload2"></i>
+                            我要交文件
                         </router-link>
                     </el-button-group>
                 </el-col>
@@ -36,7 +41,7 @@
 
 
             .btn-row {
-                padding-top 430px
+                padding-top 500px
             }
         }
     }

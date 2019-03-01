@@ -16,7 +16,7 @@ db.sqlite3
 /frontend/node_modules
 
 # custom
-blog/production_settings.py
+/daty/settings_prod.py
 */migrations/*
 /media/*
 /static/
