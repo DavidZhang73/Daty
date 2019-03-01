@@ -1,14 +1,16 @@
 <template>
     <div class="home-wrap">
         <div class="home">
-            <el-row class="btn-row" :gutter="20">
-                <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1" :offset="9">
-                    <router-link :to="{ name : 'about'}">
-                        <el-button type="primary" icon="el-icon-download">我要收文件</el-button>
-                    </router-link>
-                </el-col>
-                <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
-                    <el-button type="primary" icon="el-icon-upload2">我要交文件</el-button>
+            <el-row class="btn-row">
+                <el-col :offset="10" :span="4">
+                    <el-button-group>
+                        <router-link :to="{ name : 'fileDetail'}">
+                            <el-button type="primary" icon="el-icon-download">我要收文件</el-button>
+                        </router-link>
+                        <router-link :to="{ name : 'about'}">
+                            <el-button type="primary" icon="el-icon-upload2">我要交文件</el-button>
+                        </router-link>
+                    </el-button-group>
                 </el-col>
             </el-row>
         </div>
@@ -26,6 +28,9 @@
 <style lang="stylus">
     .home-wrap {
         height 100%
+
+        background: #F8F9FB url("../assets/background.jpg") no-repeat;
+        background-size: contain;
 
         .home {
 

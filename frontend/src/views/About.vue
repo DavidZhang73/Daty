@@ -16,8 +16,9 @@
                             <span style="font-size: 18px;">{{dev.name}}</span>
                         </el-row>
                         <el-row>
-                            <el-button type="text" style="font-size: 13px;"><a :href="dev.pageURL"
-                                                                               target="_blank">Github</a></el-button>
+                            <el-button type="text" style="font-size: 13px;">
+                                <a :href="dev.pageURL" target="_blank">Github</a>
+                            </el-button>
                         </el-row>
                     </div>
                 </el-card>
@@ -79,6 +80,7 @@
 <style lang="stylus">
     .about-wrap {
         height 100%
+        background-color #F8F9FB
 
         .about-row {
             padding-top 260px
