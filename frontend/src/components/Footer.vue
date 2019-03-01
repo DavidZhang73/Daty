@@ -18,19 +18,24 @@
 </script>
 
 <style lang="stylus">
-    .footer-wrap {
-        .footer {
-            height 30px
-            width 100%
-            position fixed
-            bottom 0
-            background-color #DCDCDC
+	.footer-wrap {
+		.footer {
+			height 30px
+			width 100%
+			position fixed
+			bottom 0
+			background-color #DCDCDC
 
-            p {
-                text-align center
-                margin 7px 10px
-                font-size 1em
-            }
-        }
-    }
+			p {
+				text-align center
+				margin 7px 10px
+				font-size 14px
+				opacity 0.8
+
+				a:hover {
+					opacity 1
+				}
+			}
+		}
+	}
 </style>
