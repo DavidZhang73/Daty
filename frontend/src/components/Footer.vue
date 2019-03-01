@@ -1,9 +1,9 @@
 <template>
-	<div class="footer-wrap">
-		<div class="footer">
-			<p>Copyright {{year()}} <a href="https://github.com/DavidZhang73/daty.git" target="_blank">Github</a></p>
-		</div>
-	</div>
+    <div class="footer-wrap">
+        <div class="footer">
+            <p>Copyright {{year()}} <a href="https://github.com/DavidZhang73/daty.git" target="_blank">Github</a></p>
+        </div>
+    </div>
 </template>
 
 <script>
