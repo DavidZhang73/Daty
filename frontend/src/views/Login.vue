@@ -32,6 +32,7 @@
 </template>
 
 <script>
+    import api from '../api'
     import UserBackground from '../components/UserBackground'
 
     export default {
@@ -78,10 +79,10 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        console.log(this.loginForm);
-                        alert('submit!');
+                        api.login(this.loginForm.email, this.loginForm.password).then(json => {
+                            console.log(json)
+                        })
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
