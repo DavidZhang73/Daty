@@ -1,5 +1,6 @@
 <template>
 	<div class="login-wrap">
+		<UserBackground></UserBackground>
 		<div class="login">
 			<router-link :to="{name: 'home'}">
 				<img class="logo" src="../assets/logo.png">
@@ -20,7 +21,7 @@
 				</el-form-item>
 				<div class="info">
 					<router-link id="no-account" :to="{name: 'signin'}">还没有账号?</router-link>
-					<router-link id="forget-password" :to="{name: 'forget-password-step1'}">忘记密码?</router-link>
+					<router-link id="forget-password" :to="{name: 'forgetPassword'}">忘记密码?</router-link>
 				</div>
 				<el-form-item>
 					<el-button type="primary" @click="submitForm('loginForm')">登陆</el-button>
@@ -31,8 +32,13 @@
 </template>
 
 <script>
+    import UserBackground from '../components/UserBackground'
+
     export default {
         name: "Login",
+        components: {
+            UserBackground
+        },
         data() {
             var validateEmail = (rule, value, callback) => {
                 let emailRex = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
@@ -79,11 +85,6 @@
                         return false;
                     }
                 });
-            },
-            getBGImageURL() {
-                // TODO
-                let url = 'https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN';
-                return url;
             }
         }
     }
@@ -92,23 +93,6 @@
 <style lang="stylus">
 
 	.login-wrap {
-		background: url(https://cn.bing.com/az/hprichbg/rb/PolarBearDay_ZH-CN5185516722_1920x1080.jpg)
-		position absolute
-		width 100%
-		height 100%
-		background-size cover;
-
-		&::after {
-			content: "";
-			width: 100%;
-			height: 100%;
-			position: absolute;
-			left: 0;
-			top: 0;
-			background: inherit;
-			filter: blur(5px);
-			z-index 0
-		}
 
 		.login {
 			position fixed
@@ -118,7 +102,7 @@
 			margin -230px -240px 0 0
 			padding 40px 40px
 			border-radius 5px
-			box-shadow 0 0 5px #2c3e50
+			box-shadow 0 0 10px #2c3e50
 			background-color: #fbfbfb
 			z-index 1
 

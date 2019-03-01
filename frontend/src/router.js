@@ -6,9 +6,7 @@ import About from './views/About'
 import Login from './views/Login'
 import Signin from './views/Signin'
 
-import ForgetPassword from './views/FogetPassword/ForgetPassword'
-import ForgetPasswordStep1 from './views/FogetPassword/Step1'
-import ForgetPasswordStep2 from './views/FogetPassword/Step2'
+import ForgetPassword from './views/ForgetPassword'
 
 import NotFound from './views/NotFound'
 
@@ -39,20 +37,9 @@ export default new Router({
             component: Signin
         },
         {
-            path: '/forget-password',
+            path: '/forgetPassword',
+            name: 'forgetPassword',
             component: ForgetPassword,
-            children: [
-                {
-                    path: "",
-                    name: 'forget-password-step1',
-                    component: ForgetPasswordStep1
-                },
-                {
-                    path: "/step2",
-                    name: 'forget-password-step2',
-                    component: ForgetPasswordStep2
-                }
-            ]
         },
         {
             path: '*',
