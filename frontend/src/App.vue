@@ -19,7 +19,7 @@
         components: {
             Header,
             Footer,
-            Aside
+            Aside,
         }
     }
 </script>
