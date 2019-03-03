@@ -21,5 +21,5 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html')),
     path('api/', include('daty.apiurls', namespace='api')),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls', namespace='api-auth'))
+    path('api-auth/', include('rest_framework.urls', namespace='api-auth')),
 ]

@@ -54,6 +54,9 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'utils.custom_exception_handler.custom_exception_handler'
 }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.SessionAuthentication',)
+}
 
 ROOT_URLCONF = 'daty.urls'
 
@@ -132,4 +135,21 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend', 'dist', 'static'),
 ]
 
-APPEND_SLASH = True
+# AUTH
+AUTH_USER_MODEL = 'user.User'
+
+# Eail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMIAL_USE_SSL = True
+
+EMAIL_PORT = 465
+# 465
+EMAIL_HOST = 'smtp.qq.com'
+
+EMAIL_HOST_USER = '530504975@qq.com'
+
+EMAIL_HOST_PASSWORD = 'oysupsddwtbabihh'
+# onamvfdsfokwbjjf
+# oysupsddwtbabihh
+EMAIL_SUBJECT_PREFIX = '[Daty] '

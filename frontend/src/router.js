@@ -7,6 +7,7 @@ import Login from './views/Login'
 import Signin from './views/Signin'
 
 import ForgetPassword from './views/ForgetPassword'
+import ForgetPasswordReset from "./views/ForgetPasswordReset"
 
 import NotFound from './views/NotFound'
 
@@ -40,6 +41,11 @@ export default new Router({
             path: '/forgetPassword',
             name: 'forgetPassword',
             component: ForgetPassword,
+        },
+        {
+            path: '/forgetPassword/reset/:uuid',
+            name: 'forgetPasswordReset',
+            component: ForgetPasswordReset,
         },
         {
             path: '*',
