@@ -102,6 +102,10 @@
 	}
 
 	[v-cloak] {
-		display: none
+		display: none;
+	}
+
+	#app {
+		height: 100%;
 	}
 </style>
