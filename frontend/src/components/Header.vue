@@ -8,7 +8,7 @@
                 background-color="#FFFFFF"
                 text-color="#000"
                 active-text-color="#000000">
-            <img id="logo" src="../assets/logo.png" height="40px" width="80px">
+            <img id="logo" src="../assets/logo_svg.svg" height="40px" width="80px">
             <el-button-group class="btn-header" v-if="!isAuthorized()">
                 <router-link
                         class="el-button el-button--info is-plain"

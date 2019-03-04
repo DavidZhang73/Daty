@@ -1,23 +1,23 @@
 <template>
     <div class="home-wrap">
         <div class="home">
-            <el-row class="btn-row">
-                <el-col :offset="10" :span="4">
-                    <el-button-group>
-                        <router-link
-                                :to="{ name : 'fileDetail'}"
-                                class="el-button el-button--primary">
+            <div class="button-col">
+                <div class="button-row">
+                    <router-link
+                            :to="{ name : 'fileDetail'}">
+                        <el-button type="primary" class="button1">
                             <i class="el-icon-download"></i>
                             我要收文件
-                        </router-link>
-                        <router-link :to="{ name : 'about'}"
-                                     class="el-button el-button--primary">
+                        </el-button>
+                    </router-link>
+                    <router-link :to="{ name : 'about'}">
+                        <el-button type="primary" class="button2">
                             <i class="el-icon-upload2"></i>
                             我要交文件
-                        </router-link>
-                    </el-button-group>
-                </el-col>
-            </el-row>
+                        </el-button>
+                    </router-link>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -38,10 +38,28 @@
         background-size: contain;
 
         .home {
+            height inherit
 
+            .button-col {
+                height inherit
+                width 270px
+                margin 0 auto
+                /*border 1px solid black*/
 
-            .btn-row {
-                padding-top 500px
+                .button-row {
+                    position relative
+                    top 55%
+                    /*border 1px solid blue*/
+
+                    .button1 {
+                        float left
+                    }
+
+                    .button2 {
+                        float right
+                    }
+
+                }
             }
         }
     }
