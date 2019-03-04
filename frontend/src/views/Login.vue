@@ -15,7 +15,9 @@
 					</el-input>
 				</el-form-item>
 				<el-form-item prop="password">
-					<el-input type="password" v-model.trim="loginForm.password">
+					<el-input type="password"
+					          v-model.trim="loginForm.password"
+					          @keypress.enter.native="submitForm('loginForm')">
 						<template slot="prepend">密码</template>
 					</el-input>
 				</el-form-item>
@@ -32,6 +34,7 @@
 </template>
 
 <script>
+    import api from '../api'
     import UserBackground from '../components/UserBackground'
 
     export default {
@@ -44,8 +47,7 @@
                 let emailRex = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
                 if (!value) {
                     return callback(new Error('请输入Email'))
-                }
-                if (!emailRex.test(value)) {
+                } else if (!emailRex.test(value)) {
                     return callback(new Error('Email格式不正确'))
                 }
                 return callback()
@@ -53,8 +55,7 @@
             var validatePassword = (rule, value, callback) => {
                 if (!value) {
                     return callback(new Error('请输入密码'))
-                }
-                if (value.length > 32) {
+                } else if (value.length > 32) {
                     return callback(new Error('密码过长, 应该小于32位'))
                 }
                 return callback()
@@ -78,10 +79,21 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        console.log(this.loginForm);
-                        alert('submit!');
+                        api.login(this.loginForm.email, this.loginForm.password).then(data => {
+                            if (data.error) {
+                                this.loginForm.password = '';
+                                this.$message.error({showClose: true, message: data.error})
+                            } else {
+                                this.$store.commit('userMutation', {
+                                    email: data.data.email,
+                                    username: data.data.username,
+                                    phone: data.data.phone,
+                                    qq: data.data.qq
+                                });
+                                this.$router.push({name: 'home'})
+                            }
+                        })
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
@@ -91,11 +103,11 @@
 </script>
 
 <style lang="stylus">
-
+	@import "../assets/css/consts.styl"
 	.login-wrap {
 
 		.login {
-			position fixed
+			position absolute
 			top 50%
 			right 50%
 			width 400px
@@ -142,17 +154,14 @@
 				}
 
 				.info {
-					margin-bottom 20px
+					margin-bottom 15px
 
 					#no-account {
-						margin-left 5px
-
 					}
 
 					#forget-password {
 						float right
 						right 0
-						padding-right 10px
 					}
 				}
 			}

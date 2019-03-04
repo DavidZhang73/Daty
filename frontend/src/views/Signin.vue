@@ -14,17 +14,9 @@
 						</el-input>
 					</el-tooltip>
 				</el-form-item>
-				<el-form-item prop="pin">
-					<el-tooltip class="item" effect="light" content="请您将邮箱中的验证码复制到这里" placement="top">
-						<el-input type="text" v-model.trim="signinForm.pin" placeholder="1234">
-							<template slot="prepend">验证码</template>
-							<el-button slot="append" icon="el-icon-message"> 发送验证码</el-button>
-						</el-input>
-					</el-tooltip>
-				</el-form-item>
-				<el-form-item prop="name">
+				<el-form-item prop="username">
 					<el-tooltip class="item" effect="light" content="姓名将有助于别人找到你" placement="top">
-						<el-input type="text" v-model.trim="signinForm.name" placeholder="张某某">
+						<el-input type="text" v-model.trim="signinForm.username" placeholder="张某某">
 							<template slot="prepend">姓名</template>
 						</el-input>
 					</el-tooltip>
@@ -36,15 +28,25 @@
 						</el-input>
 					</el-tooltip>
 				</el-form-item>
+				<el-form-item prop="qq">
+					<el-tooltip class="item" effect="light" content="QQ将有助于别人找到你" placement="top">
+						<el-input type="text" v-model.trim="signinForm.qq" placeholder="12348888">
+							<template slot="prepend">QQ</template>
+						</el-input>
+					</el-tooltip>
+				</el-form-item>
 				<el-form-item prop="password">
-					<el-tooltip class="item" effect="light" content="密码包含" placement="top">
+					<el-tooltip class="item" effect="light" content="密码" placement="top">
 						<el-input type="text" v-model.trim="signinForm.password" placeholder="********">
 							<template slot="prepend">密码</template>
 						</el-input>
 					</el-tooltip>
 				</el-form-item>
 				<el-form-item prop="confirmPassword">
-					<el-input type="password" v-model.trim="signinForm.confirmPassword" placeholder="********">
+					<el-input type="password"
+					          v-model.trim="signinForm.confirmPassword"
+					          @keypress.enter.native="submitForm('signinForm')"
+					          placeholder="********">
 						<template slot="prepend">确认密码</template>
 					</el-input>
 				</el-form-item>
@@ -61,6 +63,8 @@
 </template>
 
 <script>
+    import api from '../api'
+
     import UserBackground from '../components/UserBackground'
 
     export default {
@@ -73,27 +77,27 @@
                 let emailRex = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
                 if (!value) {
                     return callback(new Error('请输入Email'))
-                }
-                if (!emailRex.test(value)) {
+                } else if (!emailRex.test(value)) {
                     return callback(new Error('Email格式不正确'))
+                } else {
+                    return api.signinEmailCheck(value).then(data => {
+                        if (data.error) {
+                            alert(data.error)
+                        } else {
+                            if (data.data === 'Email已经被注册') {
+                                return callback(new Error(data.data))
+                            } else {
+                                return callback()
+                            }
+                        }
+                    });
                 }
-                return callback()
             };
-            var validatePin = (rule, value, callback) => {
-                if (!value) {
-                    return callback(new Error('请输入验证码'));
-                }
-                if (value.length !== 4) {
-                    return callback(new Error('验证码应该是4位的'));
-                }
-                return callback()
-            };
-            var validateName = (rule, value, callback) => {
+            var validateUsername = (rule, value, callback) => {
                 //必填。150个字符或者更少。包含字母，数字和仅有的@/./+/-/_符号。
                 if (!value) {
                     return callback(new Error('请输入姓名'))
-                }
-                if (value.length > 150) {
+                } else if (value.length > 150) {
                     return callback(new Error('姓名应该小于150个字符'))
                 }
                 return callback()
@@ -102,9 +106,17 @@
                 let phoneRex = /^1[34578]\d{9}$/;
                 if (!value) {
                     return callback(new Error('请输入手机号'))
-                }
-                if (!phoneRex.test(value)) {
+                } else if (!phoneRex.test(value)) {
                     return callback(new Error('手机号格式不正确'))
+                }
+                return callback()
+            };
+            var validateQQ = (rule, value, callback) => {
+                let qqRex = /[1-9][0-9]{4,}/;
+                if (!value) {
+                    return callback(new Error('请输入QQ'))
+                } else if (!qqRex.test(value)) {
+                    return callback(new Error('QQ格式不正确'))
                 }
                 return callback()
             };
@@ -112,14 +124,11 @@
                 let passwordRex = /^\d+$/;
                 if (!value) {
                     return callback(new Error('请输入密码'))
-                }
-                if (value.length > 32 || value.length < 8) {
+                } else if (value.length > 32 || value.length < 8) {
                     return callback(new Error('密码应该大于8位小于32位'))
-                }
-                if (value === this.signinForm.name) {
+                } else if (value === this.signinForm.name) {
                     return callback(new Error('密码不能和姓名相同'))
-                }
-                if (passwordRex.test(value)) {
+                } else if (passwordRex.test(value)) {
                     return callback(new Error('密码不能全是数字'))
                 }
                 return callback()
@@ -127,18 +136,18 @@
             var validateConfirmPassword = (rule, value, callback) => {
                 if (!value) {
                     return callback(new Error('请输入确认密码'))
-                }
-                if (value !== this.signinForm.password) {
+                } else if (value !== this.signinForm.password) {
                     return callback(new Error('确认密码与密码不同'))
                 }
                 return callback()
             };
             return {
+                countdown: 5,
                 signinForm: {
                     email: '',
-                    pin: '',
-                    name: '',
+                    username: '',
                     phone: '',
+                    qq: '',
                     password: '',
                     confirmPassword: ''
                 },
@@ -146,14 +155,14 @@
                     email: [
                         {validator: validateEmail, trigger: 'blur'}
                     ],
-                    pin: [
-                        {validator: validatePin, trigger: 'blur'}
-                    ],
-                    name: [
-                        {validator: validateName, trigger: 'blur'}
+                    username: [
+                        {validator: validateUsername, trigger: 'blur'}
                     ],
                     phone: [
                         {validator: validatePhone, trigger: 'blur'}
+                    ],
+                    qq: [
+                        {validator: validateQQ, trigger: 'blur'}
                     ],
                     password: [
                         {validator: validatePassword, trigger: 'blur'}
@@ -168,28 +177,50 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
-                        console.log('submit!');
-                        return false;
+                        api.signin(
+                            this.signinForm.email,
+                            this.signinForm.username,
+                            this.signinForm.phone,
+                            this.signinForm.qq,
+                            this.signinForm.password,
+                        ).then(data => {
+                            if (data.error) {
+                                this.signinForm.password = '';
+                                this.signinForm.confirmPassword = '';
+                                this.$message.error({showClose: true, message: data.error})
+                            } else {
+                                this.$message.success({
+                                    duration: this.countdown * 1000,
+                                    message: `注册成功！请在邮箱中激活账户，${this.countdown}秒后跳转到登录界面`
+                                });
+                                let timer = setInterval(() => {
+                                    if (this.countdown === 0) {
+                                        clearInterval(timer);
+                                        this.$router.push({name: 'login'})
+                                    }
+                                    this.countdown--
+                                }, 1000);
+                            }
+                        })
                     } else {
-                        console.log('error submit!!');
                         return false;
                     }
                 });
-            }
+            },
         }
     }
 </script>
 
 <style lang="stylus">
+	@import "../assets/css/consts.styl"
 	.signin-wrap {
 		.sign {
-			position fixed
+			position absolute
 			top 50%
 			right 50%
 			width 500px
-			margin -280px -290px 0 0
-			padding 40px 40px
+			margin -260px -290px 0 0
+			padding 30px 40px 10px 40px
 			border-radius 5px
 			box-shadow 0 0 10px #2c3e50
 			background-color: #fbfbfb
@@ -231,13 +262,11 @@
 					margin-bottom 20px
 
 					#have-account {
-						padding-left 5px
 					}
 
 					#forget-password {
 						float right
 						right 0
-						padding-right 5px
 						opacity 0.7
 
 						&:hover {

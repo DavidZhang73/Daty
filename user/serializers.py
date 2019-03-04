@@ -1,15 +1,31 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from . import models
 
-from .models import UserProfile
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
 
 
-class UserSerializers(serializers.ModelSerializer):
+class SigninEmailCheckSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class SiginSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('username', 'email')
+        model = models.SigninUserInfo
+        fields = '__all__'
 
 
-class UserLoginSerializers(serializers.ModelSerializer):
+class ForgetPasswordEmailCheckSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
+class ForgetPasswordSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = models.ForgetPassword
+        fields = '__all__'
+
+
+class ForgetPasswordResetSerializer(serializers.Serializer):
+    uuid = serializers.UUIDField()
+    password = serializers.CharField()

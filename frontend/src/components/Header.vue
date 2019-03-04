@@ -9,13 +9,17 @@
 			text-color="#000"
 			active-text-color="#000000">
 			<img id="logo" src="../assets/logo.png" height="40px" width="80px">
-			<el-button-group class="btn-header" v-if="!isAuthorized()">
+			<el-button-group class="btn-header" v-if="!isLogin()">
 				<router-link class="el-button el-button--info is-plain" :to="{name: 'login'}">登录</router-link>
 				<router-link class="el-button el-button--info is-plain" :to="{name: 'signin'}">注册</router-link>
 			</el-button-group>
-			<el-button-group class="btn-header" v-if="isAuthorized()">
-				<router-link class="el-button el-button--info is-plain" :to="{name: 'home'}">USER</router-link>
-				<button class="el-button el-button--info is-plain" :to="{name: 'home'}" @click="logout">登出</button>
+			<el-button-group class="btn-header" v-if="isLogin()">
+				<router-link class="el-button el-button--info is-plain"
+				             :to="{name: 'home'}"
+				             v-cloak>
+					{{$store.state.user.username}}
+				</router-link>
+				<button class="el-button el-button--info is-plain" @click="logout">登出</button>
 			</el-button-group>
 			<el-menu-item index="/">主页</el-menu-item>
 			<el-menu-item index="/about">关于</el-menu-item>
@@ -24,6 +28,8 @@
 </template>
 
 <script>
+    import api from '../api'
+
     export default {
         name: "Header",
         data() {
@@ -31,10 +37,17 @@
         },
         methods: {
             logout() {
-                alert("logout")
+                api.logout().then(data => {
+                    if (data.error) {
+                        alert(data.error)
+                    } else {
+                        this.$store.commit('userMutation', null);
+                        this.$router.push({name: 'home'})
+                    }
+                })
             },
-            isAuthorized() {
-                return false
+            isLogin() {
+                return this.$store.state.user
             }
         }
     }

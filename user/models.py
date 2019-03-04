@@ -1,15 +1,83 @@
+import uuid
+
 from django.db import models
-from django.contrib.auth.models import User
+from django.utils import timezone
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.validators import UnicodeUsernameValidator
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE)
+class User(AbstractUser):
+    username_validator = UnicodeUsernameValidator()
+    username = models.CharField(
+        '姓名',
+        max_length=150,
+        unique=False,
+        help_text='必填。150个字符或者更少。包含字母，数字和仅有的@/./+/-/_符号。',
+        validators=[username_validator]
+    )
+    email = models.EmailField('Email', blank=True, unique=True, error_messages={
+        'unique': 'Email已经被注册',
+    })
+    phone = models.CharField('手机号', max_length=11, blank=True)
+    qq = models.CharField('QQ', max_length=20, blank=True)
 
-    phone = models.CharField(verbose_name='手机号', max_length=12)
+    EMAIL_FIELD = 'email'
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
-    class Meta:
+    class Meta(AbstractUser.Meta):
         verbose_name = '用户信息'
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.user.username
+        return self.username
+
+
+class SigninUserInfo(models.Model):
+    username_validator = UnicodeUsernameValidator()
+    id = models.CharField('ID', max_length=36, default=uuid.uuid1, primary_key=True)
+    email = models.EmailField('Email')
+    username = models.CharField(
+        '姓名',
+        max_length=150,
+        help_text='必填。150个字符或者更少。包含字母，数字和仅有的@/./+/-/_符号。',
+        validators=[username_validator]
+    )
+    phone = models.CharField('手机号', max_length=11)
+    qq = models.CharField('QQ', max_length=20)
+    password = models.CharField('密码', max_length=128)
+    date_joined = models.DateTimeField('注册日期', default=timezone.now)
+
+    class Meta:
+        verbose_name = '注册信息'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.username
+
+    def saveToUser(self):
+        '''
+        邮箱激活后，把SigninUserInfo中的信息放到User中，删除本身
+        :return:
+        '''
+        User.objects.create_user(
+            username=self.username,
+            password=self.password,
+            email=self.email,
+            phone=self.phone,
+            qq=self.qq,
+        )
+        self.delete()
+
+
+class ForgetPassword(models.Model):
+    id = models.CharField('ID', max_length=36, default=uuid.uuid1, primary_key=True)
+    email = models.EmailField('Email')
+    created_datetime = models.DateTimeField('时间', default=timezone.now)
+
+    class Meta:
+        verbose_name = '忘记密码'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.email
