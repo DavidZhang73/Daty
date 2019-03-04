@@ -3,14 +3,13 @@
         <div class="home">
             <div class="button-col">
                 <div class="button-row">
-                    <router-link
-                            :to="{ name : 'fileDetail'}">
+                    <router-link :to="{name: 'fileDetail'}">
                         <el-button type="primary" class="button1">
                             <i class="el-icon-download"></i>
                             我要收文件
                         </el-button>
                     </router-link>
-                    <router-link :to="{ name : 'about'}">
+                    <router-link :to="{name: 'about'}">
                         <el-button type="primary" class="button2">
                             <i class="el-icon-upload2"></i>
                             我要交文件

@@ -24,8 +24,9 @@
             <el-button-group class="btn-header" v-if="isAuthorized()">
                 <router-link
                         class="el-button el-button--info is-plain"
-                        :to="{name: 'home'}">
-                    USER
+                        :to="{name: 'home'}"
+                        v-cloak>
+                    {{$store.state.user.username}}
                 </router-link>
                 <button
                         class="el-button el-button--info is-plain"
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+    import api from '../api'
 
     export default {
         name: "Header",
@@ -52,10 +54,17 @@
         },
         methods: {
             logout() {
-                alert("logout")
+                api.logout().then(data => {
+                    if (data.error) {
+                        alert(data.error)
+                    } else {
+                        this.$store.commit('userMutation', null);
+                        this.$router.push({name: 'home'})
+                    }
+                })
             },
-            isAuthorized() {
-                return false
+            isLogin() {
+                return this.$store.state.user
             },
             goToHome() {
                 this.menuIndex = '/'

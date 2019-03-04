@@ -12,7 +12,7 @@
 
 <style lang="stylus">
 	.notfound-wrap {
-
 		padding-top 60px
+        font-size 50px
 	}
 </style>

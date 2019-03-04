@@ -1,25 +1,20 @@
 <template>
     <div id="app">
         <Header></Header>
-        <!--<Aside></Aside>-->
-
         <router-view/>
-
         <Footer></Footer>
     </div>
 </template>
 
 <script>
-    import Header from '@/components/Header.vue'
-    import Footer from '@/components/Footer.vue'
-    import Aside from '@/components/Aside.vue'
+    import Header from './components/Header'
+    import Footer from './components/Footer'
 
     export default {
         name: 'App',
         components: {
             Header,
-            Footer,
-            Aside,
+            Footer
         }
     }
 </script>
@@ -106,7 +101,7 @@
     }
 
     [v-cloak] {
-        display: none
+        display: none;
     }
 
     #app {
