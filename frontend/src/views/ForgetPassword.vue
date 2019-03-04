@@ -12,7 +12,8 @@
 						<el-input type="email"
 						          v-model.trim="forgetPasswordForm.email"
 						          @keypress.enter.native="submitForm('forgetPasswordForm')"
-						          placeholder="example@abc.com">
+						          placeholder="example@abc.com"
+						          auto-complete="email">
 							<template slot="prepend">Email:</template>
 						</el-input>
 					</el-tooltip>

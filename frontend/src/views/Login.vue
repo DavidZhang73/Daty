@@ -10,14 +10,17 @@
 			         :rules="rules"
 			         ref="loginForm">
 				<el-form-item prop="email">
-					<el-input type="email" v-model.trim="loginForm.email">
+					<el-input type="email"
+					          v-model.trim="loginForm.email"
+					          auto-complete="email">
 						<template slot="prepend">Email:</template>
 					</el-input>
 				</el-form-item>
 				<el-form-item prop="password">
 					<el-input type="password"
 					          v-model.trim="loginForm.password"
-					          @keypress.enter.native="submitForm('loginForm')">
+					          @keypress.enter.native="submitForm('loginForm')"
+					          auto-complete="new-password">
 						<template slot="prepend">密码</template>
 					</el-input>
 				</el-form-item>

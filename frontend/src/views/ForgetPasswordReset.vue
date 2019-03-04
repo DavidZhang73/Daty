@@ -9,7 +9,10 @@
 			         ref="forgetPasswordResetForm">
 				<el-form-item prop="password">
 					<el-tooltip class="item" effect="light" content="密码" placement="top">
-						<el-input type="text" v-model.trim="forgetPasswordResetForm.password" placeholder="********">
+						<el-input type="text"
+						          v-model.trim="forgetPasswordResetForm.password"
+						          placeholder="********"
+						          auto-complete="new-password">
 							<template slot="prepend">新密码</template>
 						</el-input>
 					</el-tooltip>
@@ -18,7 +21,8 @@
 					<el-input type="password"
 					          v-model.trim="forgetPasswordResetForm.confirmPassword"
 					          @keypress.enter.native="submitForm('forgetPasswordResetForm')"
-					          placeholder="********">
+					          placeholder="********"
+					          auto-complete="new-password">
 						<template slot="prepend">确认密码</template>
 					</el-input>
 				</el-form-item>

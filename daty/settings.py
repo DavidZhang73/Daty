@@ -152,3 +152,8 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_SUBJECT_PREFIX = '[Daty]'
 
 HOST = 'http://localhost:8000'
+
+# Error
+SILENCED_SYSTEM_CHECKS = [
+    'auth.W004',
+]

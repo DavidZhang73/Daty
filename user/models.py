@@ -22,8 +22,8 @@ class User(AbstractUser):
     qq = models.CharField('QQ', max_length=20, blank=True)
 
     EMAIL_FIELD = 'email'
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     class Meta(AbstractUser.Meta):
         verbose_name = '用户信息'
