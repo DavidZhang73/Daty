@@ -8,8 +8,8 @@ WORKDIR /daty/
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
     && pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 # 安装python依赖
-COPY ./Pipfile /blog/Pipfile
-COPY ./Pipfile.lock /blog/Pipfile.lock
+COPY ./Pipfile /daty/Pipfile
+COPY ./Pipfile.lock /daty/Pipfile.lock
 RUN pip install pipenv \
     && pipenv install
 # 安装uwsgi
