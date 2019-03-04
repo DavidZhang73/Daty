@@ -44,9 +44,9 @@
 				</el-form-item>
 				<el-form-item prop="confirmPassword">
 					<el-input type="password"
-					          v-model.trim="signinForm.confirmPassword"
-					          @keypress.enter.native="submitForm('signinForm')"
-					          placeholder="********">
+							  v-model.trim="signinForm.confirmPassword"
+							  @keypress.enter.native="submitForm('signinForm')"
+							  placeholder="********">
 						<template slot="prepend">确认密码</template>
 					</el-input>
 				</el-form-item>

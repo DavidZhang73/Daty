@@ -1,6 +1,6 @@
 <template>
 	<div class="login-wrap">
-		<UserBackground></UserBackground>
+        <UserBackground></UserBackground>
 		<div class="login">
 			<router-link :to="{name: 'home'}">
 				<img class="logo" src="../assets/logo.png">
@@ -15,15 +15,15 @@
 					</el-input>
 				</el-form-item>
 				<el-form-item prop="password">
-					<el-input type="password"
-					          v-model.trim="loginForm.password"
-					          @keypress.enter.native="submitForm('loginForm')">
+                    <el-input type="password"
+                              v-model.trim="loginForm.password"
+                              @keypress.enter.native="submitForm('loginForm')">
 						<template slot="prepend">密码</template>
 					</el-input>
 				</el-form-item>
 				<div class="info">
 					<router-link id="no-account" :to="{name: 'signin'}">还没有账号?</router-link>
-					<router-link id="forget-password" :to="{name: 'forgetPassword'}">忘记密码?</router-link>
+                    <router-link id="forget-password" :to="{name: 'forgetPassword'}">忘记密码?</router-link>
 				</div>
 				<el-form-item>
 					<el-button type="primary" @click="submitForm('loginForm')">登陆</el-button>
@@ -103,18 +103,18 @@
 </script>
 
 <style lang="stylus">
-	@import "../assets/css/consts.styl"
+    @import "../assets/css/consts.styl"
 	.login-wrap {
 
-		.login {
-			position absolute
+        .login {
+            position absolute
 			top 50%
 			right 50%
 			width 400px
 			margin -230px -240px 0 0
 			padding 40px 40px
 			border-radius 5px
-			box-shadow 0 0 10px #2c3e50
+            box-shadow 0 0 10px #2c3e50
 			background-color: #fbfbfb
 			z-index 1
 
@@ -154,7 +154,7 @@
 				}
 
 				.info {
-					margin-bottom 15px
+                    margin-bottom 15px
 
 					#no-account {
 					}

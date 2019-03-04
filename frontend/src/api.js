@@ -1,4 +1,5 @@
 import {Message} from 'element-ui';
+
 export default {
     login(email, password) {
         return fetchAPI('/api/user/login', 'post', {

@@ -1,8 +1,6 @@
 <template>
     <div class="footer-wrap">
-        <div class="footer">
-            <p>Copyright {{year()}} <a href="https://github.com/DavidZhang73/daty.git" target="_blank">Github</a></p>
-        </div>
+        <p>Copyright© {{year()}} <a href="https://github.com/DavidZhang73/daty.git" target="_blank">Github</a></p>
     </div>
 </template>
 
@@ -18,24 +16,22 @@
 </script>
 
 <style lang="stylus">
-	.footer-wrap {
-		.footer {
-			height 30px
-			width 100%
-			position fixed
-			bottom 0
-			background-color #DCDCDC
+    .footer-wrap {
+        width 100%
+        height 30px
+        position fixed
+        bottom 0
+        background-color #ffffff
+        box-shadow 0 -2px 6px 0 rgba(0,0,0,0.12)
 
-			p {
-				text-align center
-				margin 7px 10px
-				font-size 14px
-				opacity 0.8
+        p {
+            margin 5px
+            text-align center
+            opacity 1
 
-				a:hover {
-					opacity 1
-				}
-			}
-		}
-	}
+            a:hover {
+                opacity 0.6
+            }
+        }
+    }
 </style>
