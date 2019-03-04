@@ -68,8 +68,12 @@ class SigninAPI(API):
                 qq=qq,
             )
             url = '/api/user/signin/active/' + str(user.id)
-            print(url)
-            # TODO 发送url到邮箱
+            send_mail(
+                subject=f'{settings.EMAIL_SUBJECT_PREFIX} 注册新账号',
+                message=f'请点击此链接完成注册：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email]
+            )
             return self.success(f'成功注册用户：{email}')
 
 
@@ -95,15 +99,18 @@ class ForgetPasswordAPI(API):
     def post(self, request):
         data = request.validated_data
         email = data.get('email')
-        if not models.User.objects.filter(email=email):
+        user = models.User.objects.filter(email=email)
+        if not user:
             return self.error('Email不存在')
         else:
             forgetPassword = models.ForgetPassword.objects.create(
                 email=email
             )
             url = '/api/user/forgetPassword/reset/' + str(forgetPassword.id)
-            print(url)
-            # TODO 发送url到邮箱
+            user[0].email_user(
+                subject='{settings.EMAIL_SUBJECT_PREFIX} 重置密码',
+                message=f'请点击此链接重置密码：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。'
+            )
             return self.success(f'请在{email}中继续找回密码的操作')
 
 
