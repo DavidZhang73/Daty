@@ -108,7 +108,7 @@ class ForgetPasswordAPI(API):
             )
             url = '/api/user/forgetPassword/reset/' + str(forgetPassword.id)
             user[0].email_user(
-                subject='{settings.EMAIL_SUBJECT_PREFIX} 重置密码',
+                subject=f'{settings.EMAIL_SUBJECT_PREFIX} 重置密码',
                 message=f'请点击此链接重置密码：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。'
             )
             return self.success(f'请在{email}中继续找回密码的操作')
