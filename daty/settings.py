@@ -24,7 +24,7 @@ SECRET_KEY = '-d+5%^$@6%s0704m7q#^kfzg(gg4*9rp^o3(x0de@ajo4q40rp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -152,3 +152,8 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 EMAIL_SUBJECT_PREFIX = '[Daty]'
 
 HOST = 'http://localhost:8000'
+
+# Error
+SILENCED_SYSTEM_CHECKS = [
+    'auth.W004',
+]

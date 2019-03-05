@@ -1,9 +1,9 @@
 <template>
-    <div id="app">
-        <Header></Header>
-        <router-view/>
-        <Footer></Footer>
-    </div>
+	<div id="app">
+		<Header></Header>
+		<router-view/>
+		<Footer></Footer>
+	</div>
 </template>
 
 <script>
@@ -15,96 +15,97 @@
         components: {
             Header,
             Footer
-        }
+        },
+        methods: {}
     }
 </script>
 
 <style>
-    html, body {
-        height: 100%;
-        background-color: #f4f4f4;
-        font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
-    }
+	html, body {
+		height: 100%;
+		background-color: #f4f4f4;
+		font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+	}
 
-    body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td {
-        margin: 0;
-        padding: 0;
-    }
+	body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td {
+		margin: 0;
+		padding: 0;
+	}
 
-    h1 {
-        font-size: 20px;
-    }
+	h1 {
+		font-size: 20px;
+	}
 
-    h2 {
-        font-size: 18px;
-    }
+	h2 {
+		font-size: 18px;
+	}
 
-    h3 {
-        font-size: 16px;
-    }
+	h3 {
+		font-size: 16px;
+	}
 
-    h4 {
-        font-size: 14px;
-    }
+	h4 {
+		font-size: 14px;
+	}
 
-    h5 {
-        font-size: 13px;
-    }
+	h5 {
+		font-size: 13px;
+	}
 
-    h6 {
-        font-size: 12px;
-    }
+	h6 {
+		font-size: 12px;
+	}
 
-    body, button, input, select, textarea {
-        font-size: 16px;
-    }
+	body, button, input, select, textarea {
+		font-size: 16px;
+	}
 
-    address, cite, dfn, em, var {
-        font-style: normal;
-    }
+	address, cite, dfn, em, var {
+		font-style: normal;
+	}
 
-    code, kbd, pre, samp {
-        font-family: Helvetica Neue, couriernew, courier, monospace;
-    }
+	code, kbd, pre, samp {
+		font-family: Helvetica Neue, couriernew, courier, monospace;
+	}
 
-    small {
-        font-size: 12px;
-    }
+	small {
+		font-size: 12px;
+	}
 
-    ul, ol {
-        list-style: none;
-    }
+	ul, ol {
+		list-style: none;
+	}
 
-    a {
-        color: #404040;
-        text-decoration: none;
-    }
+	a {
+		color: #404040;
+		text-decoration: none;
+	}
 
-    sup {
-        vertical-align: text-top;
-    }
+	sup {
+		vertical-align: text-top;
+	}
 
-    sub {
-        vertical-align: text-bottom;
-    }
+	sub {
+		vertical-align: text-bottom;
+	}
 
-    legend {
-        color: #000;
-    }
+	legend {
+		color: #000;
+	}
 
-    fieldset, img {
-        border: 0;
-    }
+	fieldset, img {
+		border: 0;
+	}
 
-    button, input, select, textarea {
-        font-size: 100%;
-    }
+	button, input, select, textarea {
+		font-size: 100%;
+	}
 
-    [v-cloak] {
-        display: none;
-    }
+	[v-cloak] {
+		display: none;
+	}
 
-    #app {
-        height: 100%;
-    }
+	#app {
+		height: 100%;
+	}
 </style>

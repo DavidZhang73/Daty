@@ -1,30 +1,30 @@
 <template>
-    <div class="about-wrap">
-        <el-row class="about-row" :gutter="20">
-            <el-col
-                    v-for="(dev, index) in dev_list"
-                    :key="dev.id"
-                    :span="2"
-                    :offset="index > 0 ? 2 : 3">
-                <el-card
-                        :body-style="{ padding: '0px' }"
-                        class="row-card"
-                        shadow="always">
-                    <img :src="dev.imgURL" class="image">
-                    <div class="card-text">
-                        <el-row>
-                            <span style="font-size: 18px;">{{dev.name}}</span>
-                        </el-row>
-                        <el-row>
-                            <el-button type="text" style="font-size: 13px;">
-                                <a :href="dev.pageURL" target="_blank">Github</a>
-                            </el-button>
-                        </el-row>
-                    </div>
-                </el-card>
-            </el-col>
-        </el-row>
-    </div>
+	<div class="about-wrap">
+		<el-row class="about-row">
+			<el-col
+				v-for="(dev, index) in dev_list"
+				:key="dev.id"
+				:span="2"
+				:offset="index > 0 ? 2 : 3">
+				<el-card
+					:body-style="{ padding: '0px' }"
+					class="row-card"
+					shadow="always">
+					<img :src="dev.imgURL" class="image">
+					<div class="card-text">
+						<el-row>
+							<span style="font-size: 18px;">{{dev.name}}</span>
+						</el-row>
+						<el-row>
+							<el-button type="text" style="font-size: 13px;">
+								<a :href="dev.pageURL" target="_blank">Github</a>
+							</el-button>
+						</el-row>
+					</div>
+				</el-card>
+			</el-col>
+		</el-row>
+	</div>
 </template>
 
 <script>
@@ -78,39 +78,39 @@
 </script>
 
 <style lang="stylus">
-    .about-wrap {
-        height 100%
-        background-color #F8F9FB
+	.about-wrap {
+		height 100%
+		background-color #F8F9FB
 
-        .about-row {
-            padding-top 260px
+		.about-row {
+			padding-top 260px
 
-            .row-card {
-                width 150px
+			.row-card {
+				width 150px
 
-                .image {
-                    width 150px
-                    height 150px
-                    margin-bottom 5px
-                }
+				.image {
+					width 150px
+					height 150px
+					margin-bottom 5px
+				}
 
-                .card-text {
-                    width 150px
+				.card-text {
+					width 150px
 
-                    span {
-                        margin 10px 10px 0 10px
-                    }
+					span {
+						margin 10px 10px 0 10px
+					}
 
-                    .el-button {
-                        float right
-                        padding 5px
+					.el-button {
+						float right
+						padding 5px
 
-                        a {
-                            color #409eff
-                        }
-                    }
-                }
-            }
-        }
-    }
+						a {
+							color #409eff
+						}
+					}
+				}
+			}
+		}
+	}
 </style>

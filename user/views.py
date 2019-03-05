@@ -79,7 +79,9 @@ class SigninAPI(API):
 
 class SigninUserActive(View):
     def get(self, request, uuid):
-        models.SigninUserInfo.objects.get(id=uuid).saveToUser()
+        signinUserInfo = models.SigninUserInfo.objects.filter(id=uuid)
+        if signinUserInfo:
+            signinUserInfo[0].saveToUser()
         return HttpResponseRedirect('/#/login')
 
 
@@ -116,8 +118,11 @@ class ForgetPasswordAPI(API):
 
 class ForgetPasswordReset(View):
     def get(self, request, uuid):
-        models.ForgetPassword.objects.get(id=uuid)
-        return HttpResponseRedirect('/#/forgetPassword/reset/' + str(uuid))
+        forgetPassword = models.ForgetPassword.objects.filter(id=uuid)
+        if forgetPassword:
+            return HttpResponseRedirect('/#/forgetPassword/reset/' + str(uuid))
+        else:
+            return HttpResponseRedirect('/#/login')
 
 
 class ForgetPasswordResetAPI(API):
@@ -126,8 +131,13 @@ class ForgetPasswordResetAPI(API):
         data = request.validated_data
         uuid = data.get('uuid')
         password = data.get('password')
-        email = models.ForgetPassword.objects.get(id=uuid).email
-        user = models.User.objects.get(email=email)
-        user.set_password(password)
-        user.save()
-        return self.success(f'成功重置用户{email}的密码')
+        forgetPassword = models.ForgetPassword.objects.filter(id=uuid)
+        if forgetPassword:
+            email = forgetPassword[0].email
+            forgetPassword[0].delete()
+            user = models.User.objects.get(email=email)
+            user.set_password(password)
+            user.save()
+            return self.success(f'成功重置用户{email}的密码')
+        else:
+            return self.error(f'链接已失效')

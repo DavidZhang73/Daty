@@ -1,6 +1,5 @@
 <template>
 	<div class="signin-wrap">
-		<UserBackground></UserBackground>
 		<div class="sign">
 			<h1>注册</h1>
 			<el-form class="signin-form"
@@ -9,44 +8,60 @@
 			         ref="signinForm">
 				<el-form-item prop="email">
 					<el-tooltip class="item" effect="light" content="Email是您登陆的凭据" placement="top">
-						<el-input type="email" v-model.trim="signinForm.email" placeholder="example@abc.com">
+						<el-input type="email"
+						          v-model.trim="signinForm.email"
+						          placeholder="example@abc.com"
+						          auto-complete="email">
 							<template slot="prepend">Email:</template>
 						</el-input>
 					</el-tooltip>
 				</el-form-item>
 				<el-form-item prop="username">
 					<el-tooltip class="item" effect="light" content="姓名将有助于别人找到你" placement="top">
-						<el-input type="text" v-model.trim="signinForm.username" placeholder="张某某">
+						<el-input type="text"
+						          v-model.trim="signinForm.username"
+						          placeholder="张某某"
+						          auto-complete="name">
 							<template slot="prepend">姓名</template>
 						</el-input>
 					</el-tooltip>
 				</el-form-item>
 				<el-form-item prop="phone">
 					<el-tooltip class="item" effect="light" content="手机号将有助于别人找到你" placement="top">
-						<el-input type="text" v-model.trim="signinForm.phone" placeholder="13088888888">
+						<el-input type="text"
+						          v-model.trim="signinForm.phone"
+						          placeholder="13088888888"
+						          auto-complete="tel">
 							<template slot="prepend">手机号</template>
 						</el-input>
 					</el-tooltip>
 				</el-form-item>
 				<el-form-item prop="qq">
 					<el-tooltip class="item" effect="light" content="QQ将有助于别人找到你" placement="top">
-						<el-input type="text" v-model.trim="signinForm.qq" placeholder="12348888">
+						<el-input type="text"
+						          v-model.trim="signinForm.qq"
+						          placeholder="12348888"
+						          auto-complete="qq">
 							<template slot="prepend">QQ</template>
 						</el-input>
 					</el-tooltip>
 				</el-form-item>
 				<el-form-item prop="password">
 					<el-tooltip class="item" effect="light" content="密码" placement="top">
-						<el-input type="text" v-model.trim="signinForm.password" placeholder="********">
+						<el-input type="text"
+						          v-model.trim="signinForm.password"
+						          placeholder="********"
+						          auto-complete="new-password">
 							<template slot="prepend">密码</template>
 						</el-input>
 					</el-tooltip>
 				</el-form-item>
 				<el-form-item prop="confirmPassword">
 					<el-input type="password"
-							  v-model.trim="signinForm.confirmPassword"
-							  @keypress.enter.native="submitForm('signinForm')"
-							  placeholder="********">
+					          v-model.trim="signinForm.confirmPassword"
+					          @keypress.enter.native="submitForm('signinForm')"
+					          placeholder="********"
+					          auto-complete="new-password">
 						<template slot="prepend">确认密码</template>
 					</el-input>
 				</el-form-item>
@@ -63,15 +78,12 @@
 </template>
 
 <script>
-    import api from '../api'
+    import api from '../../api'
 
-    import UserBackground from '../components/UserBackground'
+    import UserBackground from '../../components/Background'
 
     export default {
         name: "Signin",
-        components: {
-            UserBackground
-        },
         data() {
             var validateEmail = (rule, value, callback) => {
                 let emailRex = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
@@ -196,7 +208,7 @@
                                 let timer = setInterval(() => {
                                     if (this.countdown === 0) {
                                         clearInterval(timer);
-                                        this.$router.push({name: 'login'})
+                                        this.$router.push({name: 'home'})
                                     }
                                     this.countdown--
                                 }, 1000);
@@ -212,7 +224,7 @@
 </script>
 
 <style lang="stylus">
-	@import "../assets/css/consts.styl"
+	@import "../../assets/css/consts.styl"
 	.signin-wrap {
 		.sign {
 			position absolute
