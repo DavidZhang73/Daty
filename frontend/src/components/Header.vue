@@ -2,7 +2,7 @@
 	<div class="header-wrap">
 		<el-menu
 			router
-			:default-active="menuIndex"
+			:default-active="$route.path"
 			:collapse="true"
 			class="header"
 			mode="horizontal"
@@ -36,7 +36,6 @@
 					登出
 				</button>
 			</el-button-group>
-			<el-menu-item index="0" style="padding: 0; margin: 0;"></el-menu-item>
 			<el-menu-item index="/">主页</el-menu-item>
 			<el-menu-item index="/about">关于</el-menu-item>
 		</el-menu>
@@ -48,11 +47,6 @@
 
     export default {
         name: "Header",
-        data() {
-            return {
-                menuIndex: '/',
-            }
-        },
         methods: {
             logout() {
                 api.logout().then(data => {
@@ -67,17 +61,13 @@
             isLogin() {
                 return this.$store.state.user
             }
-        },
-        watch: {
-            '$route.path': function (newPath) {
-                this.menuIndex = '0'
-            }
         }
     }
 </script>
 
 <style lang="stylus">
 	.header-wrap {
+
 		.header {
 			width 100%
 			position fixed
