@@ -11,7 +11,7 @@
 					          v-model.trim="signinForm.email"
 					          placeholder="example@abc.com"
 					          auto-complete="email">
-						<template slot="prepend">Email:</template>
+						<template slot="prepend"><span>*</span>Email:</template>
 					</el-input>
 				</el-tooltip>
 			</el-form-item>
@@ -21,7 +21,7 @@
 					          v-model.trim="signinForm.username"
 					          placeholder="张某某"
 					          auto-complete="name">
-						<template slot="prepend">姓名</template>
+						<template slot="prepend"><span>*</span>姓名</template>
 					</el-input>
 				</el-tooltip>
 			</el-form-item>
@@ -51,7 +51,7 @@
 					          v-model.trim="signinForm.password"
 					          placeholder="********"
 					          auto-complete="new-password">
-						<template slot="prepend">密码</template>
+						<template slot="prepend"><span>*</span>密码</template>
 					</el-input>
 				</el-tooltip>
 			</el-form-item>
@@ -61,7 +61,7 @@
 				          @keypress.enter.native="submitForm('signinForm')"
 				          placeholder="********"
 				          auto-complete="new-password">
-					<template slot="prepend">确认密码</template>
+					<template slot="prepend"><span>*</span>确认密码</template>
 				</el-input>
 			</el-form-item>
 			<div class="info">
@@ -77,9 +77,6 @@
 
 <script>
     import api from '../../api'
-
-    import UserBackground from '../../components/Background'
-
     export default {
         name: "Signin",
         data() {
@@ -115,7 +112,7 @@
             var validatePhone = (rule, value, callback) => {
                 let phoneRex = /^1[34578]\d{9}$/;
                 if (!value) {
-                    return callback(new Error('请输入手机号'))
+                    return callback()
                 } else if (!phoneRex.test(value)) {
                     return callback(new Error('手机号格式不正确'))
                 }
@@ -124,7 +121,7 @@
             var validateQQ = (rule, value, callback) => {
                 let qqRex = /[1-9][0-9]{4,}/;
                 if (!value) {
-                    return callback(new Error('请输入QQ'))
+                    return callback()
                 } else if (!qqRex.test(value)) {
                     return callback(new Error('QQ格式不正确'))
                 }
@@ -245,6 +242,10 @@
 
 			.el-form-item {
 				margin-bottom 20px
+
+				span {
+					color $danger-color
+				}
 
 				.el-input-group__prepend {
 					text-align center

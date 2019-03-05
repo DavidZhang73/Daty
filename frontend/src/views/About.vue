@@ -8,7 +8,7 @@
 			     v-for="dev in dev_list"
 			     :key="dev.id">
 				<a :href="dev.pageURL" target="_blank">
-					<img class="dev-image" :src="dev.imgURL">
+					<img class="dev-image" :src="dev.imgURL" :alt="dev.name">
 					<span class="dev-name">{{dev.name}}</span>
 					<span class="dev-link">Github</span>
 				</a>

@@ -18,7 +18,7 @@
 				<el-input type="password"
 				          v-model.trim="loginForm.password"
 				          @keypress.enter.native="submitForm('loginForm')"
-				          auto-complete="new-password">
+				          auto-complete="password">
 					<template slot="prepend">密码</template>
 				</el-input>
 			</el-form-item>
@@ -82,6 +82,7 @@
                                 this.$message.error({showClose: true, message: data.error})
                             } else {
                                 this.$store.commit('userMutation', {
+                                    id: data.data.id,
                                     email: data.data.email,
                                     username: data.data.username,
                                     phone: data.data.phone,
