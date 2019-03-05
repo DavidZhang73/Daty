@@ -3,13 +3,14 @@
 		<el-menu
 			router
 			:default-active="menuIndex"
+			:collapse="true"
 			class="header"
 			mode="horizontal"
 			background-color="#FFFFFF"
 			text-color="#000"
 			active-text-color="#000000">
 			<img id="logo" src="../assets/logo_svg.svg" height="40px" width="80px">
-			<el-button-group class="btn-header" v-if="!isAuthorized()">
+			<el-button-group class="btn-header" v-if="!isLogin()">
 				<router-link
 					class="el-button el-button--info is-plain"
 					:to="{name: 'login'}">
@@ -21,7 +22,7 @@
 					注册
 				</router-link>
 			</el-button-group>
-			<el-button-group class="btn-header" v-if="isAuthorized()">
+			<el-button-group class="btn-header" v-if="isLogin()">
 				<router-link
 					class="el-button el-button--info is-plain"
 					:to="{name: 'home'}"
@@ -35,9 +36,9 @@
 					登出
 				</button>
 			</el-button-group>
-			<el-menu-item index="0" style="margin: 0px; padding: 0px;"></el-menu-item>
-			<el-menu-item index="/" @click="goToHome">主页</el-menu-item>
-			<el-menu-item index="/about" @click="goToAbout">关于</el-menu-item>
+			<el-menu-item index="0" style="padding: 0; margin: 0;"></el-menu-item>
+			<el-menu-item index="/">主页</el-menu-item>
+			<el-menu-item index="/about">关于</el-menu-item>
 		</el-menu>
 	</div>
 </template>
@@ -49,7 +50,7 @@
         name: "Header",
         data() {
             return {
-                menuIndex: '/'
+                menuIndex: '/',
             }
         },
         methods: {
@@ -65,9 +66,11 @@
             },
             isLogin() {
                 return this.$store.state.user
-            },
-            isAuthorized() {
-                return false
+            }
+        },
+        watch: {
+            '$route.path': function (newPath) {
+                this.menuIndex = '0'
             }
         }
     }

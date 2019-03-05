@@ -1,5 +1,7 @@
 <template>
 	<div class="home-wrap">
+		<Background img-name="background.jpg"
+		            :blur="false"></Background>
 		<div class="home">
 			<div class="button-col">
 				<div class="button-row">
@@ -22,18 +24,19 @@
 </template>
 
 <script>
+    import Background from '../components/Background'
 
     export default {
         name: 'home',
-        components: {}
+        components: {
+            Background
+        }
     }
 </script>
 
 <style lang="stylus">
 	.home-wrap {
 		height 100%
-
-		background: #F8F9FB url("../assets/background.jpg") no-repeat;
 		background-size: contain;
 
 		.home {

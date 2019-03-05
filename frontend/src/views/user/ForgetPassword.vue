@@ -1,6 +1,5 @@
 <template>
 	<div class="forget-password-wrap">
-		<UserBackground></UserBackground>
 		<div class="forget-password">
 			<h1>找回密码</h1>
 			<el-form class="forgrt-password-form"
@@ -27,14 +26,10 @@
 </template>
 
 <script>
-    import api from '../api'
-    import UserBackground from '../components/UserBackground'
+    import api from '../../api'
 
     export default {
         name: "ForgetPassword",
-        components: {
-            UserBackground
-        },
         data() {
             var validateEmail = (rule, value, callback) => {
                 let emailRex = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;

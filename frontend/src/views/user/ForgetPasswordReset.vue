@@ -1,6 +1,5 @@
 <template>
 	<div class="forget-password-reset-wrap">
-		<UserBackground></UserBackground>
 		<div class="forget-password-reset">
 			<h1>重置密码</h1>
 			<el-form class="forgrt-password-reset-form"
@@ -35,14 +34,10 @@
 </template>
 
 <script>
-    import api from '../api'
-    import UserBackground from '../components/UserBackground'
+    import api from '../../api'
 
     export default {
         name: "ForgetPasswordReset",
-        components: {
-            UserBackground
-        },
         data() {
             var validatePassword = (rule, value, callback) => {
                 let passwordRex = /^\d+$/;

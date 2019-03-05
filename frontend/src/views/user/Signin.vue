@@ -1,6 +1,5 @@
 <template>
 	<div class="signin-wrap">
-		<UserBackground></UserBackground>
 		<div class="sign">
 			<h1>注册</h1>
 			<el-form class="signin-form"
@@ -79,15 +78,12 @@
 </template>
 
 <script>
-    import api from '../api'
+    import api from '../../api'
 
-    import UserBackground from '../components/UserBackground'
+    import UserBackground from '../../components/Background'
 
     export default {
         name: "Signin",
-        components: {
-            UserBackground
-        },
         data() {
             var validateEmail = (rule, value, callback) => {
                 let emailRex = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
@@ -228,7 +224,7 @@
 </script>
 
 <style lang="stylus">
-	@import "../assets/css/consts.styl"
+	@import "../../assets/css/consts.styl"
 	.signin-wrap {
 		.sign {
 			position absolute

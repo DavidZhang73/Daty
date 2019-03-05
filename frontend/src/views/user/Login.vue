@@ -1,9 +1,8 @@
 <template>
 	<div class="login-wrap">
-		<UserBackground></UserBackground>
 		<div class="login">
 			<router-link :to="{name: 'home'}">
-				<img class="logo" src="../assets/logo.png">
+				<img class="logo" src="../../assets/logo.png">
 			</router-link>
 			<el-form class="login-form"
 			         :model="loginForm"
@@ -37,14 +36,11 @@
 </template>
 
 <script>
-    import api from '../api'
-    import UserBackground from '../components/UserBackground'
+    import api from '../../api'
+    import UserBackground from '../../components/Background'
 
     export default {
         name: "Login",
-        components: {
-            UserBackground
-        },
         data() {
             var validateEmail = (rule, value, callback) => {
                 let emailRex = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
@@ -106,7 +102,7 @@
 </script>
 
 <style lang="stylus">
-	@import "../assets/css/consts.styl"
+	@import "../../assets/css/consts.styl"
 	.login-wrap {
 
 		.login {
