@@ -1,37 +1,30 @@
 <template>
 	<div class="about-wrap">
-		<el-row class="about-row">
-			<el-col
-				v-for="(dev, index) in dev_list"
-				:key="dev.id"
-				:span="2"
-				:offset="index > 0 ? 2 : 3">
-				<el-card
-					:body-style="{ padding: '0px' }"
-					class="row-card"
-					shadow="always">
-					<img :src="dev.imgURL" class="image">
-					<div class="card-text">
-						<el-row>
-							<span style="font-size: 18px;">{{dev.name}}</span>
-						</el-row>
-						<el-row>
-							<el-button type="text" style="font-size: 13px;">
-								<a :href="dev.pageURL" target="_blank">Github</a>
-							</el-button>
-						</el-row>
-					</div>
-				</el-card>
-			</el-col>
-		</el-row>
+        <Background img-name="background.jpg"
+                    :blur="true"></Background>
+        <div class="about">
+            <h1>Developers</h1>
+            <div class="card"
+                 v-for="dev in dev_list"
+                 :key="dev.id">
+                <a :href="dev.pageURL" target="_blank">
+                    <img class="dev-image" :src="dev.imgURL" :alt="dev.name">
+                    <span class="dev-name">{{dev.name}}</span>
+                    <span class="dev-link">Github</span>
+                </a>
+            </div>
+        </div>
 	</div>
 </template>
 
 <script>
+    import Background from '../components/Background'
 
     export default {
         name: 'about',
-        components: {},
+        components: {
+            Background
+        },
         data() {
             return {
                 dev_list: [
@@ -65,9 +58,9 @@
                     },
                     {
                         id: 4,
-                        name: 'EggTargaryen',
-                        imgURL: 'https://avatars1.githubusercontent.com/u/34475415?s=460&v=4',
-                        pageURL: 'https://github.com/dzxrly',
+                        name: 'Victor',
+                        imgURL: 'https://avatars1.githubusercontent.com/u/38451914?s=400&v=4',
+                        pageURL: 'https://github.com/VictorYgy',
                         desc: 'desc4'
                     }
                 ]
@@ -79,36 +72,45 @@
 
 <style lang="stylus">
 	.about-wrap {
-		height 100%
-		background-color #F8F9FB
+        .about {
+            position relative
+            padding-top 150px
 
-		.about-row {
-			padding-top 260px
+            h1 {
+                font-size 2em
+                text-align center
+                padding-bottom 40px
+            }
 
-			.row-card {
-				width 150px
+            .card {
+                float left
+                width 200px
+                margin 0 50px 50px 50px
+                border-radius 20px
+                background-color rgb(249, 250, 254)
+                box-shadow 0 0 6px 0 rgba(0, 0, 0, 0.12)
+                overflow hidden
 
-				.image {
-					width 150px
-					height 150px
+                &:hover {
+                    box-shadow 0 0 10px 0 #7fbcff
+                }
+
+                .dev-image {
+                    width 200px
+                    height 200x
 					margin-bottom 5px
 				}
 
-				.card-text {
-					width 150px
+                .dev-name {
+                    font-size 1.8em
+                    display block
+                    padding 5px 0 0 5px
+                    margin-bottom 10px
+                }
 
-					span {
-						margin 10px 10px 0 10px
-					}
-
-					.el-button {
-						float right
-						padding 5px
-
-						a {
-							color #409eff
-						}
-					}
+                .dev-link {
+                    float right
+                    padding 5px
 				}
 			}
 		}

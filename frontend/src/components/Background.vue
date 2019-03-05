@@ -1,6 +1,5 @@
 <template>
-	<div class="user-background-wrap" :style="backgroundStyle">
-
+	<div class="background-wrap" :style="backgroundStyle">
 	</div>
 </template>
 
@@ -14,7 +13,7 @@
         data() {
             return {
                 backgroundStyle: {
-                    background: "no-repeat center/100% url(" + require("../assets/img/" + this.imgName) + ")",
+                    background: "no-repeat top/100% url(" + require("../assets/img/" + this.imgName) + ")",
                     filter: this.blurStyle(),
                 }
             }
@@ -33,9 +32,10 @@
 </script>
 
 <style lang="stylus">
-	.user-background-wrap {
-		position absolute
+	.background-wrap {
+		position fixed
 		width 100%
 		height 100%
+		transform translate(0, 60px)
 	}
 </style>

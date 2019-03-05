@@ -3,21 +3,20 @@
 		<Background img-name="background.jpg"
 		            :blur="false"></Background>
 		<div class="home">
-			<div class="button-col">
-				<div class="button-row">
-					<router-link :to="{name: 'fileDetail'}">
-						<el-button type="primary" class="button1">
-							<i class="el-icon-download"></i>
-							我要收文件
-						</el-button>
-					</router-link>
-					<router-link :to="{name: 'about'}">
-						<el-button type="primary" class="button2">
-							<i class="el-icon-upload2"></i>
-							我要交文件
-						</el-button>
-					</router-link>
-				</div>
+			<img class="logo" src="../assets/logo_svg.svg" alt="LOGO">
+			<div class="button-row">
+				<router-link :to="{name: 'home'}">
+					<el-button type="primary">
+						<i class="el-icon-download"></i>
+						我要收文件
+					</el-button>
+				</router-link>
+				<router-link :to="{name: 'home'}">
+					<el-button type="primary" id="last-btn">
+						<i class="el-icon-upload2"></i>
+						我要交文件
+					</el-button>
+				</router-link>
 			</div>
 		</div>
 	</div>
@@ -41,27 +40,29 @@
 		background-color rgb(248,250,251)
 
 		.home {
-			height inherit
+			position relative
+			padding-top 150px
+			margin 0 auto
+			width 500px
 
-			.button-col {
-				height inherit
-				width 270px
+			.logo {
+				width 500px
+				height 250px
+				margin-bottom 50px
+			}
+
+			.button-row {
 				margin 0 auto
-				/*border 1px solid black*/
+				width 350px
 
-				.button-row {
-					position relative
-					top 55%
-					/*border 1px solid blue*/
+				#last-btn {
+					float right
 
-					.button1 {
-						float left
+					&::after {
+						content ''
+						display block
+						clear both
 					}
-
-					.button2 {
-						float right
-					}
-
 				}
 			}
 		}

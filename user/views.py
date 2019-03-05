@@ -22,6 +22,7 @@ class LoginAPI(API):
             else:
                 auth.login(request, user)
                 return self.success({
+                    'id': user.id,
                     'email': user.email,
                     'username': user.username,
                     'qq': user.qq,
@@ -82,7 +83,7 @@ class SigninUserActive(View):
         signinUserInfo = models.SigninUserInfo.objects.filter(id=uuid)
         if signinUserInfo:
             signinUserInfo[0].saveToUser()
-        return HttpResponseRedirect('/#/login')
+        return HttpResponseRedirect('/#/user/login')
 
 
 class ForgetPasswordEmailCheckAPI(API):
@@ -120,9 +121,9 @@ class ForgetPasswordReset(View):
     def get(self, request, uuid):
         forgetPassword = models.ForgetPassword.objects.filter(id=uuid)
         if forgetPassword:
-            return HttpResponseRedirect('/#/forgetPassword/reset/' + str(uuid))
+            return HttpResponseRedirect('/#/user/forgetPassword/reset/' + str(uuid))
         else:
-            return HttpResponseRedirect('/#/login')
+            return HttpResponseRedirect('/#/user/login')
 
 
 class ForgetPasswordResetAPI(API):
