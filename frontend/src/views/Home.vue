@@ -52,6 +52,10 @@
 				margin 0 auto
 				width 350px
 
+				button {
+					font-size 16px
+				}
+
 				#last-btn {
 					float right
 

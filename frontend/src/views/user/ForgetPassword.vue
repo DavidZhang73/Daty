@@ -69,17 +69,7 @@
                             if (data.error) {
                                 this.$message.error({showClose: true, message: data.error})
                             } else {
-                                this.$message.success({
-                                    duration: this.countdown * 1000,
-                                    message: `找回成功！请在邮箱中继续操作，${this.countdown}秒后跳转到主页`
-                                });
-                                let timer = setInterval(() => {
-                                    if (this.countdown === 0) {
-                                        clearInterval(timer);
-                                        this.$router.push({name: 'home'})
-                                    }
-                                    this.countdown--
-                                }, 1000);
+                                this.$router.push({name: 'emailCheck'})
                             }
                         })
                     } else {

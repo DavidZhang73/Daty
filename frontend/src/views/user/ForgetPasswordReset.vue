@@ -80,17 +80,7 @@
                             if (data.error) {
                                 this.$message.error({showClose: true, message: data.error})
                             } else {
-                                this.$message.success({
-                                    duration: this.countdown * 1000,
-                                    message: `重置密码成功！${this.countdown}秒后跳转到登录界面`
-                                });
-                                let timer = setInterval(() => {
-                                    if (this.countdown === 0) {
-                                        clearInterval(timer);
-                                        this.$router.push({name: 'login'})
-                                    }
-                                    this.countdown--
-                                }, 1000);
+                                this.$router.push({name: 'forgetPasswordResetSuccess'})
                             }
                         })
                     } else {

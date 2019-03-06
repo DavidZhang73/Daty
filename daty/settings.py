@@ -157,3 +157,5 @@ HOST = 'http://localhost:8000'
 SILENCED_SYSTEM_CHECKS = [
     'auth.W004',
 ]
+
+SESSION_COOKIE_HTTPONLY = False

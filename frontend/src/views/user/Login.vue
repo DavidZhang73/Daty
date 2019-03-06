@@ -35,7 +35,6 @@
 
 <script>
     import api from '../../api'
-    import UserBackground from '../../components/Background'
 
     export default {
         name: "Login",
@@ -81,13 +80,15 @@
                                 this.loginForm.password = '';
                                 this.$message.error({showClose: true, message: data.error})
                             } else {
-                                this.$store.commit('userMutation', {
+                                let userInfo = {
                                     id: data.data.id,
                                     email: data.data.email,
                                     username: data.data.username,
                                     phone: data.data.phone,
                                     qq: data.data.qq
-                                });
+                                };
+                                this.$store.commit('userMutation', userInfo);
+
                                 this.$router.push({name: 'home'})
                             }
                         })

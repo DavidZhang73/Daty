@@ -30,7 +30,7 @@
 			left 50%
 			transform translate(-50%, -50%)
 			min-width 400px
-			padding 40px 50px 20px 50px
+			padding 30px 50px 30px 50px
 			border-radius 5px
 			box-shadow 0 0 6px 0 rgba(0, 0, 0, 0.12)
 			background-color: #ffffff

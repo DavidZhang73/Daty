@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 from django.contrib import auth
+from django.contrib.auth.hashers import make_password
 from django.views.generic.base import View
 from django.shortcuts import HttpResponseRedirect
 
@@ -63,7 +64,7 @@ class SigninAPI(API):
         else:
             user = models.SigninUserInfo.objects.create(
                 username=username,
-                password=password,
+                password=make_password(password),
                 email=email,
                 phone=phone,
                 qq=qq,
@@ -83,7 +84,9 @@ class SigninUserActive(View):
         signinUserInfo = models.SigninUserInfo.objects.filter(id=uuid)
         if signinUserInfo:
             signinUserInfo[0].saveToUser()
-        return HttpResponseRedirect('/#/user/login')
+            return HttpResponseRedirect('/#/user/signinSuccess')
+        else:
+            return HttpResponseRedirect('/#/user/login')
 
 
 class ForgetPasswordEmailCheckAPI(API):

@@ -77,6 +77,7 @@
 
 <script>
     import api from '../../api'
+
     export default {
         name: "Signin",
         data() {
@@ -196,17 +197,7 @@
                                 this.signinForm.confirmPassword = '';
                                 this.$message.error({showClose: true, message: data.error})
                             } else {
-                                this.$message.success({
-                                    duration: this.countdown * 1000,
-                                    message: `注册成功！请在邮箱中激活账户，${this.countdown}秒后跳转到登录界面`
-                                });
-                                let timer = setInterval(() => {
-                                    if (this.countdown === 0) {
-                                        clearInterval(timer);
-                                        this.$router.push({name: 'home'})
-                                    }
-                                    this.countdown--
-                                }, 1000);
+                                this.$router.push({name: 'emailCheck'})
                             }
                         })
                     } else {
@@ -243,7 +234,7 @@
 			.el-form-item {
 				margin-bottom 20px
 
-				span {
+				input > span {
 					color $danger-color
 				}
 

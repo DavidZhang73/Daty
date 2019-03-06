@@ -7,8 +7,11 @@ import About from './views/About'
 import User from './views/user/User'
 import Login from './views/user/Login'
 import Signin from './views/user/Signin'
+import EmailCheck from './views/user/EmailCheck'
+import SigninSuccess from './views/user/SigninSuccess'
 import ForgetPassword from './views/user/ForgetPassword'
 import ForgetPasswordReset from "./views/user/ForgetPasswordReset"
+import ForgetPasswordResetSuccess from './views/user/ForgetPasswordResetSuccess'
 
 import Center from './views/center/Center'
 import CollectionList from './views/center/CollectionList'
@@ -17,6 +20,7 @@ import UserInfo from './views/center/UserInfo'
 import UserPassword from './views/center/UserPassword'
 
 import NotFound from './views/NotFound'
+import Test from './views/Test'
 
 Vue.use(Router);
 
@@ -49,6 +53,16 @@ export default new Router({
                     component: Signin
                 },
                 {
+                    path: 'emailCheck',
+                    name: 'emailCheck',
+                    component: EmailCheck
+                },
+                {
+                    path: 'signinSuccess',
+                    name: 'signinSuccess',
+                    component: SigninSuccess
+                },
+                {
                     path: 'forgetPassword',
                     name: 'forgetPassword',
                     component: ForgetPassword,
@@ -57,6 +71,11 @@ export default new Router({
                     path: 'forgetPassword/reset/:uuid',
                     name: 'forgetPasswordReset',
                     component: ForgetPasswordReset,
+                },
+                {
+                    path: 'forgetPassword/resetSuccess',
+                    name: 'forgetPasswordResetSuccess',
+                    component: ForgetPasswordResetSuccess,
                 },
             ]
         },
@@ -85,6 +104,10 @@ export default new Router({
                     component: UserPassword
                 }
             ]
+        },
+        {
+            path: '/test',
+            component: Test,
         },
         {
             path: '*',
