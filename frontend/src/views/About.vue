@@ -98,8 +98,8 @@
                 .dev-image {
                     width 200px
                     height 200x
-					margin-bottom 5px
-				}
+                    margin-bottom 5px
+                }
 
                 .dev-name {
                     font-size 1.8em
@@ -111,7 +111,7 @@
                 .dev-link {
                     float right
                     padding 5px
-				}
+                }
 			}
 		}
 	}

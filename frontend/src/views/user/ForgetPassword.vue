@@ -114,7 +114,7 @@
                 .el-button {
                     float right
                     right 0
-				}
+                }
 			}
 		}
 	}
