@@ -1,5 +1,5 @@
 <template>
-	<div class="forget-password-reset-wrap">
+    <div class="forget-password-reset-wrap">
         <h1>重置密码</h1>
         <el-form class="forgrt-password-reset-form"
                  :model="forgetPasswordResetForm"
@@ -28,7 +28,7 @@
                 <el-button type="success" @click="submitForm('forgetPasswordResetForm')">重置密码</el-button>
             </el-form-item>
         </el-form>
-	</div>
+    </div>
 </template>
 
 <script>
@@ -103,7 +103,7 @@
 </script>
 
 <style lang="stylus">
-	.forget-password-reset-wrap {
+    .forget-password-reset-wrap {
 
         h1 {
             margin-bottom 20px
@@ -126,7 +126,7 @@
                     float right
                     right 0
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 </style>

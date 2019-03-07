@@ -1,5 +1,5 @@
 <template>
-	<div class="signin-wrap">
+    <div class="signin-wrap">
         <h1>注册</h1>
         <el-form class="signin-form"
                  :model="signinForm"
@@ -72,11 +72,12 @@
                 <el-button type="success" @click="submitForm('signinForm')">注册</el-button>
             </el-form-item>
         </el-form>
-	</div>
+    </div>
 </template>
 
 <script>
     import api from '../../api'
+
     export default {
         name: "Signin",
         data() {
@@ -219,8 +220,8 @@
 </script>
 
 <style lang="stylus">
-	@import "../../assets/css/consts.styl"
-	.signin-wrap {
+    @import "../../assets/css/consts.styl"
+    .signin-wrap {
 
         h1 {
             margin-bottom 20px
@@ -272,8 +273,8 @@
                     &:hover {
                         opacity 1
                     }
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 </style>

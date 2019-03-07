@@ -1,7 +1,10 @@
 <template>
     <div class="user-info-wrap">
-        <el-collapse v-model="activeNames" @change="handleChange">
-            <el-collapse-item title="修改姓名" name="1">
+        <el-collapse class="user-info" accordion>
+            <el-collapse-item name="1">
+                <template slot="title">
+                    <i class="el-icon-edit-outline"></i>&nbsp;修改姓名
+                </template>
                 <el-form :inline="true"
                          class="formItem"
                          :model="ruleFormName"
@@ -18,7 +21,10 @@
                     </el-form-item>
                 </el-form>
             </el-collapse-item>
-            <el-collapse-item title="修改手机号" name="2">
+            <el-collapse-item name="2">
+                <template slot="title">
+                    <i class="el-icon-edit-outline"></i>&nbsp;修改手机号
+                </template>
                 <el-form :inline="true"
                          class="formItem"
                          :model="ruleFormPhonenumber"
@@ -35,14 +41,25 @@
                     </el-form-item>
                 </el-form>
             </el-collapse-item>
-            <el-collapse-item title="效率 Efficiency" name="3">
-                <div>简化流程：设计简洁直观的操作流程；</div>
-                <div>清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；</div>
-                <div>帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。</div>
-            </el-collapse-item>
-            <el-collapse-item title="可控 Controllability" name="4">
-                <div>用户决策：根据场景可给予用户操作建议或安全提示，但不能代替用户进行决策；</div>
-                <div>结果可控：用户可以自由的进行操作，包括撤销、回退和终止当前操作等。</div>
+            <el-collapse-item name="3">
+                <template slot="title">
+                    <i class="el-icon-edit-outline"></i>&nbsp;修改QQ
+                </template>
+                <el-form :inline="true"
+                         class="formItem"
+                         :model="ruleFormQQ"
+                         :rules="rulesQQ"
+                         ref="ruleFormQQ">
+                    <el-form-item label="新的QQ" prop="QQ">
+                        <el-input
+                                v-model.trim="ruleFormQQ.QQ"
+                                placeholder="12348888"
+                                auto-complete="QQ"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmitQQ">提交</el-button>
+                    </el-form-item>
+                </el-form>
             </el-collapse-item>
         </el-collapse>
     </div>
@@ -53,7 +70,7 @@
         name: "UserInfo",
         data() {
             var validateName = (rule, value, callback) => {
-                //必填。150个字符或者更少。包含字母，数字和仅有的@/./+/-/_符号。
+                //150个字符或者更少。包含字母，数字和仅有的@/./+/-/_符号。
                 if (!value) {
                     return callback(new Error('请输入姓名'))
                 } else if (value.length > 150) {
@@ -70,6 +87,15 @@
                 }
                 return callback()
             };
+            var validateQQ = (rule, value, callback) => {
+                let qqRex = /[1-9][0-9]{4,}/;
+                if (!value) {
+                    return callback()
+                } else if (!qqRex.test(value)) {
+                    return callback(new Error('QQ格式不正确'))
+                }
+                return callback()
+            };
             return {
                 activeNames: ['1'],
                 ruleFormName: {
@@ -77,6 +103,9 @@
                 },
                 ruleFormPhonenumber: {
                     phoneNumber: ''
+                },
+                ruleFormQQ: {
+                    QQ: ''
                 },
                 rulesName: {
                     name: [
@@ -87,17 +116,22 @@
                     phoneNumber: [
                         {validator: validatePhone, trigger: 'blur'}
                     ]
+                },
+                rulesQQ: {
+                    QQ: [
+                        {validator: validateQQ, trigger: 'blur'}
+                    ]
                 }
             }
         },
         methods: {
-            handleChange(val) {
-                console.log(val);
-            },
             onSubmitName() {
 
             },
             onSubmitPhonenumber() {
+
+            },
+            onSubmitQQ() {
 
             }
         }
@@ -106,6 +140,24 @@
 
 <style lang="stylus">
     .user-info-wrap {
+        height 100%
+        width 100%
 
+        .user-info {
+            height 100%
+            width 100%
+
+            .formItem {
+                margin 0 auto
+
+                .el-form-item {
+                    margin 20px
+
+                    .el-button {
+                        margin-left -20px
+                    }
+                }
+            }
+        }
     }
 </style>

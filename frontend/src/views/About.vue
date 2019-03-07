@@ -1,5 +1,5 @@
 <template>
-	<div class="about-wrap">
+    <div class="about-wrap">
         <Background img-name="background.jpg"
                     :blur="true"></Background>
         <div class="about">
@@ -14,7 +14,7 @@
                 </a>
             </div>
         </div>
-	</div>
+    </div>
 </template>
 
 <script>
@@ -71,7 +71,7 @@
 </script>
 
 <style lang="stylus">
-	.about-wrap {
+    .about-wrap {
         .about {
             position relative
             padding-top 150px
@@ -112,7 +112,7 @@
                     float right
                     padding 5px
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 </style>
