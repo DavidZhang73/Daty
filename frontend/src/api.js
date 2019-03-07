@@ -39,6 +39,9 @@ export default {
             uuid,
             password
         })
+    },
+    userInfoNameChange(username) {
+
     }
 }
 

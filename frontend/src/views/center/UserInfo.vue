@@ -17,7 +17,7 @@
                                 auto-complete="name"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmitName">提交</el-button>
+                        <el-button type="primary" @click="onSubmitName('ruleFormName')">提交</el-button>
                     </el-form-item>
                 </el-form>
             </el-collapse-item>
@@ -37,7 +37,7 @@
                                 auto-complete="phoneNumber"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmitPhonenumber">提交</el-button>
+                        <el-button type="primary" @click="onSubmitPhonenumber('ruleFormPhonenumber')">提交</el-button>
                     </el-form-item>
                 </el-form>
             </el-collapse-item>
@@ -57,7 +57,7 @@
                                 auto-complete="QQ"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmitQQ">提交</el-button>
+                        <el-button type="primary" @click="onSubmitQQ('ruleFormQQ')">提交</el-button>
                     </el-form-item>
                 </el-form>
             </el-collapse-item>
@@ -125,13 +125,13 @@
             }
         },
         methods: {
-            onSubmitName() {
+            onSubmitName(formName) {
 
             },
-            onSubmitPhonenumber() {
+            onSubmitPhonenumber(formName) {
 
             },
-            onSubmitQQ() {
+            onSubmitQQ(formName) {
 
             }
         }
