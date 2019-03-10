@@ -11,7 +11,6 @@
                 <div class="step-1" v-if="stepOneSeen">
                     <el-input type="password"
                               v-model="oldPassword"
-                              @blur="pwCheck"
                               clearable>
                         <template slot="prepend">请输入旧的密码</template>
                     </el-input>
@@ -33,7 +32,10 @@
                     </el-input>
                 </div>
             </div>
-            <el-button-group>
+            <el-button class="submitChange" v-if="submitBtn" type="success" @click="submitData" plain>
+                提交
+            </el-button>
+            <el-button-group v-if="btnGroup">
                 <el-button
                         type="primary"
                         icon="el-icon-arrow-left"
@@ -64,7 +66,9 @@
                 canSeenNextBtn: false,
                 stepOneSeen: true,
                 stepTwoSeen: false,
-                stepThreeSeen: false
+                stepThreeSeen: false,
+                submitBtn: false,
+                btnGroup: true,
             };
         },
         methods: {
@@ -74,8 +78,8 @@
             last() {
                 this.active--;
             },
-            pwCheck() {
-                
+            submitData() {
+
             },
         },
         watch: {
@@ -88,6 +92,9 @@
                     this.stepOneSeen = false;
                     this.stepTwoSeen = true;
                     this.stepThreeSeen = false;
+
+                    this.submitBtn = false;
+                    this.btnGroup = true;
                 } else if (newVal === 2) {
                     this.canSeenNextBtn = false;
                     this.canSeenLastBtn = false;
@@ -95,11 +102,18 @@
                     this.stepOneSeen = false;
                     this.stepTwoSeen = false;
                     this.stepThreeSeen = true;
+
+                    this.submitBtn = false;
+                    this.btnGroup = true;
                 } else if (newVal === 3) {
                     this.canSeenNextBtn = true;
                     this.canSeenLastBtn = false;
+                    this.stepOneSeen = false;
+                    this.stepTwoSeen = false;
+                    this.stepThreeSeen = false;
 
-
+                    this.submitBtn = true;
+                    this.btnGroup = false;
                 } else if (newVal === 0) {
                     this.canSeenNextBtn = false;
                     this.canSeenLastBtn = true;
@@ -107,6 +121,9 @@
                     this.stepOneSeen = true;
                     this.stepTwoSeen = false;
                     this.stepThreeSeen = false;
+
+                    this.submitBtn = false;
+                    this.btnGroup = true;
                 } else {
                     this.canSeenNextBtn = false;
                     this.canSeenLastBtn = false;
@@ -114,6 +131,9 @@
                     this.stepOneSeen = true;
                     this.stepTwoSeen = false;
                     this.stepThreeSeen = false;
+
+                    this.submitBtn = false;
+                    this.btnGroup = true;
                 }
             }
         }

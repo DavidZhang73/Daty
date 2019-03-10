@@ -40,9 +40,24 @@ export default {
             password
         })
     },
-    userInfoNameChange(username) {
+    //Center
+    //center.useInfo
+    userInfoNameChange() {
 
-    }
+    },
+    userInfoPhoneNumberChange() {
+
+    },
+    userInfoQQChange() {
+
+    },
+    //Center.userPassword
+    checkOldPassword(email, oldPassword) {
+
+    },
+    changePassword(email, newPassword) {
+
+    },
 }
 
 /**
