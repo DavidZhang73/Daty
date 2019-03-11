@@ -80,15 +80,11 @@
                                 this.loginForm.password = '';
                                 this.$message.error({showClose: true, message: data.error})
                             } else {
-                                let userInfo = {
+                                let user = {
                                     id: data.data.id,
-                                    email: data.data.email,
                                     username: data.data.username,
-                                    phone: data.data.phone,
-                                    qq: data.data.qq
                                 };
-                                this.$store.commit('userMutation', userInfo);
-
+                                this.$store.dispatch('userLogin', user);
                                 this.$router.push({name: 'home'})
                             }
                         })

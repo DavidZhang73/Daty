@@ -6,6 +6,8 @@
 </template>
 
 <script>
+    import api from '../api'
+
     export default {
         name: "Test",
         data() {
@@ -15,7 +17,9 @@
         },
         methods: {
             handle() {
-
+                api.test().then(data => {
+                    this.msg = data
+                })
             }
         }
     }

@@ -6,6 +6,8 @@ from django.contrib.auth.hashers import make_password
 from django.views.generic.base import View
 from django.shortcuts import HttpResponseRedirect
 
+from rest_framework.permissions import IsAuthenticated
+
 from . import serializers
 from . import models
 from utils.api import API
@@ -24,10 +26,7 @@ class LoginAPI(API):
                 auth.login(request, user)
                 return self.success({
                     'id': user.id,
-                    'email': user.email,
                     'username': user.username,
-                    'qq': user.qq,
-                    'phone': user.phone
                 })
         else:
             return self.error('Email不存在或密码不正确')
@@ -39,7 +38,7 @@ class LogoutAPI(API):
         return self.success("success")
 
 
-class SigninEmailCheckAPI(API):
+class SigninCheckEmailAPI(API):
     @validate_serializer(serializers.SigninEmailCheckSerializer)
     def post(self, request):
         data = request.validated_data
@@ -79,7 +78,7 @@ class SigninAPI(API):
             return self.success(f'成功注册用户：{email}')
 
 
-class SigninUserActive(View):
+class SigninActiveUser(View):
     def get(self, request, uuid):
         signinUserInfo = models.SigninUserInfo.objects.filter(id=uuid)
         if signinUserInfo:
@@ -89,7 +88,7 @@ class SigninUserActive(View):
             return HttpResponseRedirect('/#/user/login')
 
 
-class ForgetPasswordEmailCheckAPI(API):
+class ForgetPasswordCheckEmailAPI(API):
     @validate_serializer(serializers.ForgetPasswordEmailCheckSerializer)
     def post(self, request):
         data = request.validated_data
@@ -145,3 +144,16 @@ class ForgetPasswordResetAPI(API):
             return self.success(f'成功重置用户{email}的密码')
         else:
             return self.error(f'链接已失效')
+
+
+class UserInfoAPI(API):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        return self.success('msg')
+
+
+class TestAPI(API):
+    def get(self, request):
+        print(request.query_params['account'])
+        return self.success("success")

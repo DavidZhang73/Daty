@@ -16,7 +16,19 @@
             Header,
             Footer
         },
-        methods: {}
+        methods: {},
+        created() {
+            if (document.cookie.search('sessionid') === -1) {
+                this.$store.dispatch('userLogout')
+            } else {
+                if (!this.$store.state.user) {
+                    let user_info_ls = JSON.parse(this.$ls.get('user'));
+                    if (user_info_ls) {
+                        this.$store.commit('userMutation', user_info_ls);
+                    }
+                }
+            }
+        }
     }
 </script>
 

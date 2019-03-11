@@ -2,6 +2,7 @@
 	<div class="forget-password-reset-wrap">
 		<h1>重置密码</h1>
 		<el-form class="forgrt-password-reset-form"
+		         status-icon
 		         :model="forgetPasswordResetForm"
 		         :rules="rules"
 		         ref="forgetPasswordResetForm">

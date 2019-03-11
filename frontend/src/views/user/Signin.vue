@@ -2,6 +2,7 @@
 	<div class="signin-wrap">
 		<h1>注册</h1>
 		<el-form class="signin-form"
+		         status-icon
 		         :model="signinForm"
 		         :rules="rules"
 		         ref="signinForm">
@@ -88,7 +89,7 @@
                 } else if (!emailRex.test(value)) {
                     return callback(new Error('Email格式不正确'))
                 } else {
-                    return api.signinEmailCheck(value).then(data => {
+                    return api.signinCheckEmail(value).then(data => {
                         if (data.error) {
                             alert(data.error)
                         } else {

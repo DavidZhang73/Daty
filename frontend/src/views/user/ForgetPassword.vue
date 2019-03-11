@@ -2,6 +2,7 @@
 	<div class="forget-password-wrap">
 		<h1>找回密码</h1>
 		<el-form class="forgrt-password-form"
+		         status-icon
 		         :model="forgetPasswordForm"
 		         :rules="rules"
 		         ref="forgetPasswordForm">
@@ -36,7 +37,7 @@
                 } else if (!emailRex.test(value)) {
                     return callback(new Error('Email格式不正确'))
                 } else {
-                    return api.forgetPasswordEmailCheck(value).then(data => {
+                    return api.forgetPasswordCheckEmail(value).then(data => {
                         if (data.error) {
                             this.$message.error({showClose: true, mseeage: data.error});
                         } else {
