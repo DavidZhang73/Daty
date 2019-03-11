@@ -1,54 +1,45 @@
 <template>
     <div class="user-password-wrap">
-        <div class="user-password">
-            <el-steps :active="active" finish-status="success">
-                <el-step title="步骤 1"></el-step>
-                <el-step title="步骤 2"></el-step>
-                <el-step title="步骤 3"></el-step>
-            </el-steps>
+        <el-form class="user-password-form"
+                 :model="passwords"
+                 :rules="rules"
+                 ref="passwords"
+                 v-if="showForm">
+            <el-form-item prop="firstPassword">
+                <el-input
+                        type="text"
+                        v-model="passwords.firstPassword"
+                        placeholder="密码不能为纯数字且须大于8位">
+                    <template slot="prepend">请输入新的密码</template>
+                </el-input>
+            </el-form-item>
+            <el-form-item prop="secondPassword">
+                <el-input
+                        type="text"
+                        v-model="passwords.secondPassword"
+                        placeholder="密码不能为纯数字且须大于8位">
+                    <template slot="prepend">请重复输入新的密码</template>
+                </el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submitForm('passwords')">提交</el-button>
+            </el-form-item>
+        </el-form>
 
-            <div class="changePassword">
-                <div class="step-1" v-if="stepOneSeen">
-                    <el-input type="password"
-                              v-model="oldPassword"
-                              clearable>
-                        <template slot="prepend">请输入旧的密码</template>
-                    </el-input>
-                </div>
-                <div class="step-2" v-if="stepTwoSeen">
-                    <el-input type="text"
-                              placeholder="密码不能全为数字且应大于8位"
-                              v-model="firstInput"
-                              clearable>
-                        <template slot="prepend">请输入新的密码</template>
-                    </el-input>
-                </div>
-                <div class="step-3" v-if="stepThreeSeen">
-                    <el-input type="text"
-                              placeholder="密码不能全为数字且应大于8位"
-                              v-model="secondInput"
-                              clearable>
-                        <template slot="prepend">请再次输入新的密码</template>
-                    </el-input>
-                </div>
+        <div class="feedback-success" v-if="showFeedbackSuccess">
+            <div class="icon-success">
+                <i class="el-icon-circle-check-outline"></i>
+                <p class="infoText">修改成功</p>
             </div>
-            <el-button class="submitChange" v-if="submitBtn" type="success" @click="submitData" plain>
-                提交
-            </el-button>
-            <el-button-group v-if="btnGroup">
-                <el-button
-                        type="primary"
-                        icon="el-icon-arrow-left"
-                        @click="last"
-                        :disabled="canSeenLastBtn">上一步
-                </el-button>
-                <el-button
-                        type="primary"
-                        @click="next"
-                        :disabled="canSeenNextBtn">下一步<i
-                        class="el-icon-arrow-right el-icon--right"></i>
-                </el-button>
-            </el-button-group>
+            <p class="returnText">{{ timerText }}</p>
+        </div>
+
+        <div class="feedback-error" v-if="showFeedbackError">
+            <div class="icon-error">
+                <i class="el-icon-circle-close-outline"></i>
+                <p class="infoText">修改失败</p>
+            </div>
+            <p class="returnText">{{ timerText }}</p>
         </div>
     </div>
 </template>
@@ -57,83 +48,72 @@
     export default {
         name: "UserPassword",
         data() {
+            var validatePassword = (rule, value, callback) => {
+                let passwordRex = /^\d+$/;
+                if (!value) {
+                    return callback(new Error('请输入密码'))
+                } else if (value.length > 32 || value.length < 8) {
+                    return callback(new Error('密码应该大于8位小于32位'))
+                } else if (passwordRex.test(value)) {
+                    return callback(new Error('密码不能全是数字'))
+                }
+                return callback()
+            };
+            var validateConfirmPassword = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('请输入确认密码'))
+                } else if (value !== this.passwords.firstPassword) {
+                    return callback(new Error('两次输入密码不一致'))
+                }
+                return callback()
+            };
             return {
-                active: 0,
-                oldPassword: '',
-                firstInput: '',
-                secondInput: '',
-                canSeenLastBtn: true,
-                canSeenNextBtn: false,
-                stepOneSeen: true,
-                stepTwoSeen: false,
-                stepThreeSeen: false,
-                submitBtn: false,
-                btnGroup: true,
+                showForm: true,
+                showFeedbackSuccess: false,
+                showFeedbackError: false,
+                returnToHome: false,
+                autoTime: 5,
+                timerText: '5秒后跳转至登陆页面',
+                passwords: {
+                    firstPassword: '',
+                    secondPassword: '',
+                },
+                rules: {
+                    firstPassword: [
+                        {validator: validatePassword, trigger: 'blur'}
+                    ],
+                    secondPassword: [
+                        {validator: validateConfirmPassword, trigger: 'blur'}
+                    ]
+                }
             };
         },
         methods: {
-            next() {
-                this.active++;
+            submitForm(formName) {
+                this.$refs[formName].validate((vaild) => {
+                    if (vaild) {
+                        this.showForm = false;
+                        this.showFeedbackSuccess = true;
+                        this.showFeedbackError = false;
+                        this.NotFoundTimer();
+                    }
+                });
             },
-            last() {
-                this.active--;
-            },
-            submitData() {
-
-            },
+            NotFoundTimer() {
+                var timer = setInterval(() => {
+                    this.autoTime--;
+                    this.timerText = this.autoTime + '秒后跳转至登陆页面';
+                    if (this.autoTime < 0) {
+                        this.returnToHome = true;
+                        clearInterval(timer);
+                    }
+                }, 1000)
+            }
         },
         watch: {
-            active(newVal) {
-                console.log('watch: ' + newVal);
-                if (newVal === 1) {
-                    this.canSeenNextBtn = false;
-                    this.canSeenLastBtn = false;
-
-                    this.stepOneSeen = false;
-                    this.stepTwoSeen = true;
-                    this.stepThreeSeen = false;
-
-                    this.submitBtn = false;
-                    this.btnGroup = true;
-                } else if (newVal === 2) {
-                    this.canSeenNextBtn = false;
-                    this.canSeenLastBtn = false;
-
-                    this.stepOneSeen = false;
-                    this.stepTwoSeen = false;
-                    this.stepThreeSeen = true;
-
-                    this.submitBtn = false;
-                    this.btnGroup = true;
-                } else if (newVal === 3) {
-                    this.canSeenNextBtn = true;
-                    this.canSeenLastBtn = false;
-                    this.stepOneSeen = false;
-                    this.stepTwoSeen = false;
-                    this.stepThreeSeen = false;
-
-                    this.submitBtn = true;
-                    this.btnGroup = false;
-                } else if (newVal === 0) {
-                    this.canSeenNextBtn = false;
-                    this.canSeenLastBtn = true;
-
-                    this.stepOneSeen = true;
-                    this.stepTwoSeen = false;
-                    this.stepThreeSeen = false;
-
-                    this.submitBtn = false;
-                    this.btnGroup = true;
-                } else {
-                    this.canSeenNextBtn = false;
-                    this.canSeenLastBtn = false;
-
-                    this.stepOneSeen = true;
-                    this.stepTwoSeen = false;
-                    this.stepThreeSeen = false;
-
-                    this.submitBtn = false;
-                    this.btnGroup = true;
+            returnToHome: function (newVal) {
+                if (newVal === true) {
+                    this.$router.push({name: 'login'})
                 }
             }
         }
@@ -146,28 +126,100 @@
         height 100%
         width 100%
 
-        .user-password {
-            margin 0 auto
+        .user-password-form {
             width 70%
+            height 100%
+            margin 0 auto
 
-            .changePassword {
-                margin-top 40px
+            .el-form-item {
 
-                .step-1 {
-                    width 70%
+                .el-input-group__prepend {
+                    text-align center
+                    width 140px
                 }
 
-                .step-2 {
-                    width 70%
+                .el-button {
+                    float right
+                    right 0
+                }
+            }
+        }
+
+        .feedback-success {
+            width 100%
+            height 100%
+            margin 0 auto
+
+            .icon-success {
+                width 80px
+                height 100%
+                margin 0 auto
+
+                i {
+                    font-size 80px
+                    color #67C23A
+
+                    height 100%
+                    margin 0 auto
                 }
 
-                .step-3 {
-                    width 70%
+                .infoText {
+                    font-size 18px
+                    color #67C23A
+                    text-align center
+
+                    height 100%
+                    margin 0 auto
                 }
             }
 
-            .el-button-group {
-                margin-top 30px
+            .returnText {
+                padding-top 10px
+                font-size 12px
+                color rgb(105, 105, 105)
+                text-align center
+
+                height 100%
+                margin 0 auto
+            }
+        }
+
+        .feedback-error {
+            width 100%
+            height 100%
+            margin 0 auto
+
+            .icon-error {
+                width 80px
+                height 100%
+                margin 0 auto
+
+                i {
+                    font-size 80px
+                    color #F56C6C
+
+                    height 100%
+                    margin 0 auto
+                }
+
+                .infoText {
+                    font-size 18px
+                    color #F56C6C
+                    text-align center
+
+                    height 100%
+                    margin 0 auto
+                }
+            }
+
+            .returnText {
+                padding-top 10px
+                font-size 12px
+                color rgb(105, 105, 105)
+                text-align center
+
+                height 100%
+                margin 0 auto
             }
         }
     }

@@ -3,19 +3,29 @@
         <el-form class="user-info-form"
                  :model="infoForm"
                  :rules="rules"
-                 ref="infoForm">
+                 ref="infoForm"
+                 status-icon>
             <el-form-item prop="name">
-                <el-input type="text" v-model.trim="infoForm.name">
+                <el-input
+                        type="text"
+                        v-model.trim="infoForm.name"
+                        :placeholder="oldName">
                     <template slot="prepend">新的姓名</template>
                 </el-input>
             </el-form-item>
             <el-form-item prop="phoneNumber">
-                <el-input type="text" v-model.trim="infoForm.phoneNumber">
+                <el-input
+                        type="text"
+                        v-model.trim="infoForm.phoneNumber"
+                        :placeholder="oldPhone">
                     <template slot="prepend">新的手机号</template>
                 </el-input>
             </el-form-item>
             <el-form-item prop="QQ">
-                <el-input type="text" v-model.trim="infoForm.QQ">
+                <el-input
+                        type="text"
+                        v-model.trim="infoForm.QQ"
+                        :placeholder="oldQQ">
                     <template slot="prepend">新的QQ</template>
                 </el-input>
             </el-form-item>
@@ -58,6 +68,9 @@
                 return callback()
             };
             return {
+                oldName: '',
+                oldPhone: '',
+                oldQQ: '',
                 infoForm: {
                     name: '',
                     phoneNumber: '',
@@ -86,11 +99,14 @@
 
 <style lang="stylus">
     .user-info-wrap {
+        margin-top 50px
         height 100%
         width 100%
 
         .el-form {
-            width 50%
+            width 70%
+            height 100%
+            margin 0 auto
 
             .el-form-item {
 
