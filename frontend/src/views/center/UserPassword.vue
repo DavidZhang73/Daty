@@ -90,8 +90,8 @@
         },
         methods: {
             submitForm(formName) {
-                this.$refs[formName].validate((vaild) => {
-                    if (vaild) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
                         this.showForm = false;
                         this.showFeedbackSuccess = true;
                         this.showFeedbackError = false;
@@ -108,7 +108,7 @@
                         clearInterval(timer);
                     }
                 }, 1000)
-            }
+            },
         },
         watch: {
             returnToHome: function (newVal) {

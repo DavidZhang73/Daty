@@ -4,7 +4,8 @@
                  :model="infoForm"
                  :rules="rules"
                  ref="infoForm"
-                 status-icon>
+                 status-icon
+                 v-if="showForm">
             <el-form-item prop="name">
                 <el-input
                         type="text"
@@ -33,6 +34,22 @@
                 <el-button type="primary" @click="submitForm('infoForm')">保存修改</el-button>
             </el-form-item>
         </el-form>
+
+        <div class="feedback-success" v-if="showFeedbackSuccess">
+            <div class="icon-success">
+                <i class="el-icon-circle-check-outline"></i>
+                <p class="infoText">修改成功</p>
+            </div>
+            <p class="returnText">{{ timerText }}</p>
+        </div>
+
+        <div class="feedback-error" v-if="showFeedbackError">
+            <div class="icon-error">
+                <i class="el-icon-circle-close-outline"></i>
+                <p class="infoText">修改失败</p>
+            </div>
+            <p class="returnText">{{ timerText }}</p>
+        </div>
     </div>
 </template>
 
@@ -68,6 +85,12 @@
                 return callback()
             };
             return {
+                showForm: true,
+                showFeedbackSuccess: false,
+                showFeedbackError: false,
+                returnToHome: false,
+                autoTime: 5,
+                timerText: '5秒后跳转至主页',
                 oldName: '',
                 oldPhone: '',
                 oldQQ: '',
@@ -91,7 +114,31 @@
         },
         methods: {
             submitForm(formName) {
-
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.showForm = false;
+                        this.showFeedbackSuccess = true;
+                        this.showFeedbackError = false;
+                        this.NotFoundTimer();
+                    }
+                });
+            },
+            NotFoundTimer() {
+                var timer = setInterval(() => {
+                    this.autoTime--;
+                    this.timerText = this.autoTime + '秒后跳转至主页';
+                    if (this.autoTime < 0) {
+                        this.returnToHome = true;
+                        clearInterval(timer);
+                    }
+                }, 1000)
+            },
+        },
+        watch: {
+            returnToHome: function (newVal) {
+                if (newVal === true) {
+                    this.$router.push({name: 'login'})
+                }
             }
         }
     }
@@ -119,6 +166,84 @@
                     float right
                     right 0
                 }
+            }
+        }
+
+        .feedback-success {
+            width 100%
+            height 100%
+            margin 0 auto
+
+            .icon-success {
+                width 80px
+                height 100%
+                margin 0 auto
+
+                i {
+                    font-size 80px
+                    color #67C23A
+
+                    height 100%
+                    margin 0 auto
+                }
+
+                .infoText {
+                    font-size 18px
+                    color #67C23A
+                    text-align center
+
+                    height 100%
+                    margin 0 auto
+                }
+            }
+
+            .returnText {
+                padding-top 10px
+                font-size 12px
+                color rgb(105, 105, 105)
+                text-align center
+
+                height 100%
+                margin 0 auto
+            }
+        }
+
+        .feedback-error {
+            width 100%
+            height 100%
+            margin 0 auto
+
+            .icon-error {
+                width 80px
+                height 100%
+                margin 0 auto
+
+                i {
+                    font-size 80px
+                    color #F56C6C
+
+                    height 100%
+                    margin 0 auto
+                }
+
+                .infoText {
+                    font-size 18px
+                    color #F56C6C
+                    text-align center
+
+                    height 100%
+                    margin 0 auto
+                }
+            }
+
+            .returnText {
+                padding-top 10px
+                font-size 12px
+                color rgb(105, 105, 105)
+                text-align center
+
+                height 100%
+                margin 0 auto
             }
         }
     }
