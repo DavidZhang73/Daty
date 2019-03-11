@@ -2,8 +2,11 @@ from django.conf import settings
 from django.core.mail import send_mail
 
 from django.contrib import auth
+from django.contrib.auth.hashers import make_password
 from django.views.generic.base import View
 from django.shortcuts import HttpResponseRedirect
+
+from rest_framework.permissions import IsAuthenticated
 
 from . import serializers
 from . import models
@@ -22,10 +25,8 @@ class LoginAPI(API):
             else:
                 auth.login(request, user)
                 return self.success({
-                    'email': user.email,
+                    'id': user.id,
                     'username': user.username,
-                    'qq': user.qq,
-                    'phone': user.phone
                 })
         else:
             return self.error('Email不存在或密码不正确')
@@ -37,7 +38,7 @@ class LogoutAPI(API):
         return self.success("success")
 
 
-class SigninEmailCheckAPI(API):
+class SigninCheckEmailAPI(API):
     @validate_serializer(serializers.SigninEmailCheckSerializer)
     def post(self, request):
         data = request.validated_data
@@ -62,7 +63,7 @@ class SigninAPI(API):
         else:
             user = models.SigninUserInfo.objects.create(
                 username=username,
-                password=password,
+                password=make_password(password),
                 email=email,
                 phone=phone,
                 qq=qq,
@@ -77,13 +78,17 @@ class SigninAPI(API):
             return self.success(f'成功注册用户：{email}')
 
 
-class SigninUserActive(View):
+class SigninActiveUser(View):
     def get(self, request, uuid):
-        models.SigninUserInfo.objects.get(id=uuid).saveToUser()
-        return HttpResponseRedirect('/#/login')
+        signinUserInfo = models.SigninUserInfo.objects.filter(id=uuid)
+        if signinUserInfo:
+            signinUserInfo[0].saveToUser()
+            return HttpResponseRedirect('/#/user/signinSuccess')
+        else:
+            return HttpResponseRedirect('/#/user/login')
 
 
-class ForgetPasswordEmailCheckAPI(API):
+class ForgetPasswordCheckEmailAPI(API):
     @validate_serializer(serializers.ForgetPasswordEmailCheckSerializer)
     def post(self, request):
         data = request.validated_data
@@ -116,8 +121,11 @@ class ForgetPasswordAPI(API):
 
 class ForgetPasswordReset(View):
     def get(self, request, uuid):
-        models.ForgetPassword.objects.get(id=uuid)
-        return HttpResponseRedirect('/#/forgetPassword/reset/' + str(uuid))
+        forgetPassword = models.ForgetPassword.objects.filter(id=uuid)
+        if forgetPassword:
+            return HttpResponseRedirect('/#/user/forgetPassword/reset/' + str(uuid))
+        else:
+            return HttpResponseRedirect('/#/user/login')
 
 
 class ForgetPasswordResetAPI(API):
@@ -126,8 +134,26 @@ class ForgetPasswordResetAPI(API):
         data = request.validated_data
         uuid = data.get('uuid')
         password = data.get('password')
-        email = models.ForgetPassword.objects.get(id=uuid).email
-        user = models.User.objects.get(email=email)
-        user.set_password(password)
-        user.save()
-        return self.success(f'成功重置用户{email}的密码')
+        forgetPassword = models.ForgetPassword.objects.filter(id=uuid)
+        if forgetPassword:
+            email = forgetPassword[0].email
+            forgetPassword[0].delete()
+            user = models.User.objects.get(email=email)
+            user.set_password(password)
+            user.save()
+            return self.success(f'成功重置用户{email}的密码')
+        else:
+            return self.error(f'链接已失效')
+
+
+class UserInfoAPI(API):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        return self.success('msg')
+
+
+class TestAPI(API):
+    def get(self, request):
+        print(request.query_params['account'])
+        return self.success("success")

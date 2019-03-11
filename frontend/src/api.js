@@ -1,4 +1,5 @@
 import {Message} from 'element-ui';
+import router from './router'
 
 export default {
     login(email, password) {
@@ -10,8 +11,8 @@ export default {
     logout() {
         return fetchAPI('/api/user/logout', 'get')
     },
-    signinEmailCheck(email) {
-        return fetchAPI('/api/user/signin/emailCheck', 'post', {
+    signinCheckEmail(email) {
+        return fetchAPI('/api/user/signin/checkEmail', 'post', {
             email
         })
     },
@@ -24,8 +25,8 @@ export default {
             password
         })
     },
-    forgetPasswordEmailCheck(email) {
-        return fetchAPI('/api/user/forgetPassword/emailCheck', 'post', {
+    forgetPasswordCheckEmail(email) {
+        return fetchAPI('/api/user/forgetPassword/checkEmail', 'post', {
             email
         })
     },
@@ -39,6 +40,9 @@ export default {
             uuid,
             password
         })
+    },
+    test() {
+        return fetchAPI('/api/user/', 'get')
     }
 }
 
@@ -52,25 +56,24 @@ export default {
  */
 function fetchAPI(url, method, data = null, params = null) {
     let body = null;
-    let content_type = '';
-    if (data && params) {
-        throw (new Error('不能同时使用data和params'))
-    } else if (data) {
+    let headers = {
+        'Content-Type': 'application/json'
+    };
+    if (data) {
         body = JSON.stringify(data);
-        content_type = 'application/json'
     } else if (params) {
-        body = params;
-        content_type = 'x-www-form-urlencoded'
+        url += '?' + (new URLSearchParams(params)).toString();
     }
     return fetch(url, {
-        headers: {
-            'content-type': content_type,
-        },
+        headers: headers,
         method: method,
         body: body,
     }).then(res => {
-        if (res.status === 401 || res.status === 403) {
+        if (res.status === 401) {
             throw (new Error(res.status))
+        } else if (res.status === 403) {
+            Message.error({duration: 5000, showClose: true, message: '用户未登录'});
+            router.push({name: 'login'})
         }
         return res.json()
     }).catch(e => {

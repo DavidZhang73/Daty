@@ -1,13 +1,17 @@
 <template>
-	<p>Step2</p>
+	<div class="user-info-wrap">
+		userInfo
+	</div>
 </template>
 
 <script>
     export default {
-        name: "Step2"
+        name: "UserInfo"
     }
 </script>
 
 <style lang="stylus">
+	.user-info-wrap {
 
+	}
 </style>

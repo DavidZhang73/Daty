@@ -15,15 +15,15 @@ class User(AbstractUser):
         help_text='必填。150个字符或者更少。包含字母，数字和仅有的@/./+/-/_符号。',
         validators=[username_validator]
     )
-    email = models.EmailField('Email', blank=True, unique=True, error_messages={
+    email = models.EmailField('Email', unique=True, error_messages={
         'unique': 'Email已经被注册',
     })
     phone = models.CharField('手机号', max_length=11, blank=True)
     qq = models.CharField('QQ', max_length=20, blank=True)
 
     EMAIL_FIELD = 'email'
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     class Meta(AbstractUser.Meta):
         verbose_name = '用户信息'
@@ -43,8 +43,8 @@ class SigninUserInfo(models.Model):
         help_text='必填。150个字符或者更少。包含字母，数字和仅有的@/./+/-/_符号。',
         validators=[username_validator]
     )
-    phone = models.CharField('手机号', max_length=11)
-    qq = models.CharField('QQ', max_length=20)
+    phone = models.CharField('手机号', max_length=11, blank=True)
+    qq = models.CharField('QQ', max_length=20, blank=True)
     password = models.CharField('密码', max_length=128)
     date_joined = models.DateTimeField('注册日期', default=timezone.now)
 
@@ -60,13 +60,14 @@ class SigninUserInfo(models.Model):
         邮箱激活后，把SigninUserInfo中的信息放到User中，删除本身
         :return:
         '''
-        User.objects.create_user(
+        User.objects.create(
             username=self.username,
             password=self.password,
             email=self.email,
             phone=self.phone,
             qq=self.qq,
-        )
+            date_joined=self.date_joined
+        ).save()
         self.delete()
 
 

@@ -1,65 +1,71 @@
 <template>
-    <div class="home-wrap">
-        <div class="home">
-            <div class="button-col">
-                <div class="button-row">
-                    <router-link :to="{name: 'fileDetail'}">
-                        <el-button type="primary" class="button1">
-                            <i class="el-icon-download"></i>
-                            我要收文件
-                        </el-button>
-                    </router-link>
-                    <router-link :to="{name: 'about'}">
-                        <el-button type="primary" class="button2">
-                            <i class="el-icon-upload2"></i>
-                            我要交文件
-                        </el-button>
-                    </router-link>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="home-wrap">
+		<Background img-name="background.jpg"
+		            :blur="false"></Background>
+		<div class="home">
+			<img class="logo" src="../assets/logo_svg.svg" alt="LOGO">
+			<div class="button-row">
+				<router-link :to="{name: 'home'}">
+					<el-button type="primary">
+						<i class="el-icon-download"></i>
+						我要收文件
+					</el-button>
+				</router-link>
+				<router-link :to="{name: 'home'}">
+					<el-button type="primary" id="last-btn">
+						<i class="el-icon-upload2"></i>
+						我要交文件
+					</el-button>
+				</router-link>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
+    import Background from '../components/Background'
 
     export default {
         name: 'home',
-        components: {}
+        components: {
+            Background
+        }
     }
 </script>
 
 <style lang="stylus">
-    .home-wrap {
-        height 100%
+	.home-wrap {
 
-        background: #F8F9FB url("../assets/background.jpg") no-repeat;
-        background-size: contain;
+		.home {
+			position relative
+			padding-top 150px
+			margin 0 auto
+			width 500px
 
-        .home {
-            height inherit
+			.logo {
+				width 500px
+				height 250px
+				margin-bottom 50px
+			}
 
-            .button-col {
-                height inherit
-                width 270px
-                margin 0 auto
-                /*border 1px solid black*/
+			.button-row {
+				margin 0 auto
+				width 350px
 
-                .button-row {
-                    position relative
-                    top 55%
-                    /*border 1px solid blue*/
+				button {
+					font-size 16px
+				}
 
-                    .button1 {
-                        float left
-                    }
+				#last-btn {
+					float right
 
-                    .button2 {
-                        float right
-                    }
-
-                }
-            }
-        }
-    }
+					&::after {
+						content ''
+						display block
+						clear both
+					}
+				}
+			}
+		}
+	}
 </style>

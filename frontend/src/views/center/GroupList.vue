@@ -1,13 +1,17 @@
 <template>
-	<p>Step1</p>
+	<div class="group-llist-wrap">
+		groupList
+	</div>
 </template>
 
 <script>
     export default {
-        name: "ForgetPassword"
+        name: "GroupList"
     }
 </script>
 
 <style lang="stylus">
+	.group-llist-wrap {
 
+	}
 </style>
