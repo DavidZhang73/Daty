@@ -42,22 +42,11 @@ export default {
     },
     //Center
     //center.useInfo
-    userInfoNameChange() {
+    //TODO
 
-    },
-    userInfoPhoneNumberChange() {
-
-    },
-    userInfoQQChange() {
-
-    },
     //Center.userPassword
-    checkOldPassword(email, oldPassword) {
+    //TODO
 
-    },
-    changePassword(email, newPassword) {
-
-    },
 }
 
 /**

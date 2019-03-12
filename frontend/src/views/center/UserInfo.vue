@@ -40,7 +40,7 @@
                 <i class="el-icon-circle-check-outline"></i>
                 <p class="infoText">修改成功</p>
             </div>
-            <p class="returnText">{{ timerText }}</p>
+            <p class="returnText">{{ timerTextSuccess }}</p>
         </div>
 
         <div class="feedback-error" v-if="showFeedbackError">
@@ -48,7 +48,7 @@
                 <i class="el-icon-circle-close-outline"></i>
                 <p class="infoText">修改失败</p>
             </div>
-            <p class="returnText">{{ timerText }}</p>
+            <p class="returnText">{{ timerTextError }}</p>
         </div>
     </div>
 </template>
@@ -90,7 +90,8 @@
                 showFeedbackError: false,
                 returnToHome: false,
                 autoTime: 5,
-                timerText: '5秒后跳转至主页',
+                timerTextSuccess: '5秒后跳转至主页',
+                timerTextError: '5秒后返回',
                 oldName: '',
                 oldPhone: '',
                 oldQQ: '',
@@ -116,22 +117,46 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.showForm = false;
-                        this.showFeedbackSuccess = true;
-                        this.showFeedbackError = false;
-                        this.NotFoundTimer();
+                        this.changeSuccess();
+                        //TODO
                     }
                 });
             },
-            NotFoundTimer() {
-                var timer = setInterval(() => {
+            changeSuccess() {
+                this.showForm = false;
+                this.showFeedbackSuccess = true;
+                this.showFeedbackError = false;
+                this.autoTime = 5;
+                this.userInfoTimerSuccess();
+            },
+            changeError() {
+                this.showForm = false;
+                this.showFeedbackSuccess = false;
+                this.showFeedbackError = true;
+                this.autoTime = 5;
+                this.userInfoTimerError();
+            },
+            userInfoTimerSuccess() {
+                let timer = setInterval(() => {
                     this.autoTime--;
-                    this.timerText = this.autoTime + '秒后跳转至主页';
+                    this.timerTextSuccess = this.autoTime + '秒后跳转至主页';
                     if (this.autoTime < 0) {
                         this.returnToHome = true;
                         clearInterval(timer);
                     }
-                }, 1000)
+                }, 1000);
+            },
+            userInfoTimerError() {
+                let timer = setInterval(() => {
+                    this.autoTime--;
+                    this.timerTextError = this.autoTime + '秒后返回';
+                    if (this.autoTime < 0) {
+                        this.showForm = true;
+                        this.showFeedbackSuccess = false;
+                        this.showFeedbackError = false;
+                        clearInterval(timer);
+                    }
+                }, 1000);
             },
         },
         watch: {
