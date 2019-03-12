@@ -20,8 +20,6 @@ import UserInfo from './views/center/UserInfo'
 import UserPassword from './views/center/UserPassword'
 
 import NotFound from './views/NotFound'
-import Test from './views/Test'
-
 Vue.use(Router);
 
 export default new Router({
@@ -104,10 +102,6 @@ export default new Router({
                     component: UserPassword
                 }
             ]
-        },
-        {
-            path: '/test',
-            component: Test,
         },
         {
             path: '*',

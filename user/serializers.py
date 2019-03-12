@@ -1,12 +1,18 @@
 from rest_framework import serializers
 from . import models
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.User
+        fields = '__all__'
+
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
 
 
-class SigninEmailCheckSerializer(serializers.Serializer):
+class CheckEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
 
@@ -14,10 +20,6 @@ class SiginSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SigninUserInfo
         fields = '__all__'
-
-
-class ForgetPasswordEmailCheckSerializer(serializers.Serializer):
-    email = serializers.EmailField()
 
 
 class ForgetPasswordSerializer(serializers.ModelSerializer):

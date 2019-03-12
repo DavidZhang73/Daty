@@ -12,7 +12,7 @@
 					          v-model.trim="signinForm.email"
 					          placeholder="example@abc.com"
 					          auto-complete="email">
-						<template slot="prepend"><span>*</span>Email:</template>
+						<template slot="prepend"><span>*</span>Email</template>
 					</el-input>
 				</el-tooltip>
 			</el-form-item>
@@ -89,11 +89,11 @@
                 } else if (!emailRex.test(value)) {
                     return callback(new Error('Email格式不正确'))
                 } else {
-                    return api.signinCheckEmail(value).then(data => {
+                    return api.checkEmail(value).then(data => {
                         if (data.error) {
                             alert(data.error)
                         } else {
-                            if (data.data === 'Email已经被注册') {
+                            if (data.data === 'Email已注册') {
                                 return callback(new Error(data.data))
                             } else {
                                 return callback()
