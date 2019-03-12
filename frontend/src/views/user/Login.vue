@@ -11,7 +11,7 @@
 				<el-input type="email"
 				          v-model.trim="loginForm.email"
 				          auto-complete="email">
-					<template slot="prepend">Email:</template>
+					<template slot="prepend">Email</template>
 				</el-input>
 			</el-form-item>
 			<el-form-item prop="password">

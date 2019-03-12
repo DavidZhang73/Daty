@@ -53,7 +53,8 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'utils.custom_exception_handler.custom_exception_handler',
-    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.SessionAuthentication',)
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.SessionAuthentication',),
+    'DEFAULT_PARSER_CLASSES': ('rest_framework.parsers.JSONParser', 'rest_framework.parsers.FileUploadParser')
 }
 
 ROOT_URLCONF = 'daty.urls'
@@ -159,3 +160,5 @@ SILENCED_SYSTEM_CHECKS = [
 ]
 
 SESSION_COOKIE_HTTPONLY = False
+
+APPEND_SLASH = True

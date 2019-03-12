@@ -3,21 +3,21 @@ import router from './router'
 
 export default {
     login(email, password) {
-        return fetchAPI('/api/user/login', 'post', {
+        return fetchAPI('/api/user/login/', 'post', {
             email,
             password
         })
     },
     logout() {
-        return fetchAPI('/api/user/logout', 'get')
+        return fetchAPI('/api/user/logout/', 'get')
     },
-    signinCheckEmail(email) {
-        return fetchAPI('/api/user/signin/checkEmail', 'post', {
+    checkEmail(email) {
+        return fetchAPI('/api/user/checkEmail/', 'post', {
             email
         })
     },
     signin(email, username, phone, qq, password) {
-        return fetchAPI('/api/user/signin', 'post', {
+        return fetchAPI('/api/user/signin/', 'post', {
             email,
             username,
             phone,
@@ -25,24 +25,16 @@ export default {
             password
         })
     },
-    forgetPasswordCheckEmail(email) {
-        return fetchAPI('/api/user/forgetPassword/checkEmail', 'post', {
-            email
-        })
-    },
     forgetPassword(email) {
-        return fetchAPI('/api/user/forgetPassword', 'post', {
+        return fetchAPI('/api/user/forgetPassword/', 'post', {
             email
         })
     },
     forgetPasswordReset(uuid, password) {
-        return fetchAPI('/api/user/forgetPassword/reset', 'post', {
+        return fetchAPI('/api/user/forgetPasswordReset/', 'post', {
             uuid,
             password
         })
-    },
-    test() {
-        return fetchAPI('/api/user/', 'get')
     }
 }
 

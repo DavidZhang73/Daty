@@ -37,11 +37,11 @@
                 } else if (!emailRex.test(value)) {
                     return callback(new Error('Email格式不正确'))
                 } else {
-                    return api.forgetPasswordCheckEmail(value).then(data => {
+                    return api.checkEmail(value).then(data => {
                         if (data.error) {
                             this.$message.error({showClose: true, mseeage: data.error});
                         } else {
-                            if (data.data === 'Email不存在') {
+                            if (data.data === 'Email未注册') {
                                 return callback(new Error(data.data))
                             } else {
                                 return callback()
