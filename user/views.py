@@ -1,14 +1,12 @@
 from django.conf import settings
 from django.core.mail import send_mail
-
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password
 from django.views.generic.base import View
 from django.shortcuts import HttpResponseRedirect
 
-from rest_framework.permissions import IsAuthenticated
-
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 
 from . import serializers
 from . import models
@@ -135,3 +133,40 @@ class ForgetPasswordReset(View):
             return HttpResponseRedirect('/#/user/forgetPassword/reset/' + str(uuid))
         else:
             return HttpResponseRedirect('/#/user/login')
+
+
+class ProfileAPI(API):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        user = request.user
+        s = serializers.UserProfileSerializer(user)
+        return self.success(s.data)
+
+    @validate_serializer(serializers.UserProfileSerializer)
+    def patch(self, request):
+        data = request.validated_data
+        user = request.user
+        user.username = data.get('username')
+        user.phone = data.get('phone')
+        user.qq = data.get('qq')
+        user.save()
+        s = serializers.UserProfileSerializer(user)
+        return self.success(s.data)
+
+
+class ChangePasswordAPI(API):
+    permission_classes = (IsAuthenticated,)
+
+    @validate_serializer(serializers.ChangePasswordSerializer)
+    def post(self, request):
+        user = request.user
+        data = request.validated_data
+        old_password = data.get('old_password')
+        new_password = data.get('new_password')
+        if user.check_password(old_password):
+            user.set_password(new_password)
+            user.save()
+            return self.success("success")
+        else:
+            return self.error("旧密码错误")
