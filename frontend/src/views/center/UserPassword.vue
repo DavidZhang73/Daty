@@ -1,17 +1,251 @@
 <template>
-	<div class="user-password-wrap">
-		userPassword
-	</div>
+    <div class="user-password-wrap">
+        <el-form class="user-password-form"
+                 :model="passwords"
+                 :rules="rules"
+                 ref="passwords"
+                 v-if="showForm">
+            <el-form-item prop="firstPassword">
+                <el-input
+                        type="text"
+                        v-model="passwords.firstPassword"
+                        placeholder="密码不能为纯数字且须大于8位">
+                    <template slot="prepend">请输入新的密码</template>
+                </el-input>
+            </el-form-item>
+            <el-form-item prop="secondPassword">
+                <el-input
+                        type="text"
+                        v-model="passwords.secondPassword"
+                        placeholder="密码不能为纯数字且须大于8位">
+                    <template slot="prepend">请重复输入新的密码</template>
+                </el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submitForm('passwords')">提交</el-button>
+            </el-form-item>
+        </el-form>
+
+        <div class="feedback-success" v-if="showFeedbackSuccess">
+            <div class="icon-success">
+                <i class="el-icon-circle-check-outline"></i>
+                <p class="infoText">修改成功</p>
+            </div>
+            <p class="returnText">{{ timerTextSuccess }}</p>
+        </div>
+
+        <div class="feedback-error" v-if="showFeedbackError">
+            <div class="icon-error">
+                <i class="el-icon-circle-close-outline"></i>
+                <p class="infoText">修改失败</p>
+            </div>
+            <p class="returnText">{{ timerTextError }}</p>
+        </div>
+    </div>
 </template>
 
 <script>
     export default {
-        name: "UserPassword"
+        name: "UserPassword",
+        data() {
+            var validatePassword = (rule, value, callback) => {
+                let passwordRex = /^\d+$/;
+                if (!value) {
+                    return callback(new Error('请输入密码'))
+                } else if (value.length > 32 || value.length < 8) {
+                    return callback(new Error('密码应该大于8位小于32位'))
+                } else if (passwordRex.test(value)) {
+                    return callback(new Error('密码不能全是数字'))
+                }
+                return callback()
+            };
+            var validateConfirmPassword = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('请输入确认密码'))
+                } else if (value !== this.passwords.firstPassword) {
+                    return callback(new Error('两次输入密码不一致'))
+                }
+                return callback()
+            };
+            return {
+                showForm: true,
+                showFeedbackSuccess: false,
+                showFeedbackError: false,
+                returnToHome: false,
+                autoTime: 5,
+                timerTextSuccess: '5秒后跳转至登陆页面',
+                timerTextError: '5秒后返回',
+                passwords: {
+                    firstPassword: '',
+                    secondPassword: '',
+                },
+                rules: {
+                    firstPassword: [
+                        {validator: validatePassword, trigger: 'blur'}
+                    ],
+                    secondPassword: [
+                        {validator: validateConfirmPassword, trigger: 'blur'}
+                    ]
+                }
+            };
+        },
+        methods: {
+            submitForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.changeSuccess();
+                        //TODO
+                    }
+                });
+            },
+            changeSuccess() {
+                this.showForm = false;
+                this.showFeedbackSuccess = true;
+                this.showFeedbackError = false;
+                this.autoTime = 5;
+                this.userPasswordTimerSuccess();
+            },
+            changeError() {
+                this.showForm = false;
+                this.showFeedbackSuccess = false;
+                this.showFeedbackError = true;
+                this.autoTime = 5;
+                this.userPasswordTimerError();
+            },
+            userPasswordTimerSuccess() {
+                let timer = setInterval(() => {
+                    this.autoTime--;
+                    this.timerTextSuccess = this.autoTime + '秒后跳转至登陆页面';
+                    if (this.autoTime < 0) {
+                        this.returnToHome = true;
+                        clearInterval(timer);
+                    }
+                }, 1000)
+            },
+            userPasswordTimerError() {
+                let timer = setInterval(() => {
+                    this.autoTime--;
+                    this.timerTextError = this.autoTime + '秒后返回';
+                    if (this.autoTime < 0) {
+                        this.showForm = true;
+                        this.showFeedbackSuccess = false;
+                        this.showFeedbackError = false;
+                        clearInterval(timer);
+                    }
+                }, 1000)
+            },
+        },
+        watch: {
+            returnToHome: function (newVal) {
+                if (newVal === true) {
+                    this.$router.push({name: 'login'})
+                }
+            }
+        }
     }
 </script>
 
 <style lang="stylus">
-	.user-password-wrap {
+    .user-password-wrap {
+        margin-top 50px
+        height 100%
+        width 100%
 
-	}
+        .user-password-form {
+            width 70%
+            height 100%
+            margin 0 auto
+
+            .el-form-item {
+
+                .el-input-group__prepend {
+                    text-align center
+                    width 140px
+                }
+
+                .el-button {
+                    float right
+                    right 0
+                }
+            }
+        }
+
+        .feedback-success {
+            width 100%
+            height 100%
+            margin 0 auto
+
+            .icon-success {
+                width 80px
+                height 100%
+                margin 0 auto
+
+                i {
+                    font-size 80px
+                    color #67C23A
+
+                    height 100%
+                    margin 0 auto
+                }
+
+                .infoText {
+                    font-size 18px
+                    color #67C23A
+                    text-align center
+
+                    height 100%
+                    margin 0 auto
+                }
+            }
+
+            .returnText {
+                padding-top 10px
+                font-size 12px
+                color rgb(105, 105, 105)
+                text-align center
+
+                height 100%
+                margin 0 auto
+            }
+        }
+
+        .feedback-error {
+            width 100%
+            height 100%
+            margin 0 auto
+
+            .icon-error {
+                width 80px
+                height 100%
+                margin 0 auto
+
+                i {
+                    font-size 80px
+                    color #F56C6C
+
+                    height 100%
+                    margin 0 auto
+                }
+
+                .infoText {
+                    font-size 18px
+                    color #F56C6C
+                    text-align center
+
+                    height 100%
+                    margin 0 auto
+                }
+            }
+
+            .returnText {
+                padding-top 10px
+                font-size 12px
+                color rgb(105, 105, 105)
+                text-align center
+
+                height 100%
+                margin 0 auto
+            }
+        }
+    }
 </style>

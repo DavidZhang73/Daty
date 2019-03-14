@@ -1,7 +1,7 @@
 <template>
-	<div class="group-llist-wrap">
-		groupList
-	</div>
+    <div class="group-llist-wrap">
+        groupList
+    </div>
 </template>
 
 <script>
@@ -11,7 +11,7 @@
 </script>
 
 <style lang="stylus">
-	.group-llist-wrap {
+    .group-llist-wrap {
 
-	}
+    }
 </style>
