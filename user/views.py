@@ -39,8 +39,7 @@ class UserViewSet(APIViewSet):
         auth.logout(request)
         return self.success("success")
 
-    @action(methods=['post'], detail=False, description='验证邮箱是否存在'
-            )
+    @action(methods=['post'], detail=False, description='验证邮箱是否存在')
     @validate_serializer(serializers.CheckEmailSerializer)
     def checkEmail(self, request):
         data = request.validated_data
@@ -143,7 +142,7 @@ class ProfileAPI(API):
         return self.success(s.data)
 
     @validate_serializer(serializers.UserProfileSerializer)
-    def patch(self, request):
+    def post(self, request):
         data = request.validated_data
         user = request.user
         user.username = data.get('username')
