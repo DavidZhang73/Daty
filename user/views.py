@@ -162,11 +162,7 @@ class ChangePasswordAPI(API):
     def post(self, request):
         user = request.user
         data = request.validated_data
-        old_password = data.get('old_password')
         new_password = data.get('new_password')
-        if user.check_password(old_password):
-            user.set_password(new_password)
-            user.save()
-            return self.success("success")
-        else:
-            return self.error("旧密码错误")
+        user.set_password(new_password)
+        user.save()
+        return self.success("success")
