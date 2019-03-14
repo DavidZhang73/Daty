@@ -6,28 +6,34 @@
                  ref="infoForm"
                  status-icon
                  v-if="showForm">
+            <el-form-item prop="email">
+                <el-input
+                        type="text"
+                        v-model.trim="infoForm.email"
+                        disabled>
+                    <template slot="prepend">email</template>
+                </el-input>
+            </el-form-item>
             <el-form-item prop="name">
                 <el-input
                         type="text"
-                        v-model.trim="infoForm.name"
-                        :placeholder="oldName">
-                    <template slot="prepend">新的姓名</template>
+                        v-model.trim="infoForm.name">
+                    <template slot="prepend">姓名</template>
                 </el-input>
             </el-form-item>
             <el-form-item prop="phoneNumber">
                 <el-input
                         type="text"
-                        v-model.trim="infoForm.phoneNumber"
-                        :placeholder="oldPhone">
-                    <template slot="prepend">新的手机号</template>
+                        v-model.trim="infoForm.phoneNumber">
+                    <template slot="prepend">手机号</template>
                 </el-input>
             </el-form-item>
             <el-form-item prop="QQ">
                 <el-input
                         type="text"
                         v-model.trim="infoForm.QQ"
-                        :placeholder="oldQQ">
-                    <template slot="prepend">新的QQ</template>
+                        @keypress.enter.native="submitForm('infoForm')">
+                    <template slot="prepend">QQ</template>
                 </el-input>
             </el-form-item>
             <el-form-item>
@@ -54,13 +60,15 @@
 </template>
 
 <script>
+    import api from '../../api'
+
     export default {
         name: "UserInfo",
         data() {
             var validateUsername = (rule, value, callback) => {
                 //150个字符或者更少。包含字母，数字和仅有的@/./+/-/_符号。
                 if (!value) {
-                    return callback()
+                    return callback(new Error('姓名不可为空'))
                 } else if (value.length > 150) {
                     return callback(new Error('姓名应该小于150个字符'))
                 }
@@ -88,14 +96,11 @@
                 showForm: true,
                 showFeedbackSuccess: false,
                 showFeedbackError: false,
-                returnToHome: false,
                 autoTime: 5,
-                timerTextSuccess: '5秒后跳转至主页',
+                timerTextSuccess: '5秒后返回',
                 timerTextError: '5秒后返回',
-                oldName: '',
-                oldPhone: '',
-                oldQQ: '',
                 infoForm: {
+                    email: '',
                     name: '',
                     phoneNumber: '',
                     QQ: '',
@@ -113,13 +118,34 @@
                 },
             };
         },
+        mounted() {
+            api.getUserInfo().then(data => {
+                if (data.error) {
+                    this.$message.error({showClose: true, message: data.error});
+                } else {
+                    this.infoForm.email = data.data.email;
+                    this.infoForm.name = data.data.username;
+                    this.infoForm.phoneNumber = data.data.phone;
+                    this.infoForm.QQ = data.data.qq;
+                }
+            })
+        },
         methods: {
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.changeSuccess();
-                        //TODO
-                    }
+                        api.updateUserInfo(
+                            this.infoForm.name,
+                            this.infoForm.phoneNumber,
+                            this.infoForm.QQ,
+                        ).then(data => {
+                            if (data.error) {
+                                this.changeError();
+                            } else {
+                                this.changeSuccess();
+                            }
+                        })
+                    } else return false;
                 });
             },
             changeSuccess() {
@@ -139,9 +165,11 @@
             userInfoTimerSuccess() {
                 let timer = setInterval(() => {
                     this.autoTime--;
-                    this.timerTextSuccess = this.autoTime + '秒后跳转至主页';
-                    if (this.autoTime < 0) {
-                        this.returnToHome = true;
+                    this.timerTextSuccess = this.autoTime + '秒后返回';
+                    if (this.autoTime <= 0) {
+                        this.showForm = true;
+                        this.showFeedbackSuccess = false;
+                        this.showFeedbackError = false;
                         clearInterval(timer);
                     }
                 }, 1000);
@@ -150,7 +178,7 @@
                 let timer = setInterval(() => {
                     this.autoTime--;
                     this.timerTextError = this.autoTime + '秒后返回';
-                    if (this.autoTime < 0) {
+                    if (this.autoTime <= 0) {
                         this.showForm = true;
                         this.showFeedbackSuccess = false;
                         this.showFeedbackError = false;
@@ -159,13 +187,6 @@
                 }, 1000);
             },
         },
-        watch: {
-            returnToHome: function (newVal) {
-                if (newVal === true) {
-                    this.$router.push({name: 'login'})
-                }
-            }
-        }
     }
 </script>
 

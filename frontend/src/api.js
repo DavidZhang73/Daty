@@ -40,7 +40,7 @@ export default {
     //Center
     //center.useInfo
     updateUserInfo(username, phone, qq) {
-        return fetchAPI('/api/user/', 'patch', {
+        return fetchAPI('/api/user/', 'post', {
             username,
             phone,
             qq
@@ -52,7 +52,7 @@ export default {
   
     //Center.userPassword
     resetUserPassword(new_password) {
-        return fetchAPI('/api/user/resetPassword/', 'post', {
+        return fetchAPI('/api/user/changePassword/', 'post', {
             new_password
         })
     },
@@ -94,7 +94,7 @@ function fetchAPI(url, method, data = null, params = null) {
     let headers = {
         'Content-Type': 'application/json'
     };
-    if (!/^(GET|HEAD|OPTIONS|TRACE)$/.test(method)) {
+    if (!/^(GET|HEAD|OPTIONS|TRACE)$/.test(method.toUpperCase())) {
         headers['X-CSRFToken'] = getCookie('csrftoken')
     }
     if (data) {
@@ -107,13 +107,13 @@ function fetchAPI(url, method, data = null, params = null) {
         method: method,
         body: body,
     }).then(res => {
-        if (res.status === 401) {
-            throw (new Error(res.status))
-        } else if (res.status === 403 || res.status === 401) {
+        if (res.status === 403 || res.status === 401) {
             Message.error({duration: 5000, showClose: true, message: '用户未登录'});
-            router.push({name: 'login'})
+            router.push({name: 'login'});
+            // throw (new Error(res.status))
+        } else {
+            return res.json()
         }
-        return res.json()
     }).catch(e => {
         console.log('fetchAPI function ERROR: ' + e);
         Message.error({duration: 0, showClose: true, message: e})

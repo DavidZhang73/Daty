@@ -25,7 +25,7 @@
             <el-button-group class="btn-header" v-if="isLogin">
                 <router-link
                         class="el-button el-button--info is-plain"
-                        :to="{name: 'home'}"
+                        :to="{name: 'collectionList'}"
                         v-cloak>
                     {{$store.state.user.username}}
                 </router-link>

@@ -8,17 +8,17 @@
             <el-form-item prop="firstPassword">
                 <el-input
                         type="text"
-                        v-model="passwords.firstPassword"
+                        v-model.trim="passwords.firstPassword"
                         placeholder="密码不能为纯数字且须大于8位">
-                    <template slot="prepend">请输入新的密码</template>
+                    <template slot="prepend">新密码</template>
                 </el-input>
             </el-form-item>
             <el-form-item prop="secondPassword">
                 <el-input
                         type="text"
-                        v-model="passwords.secondPassword"
+                        v-model.trim="passwords.secondPassword"
                         placeholder="密码不能为纯数字且须大于8位">
-                    <template slot="prepend">请重复输入新的密码</template>
+                    <template slot="prepend">确认新密码</template>
                 </el-input>
             </el-form-item>
             <el-form-item>
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+    import api from '../../api'
+
     export default {
         name: "UserPassword",
         data() {
@@ -71,7 +73,6 @@
                 showForm: true,
                 showFeedbackSuccess: false,
                 showFeedbackError: false,
-                returnToHome: false,
                 autoTime: 5,
                 timerTextSuccess: '5秒后跳转至登陆页面',
                 timerTextError: '5秒后返回',
@@ -93,10 +94,27 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.changeSuccess();
-                        //TODO
+                        api.resetUserPassword(
+                            this.passwords.secondPassword,
+                        ).then(data => {
+                            if (data.error) {
+                                this.changeError();
+                            } else {
+                                this.changeSuccess();
+                            }
+                        })
                     }
                 });
+            },
+            logout() {
+                api.logout().then(data => {
+                    if (data.error) {
+                        alert(data.error)
+                    } else {
+                        this.$store.dispatch('userLogout');
+                        this.$router.push({name: 'login'})
+                    }
+                })
             },
             changeSuccess() {
                 this.showForm = false;
@@ -116,8 +134,8 @@
                 let timer = setInterval(() => {
                     this.autoTime--;
                     this.timerTextSuccess = this.autoTime + '秒后跳转至登陆页面';
-                    if (this.autoTime < 0) {
-                        this.returnToHome = true;
+                    if (this.autoTime <= 0) {
+                        this.logout();
                         clearInterval(timer);
                     }
                 }, 1000)
@@ -126,7 +144,7 @@
                 let timer = setInterval(() => {
                     this.autoTime--;
                     this.timerTextError = this.autoTime + '秒后返回';
-                    if (this.autoTime < 0) {
+                    if (this.autoTime <= 0) {
                         this.showForm = true;
                         this.showFeedbackSuccess = false;
                         this.showFeedbackError = false;
@@ -135,13 +153,6 @@
                 }, 1000)
             },
         },
-        watch: {
-            returnToHome: function (newVal) {
-                if (newVal === true) {
-                    this.$router.push({name: 'login'})
-                }
-            }
-        }
     }
 </script>
 
@@ -160,7 +171,7 @@
 
                 .el-input-group__prepend {
                     text-align center
-                    width 140px
+                    width 70px
                 }
 
                 .el-button {
