@@ -1,19 +1,16 @@
 from django.conf import settings
-from django.core.mail import send_mail
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password
-from django.views.generic.base import View
+from django.core.mail import send_mail
 from django.shortcuts import HttpResponseRedirect
-
+from django.views.generic.base import View
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
-from rest_framework.decorators import action
-
-from . import serializers
-from . import models
 from utils.api import API, APIViewSet
 from utils.decorators import validate_serializer
+from . import models
+from . import serializers
 
 
 class UserViewSet(APIViewSet):

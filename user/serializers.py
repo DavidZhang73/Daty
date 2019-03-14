@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from . import models
 
 
@@ -17,7 +18,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'qq'
         ]
 
-        
+
 class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField()
 

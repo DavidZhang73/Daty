@@ -37,7 +37,7 @@
 	.home-wrap {
 		height 100%
 		background-size: contain;
-		background-color rgb(248,250,251)
+		background-color rgb(248, 250, 251)
 
 		.home {
 			position relative
