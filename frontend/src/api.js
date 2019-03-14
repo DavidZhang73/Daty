@@ -42,10 +42,23 @@ export default {
     },
     //Center
     //center.useInfo
-    //TODO
+    updateUserInfo(username, phone, qq) {
+        return fetchAPI('/api/user/', 'patch', {
+            username,
+            phone,
+            qq
+        })
+    },
+    getUserInfo() {
+        return fetchAPI('/api/user/', 'get')
+    },
 
     //Center.userPassword
-    //TODO
+    resetUserPassword(new_password) {
+        return fetchAPI('/api/user/resetPassword/', 'post', {
+            new_password
+        })
+    },
 
 }
 
