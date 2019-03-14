@@ -165,12 +165,3 @@ class ChangePasswordAPI(API):
         user.set_password(new_password)
         user.save()
         return self.success("success")
-
-
-class ForgetPasswordReset(View):
-    def get(self, request, uuid):
-        forgetPassword = models.ForgetPassword.objects.filter(id=uuid)
-        if forgetPassword:
-            return HttpResponseRedirect('/#/user/forgetPassword/reset/' + str(uuid))
-        else:
-            return HttpResponseRedirect('/#/user/login')
