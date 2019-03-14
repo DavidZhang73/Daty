@@ -10,6 +10,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=False)
+
     class Meta:
         model = models.User
         fields = [
