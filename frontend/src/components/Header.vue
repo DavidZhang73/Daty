@@ -10,7 +10,7 @@
                 text-color="#000"
                 active-text-color="#000000">
             <img id="logo" src="../assets/logo_svg.svg" height="40px" width="80px">
-            <el-button-group class="btn-header" v-if="!isLogin()">
+            <el-button-group class="btn-header" v-if="!isLogin">
                 <router-link
                         class="el-button el-button--info is-plain"
                         :to="{name: 'login'}">
@@ -22,7 +22,7 @@
                     注册
                 </router-link>
             </el-button-group>
-            <el-button-group class="btn-header" v-if="isLogin()">
+            <el-button-group class="btn-header" v-if="isLogin">
                 <router-link
                         class="el-button el-button--info is-plain"
                         :to="{name: 'home'}"
@@ -64,9 +64,6 @@
                         this.$router.push({name: 'home'})
                     }
                 })
-            },
-            isLogin() {
-                return this.$store.state.user
             },
             goToHome() {
                 return this.menuIndex = '/'
