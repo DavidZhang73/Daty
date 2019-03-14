@@ -17,7 +17,8 @@
                 <el-input
                         type="text"
                         v-model.trim="passwords.secondPassword"
-                        placeholder="密码不能为纯数字且须大于8位">
+                        placeholder="密码不能为纯数字且须大于8位"
+                        @keypress.enter.native="submitForm('passwords')">
                     <template slot="prepend">确认新密码</template>
                 </el-input>
             </el-form-item>
