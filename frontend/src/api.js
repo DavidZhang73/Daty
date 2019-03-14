@@ -1,22 +1,23 @@
 import {Message} from 'element-ui';
+import router from './router'
 
 export default {
     login(email, password) {
-        return fetchAPI('/api/user/login', 'post', {
+        return fetchAPI('/api/user/login/', 'post', {
             email,
             password
         })
     },
     logout() {
-        return fetchAPI('/api/user/logout', 'get')
+        return fetchAPI('/api/user/logout/', 'get')
     },
-    signinEmailCheck(email) {
-        return fetchAPI('/api/user/signin/emailCheck', 'post', {
+    checkEmail(email) {
+        return fetchAPI('/api/user/checkEmail/', 'post', {
             email
         })
     },
     signin(email, username, phone, qq, password) {
-        return fetchAPI('/api/user/signin', 'post', {
+        return fetchAPI('/api/user/signin/', 'post', {
             email,
             username,
             phone,
@@ -24,18 +25,13 @@ export default {
             password
         })
     },
-    forgetPasswordEmailCheck(email) {
-        return fetchAPI('/api/user/forgetPassword/emailCheck', 'post', {
-            email
-        })
-    },
     forgetPassword(email) {
-        return fetchAPI('/api/user/forgetPassword', 'post', {
+        return fetchAPI('/api/user/forgetPassword/', 'post', {
             email
         })
     },
     forgetPasswordReset(uuid, password) {
-        return fetchAPI('/api/user/forgetPassword/reset', 'post', {
+        return fetchAPI('/api/user/forgetPasswordReset/', 'post', {
             uuid,
             password
         })
@@ -62,6 +58,27 @@ export default {
 
 }
 
+
+/**
+ * 获得cookie对应键的值
+ * @param name
+ * @returns {*}
+ */
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 /**
  * 封装fetch
  * @param url api url
@@ -72,25 +89,28 @@ export default {
  */
 function fetchAPI(url, method, data = null, params = null) {
     let body = null;
-    let content_type = '';
-    if (data && params) {
-        throw (new Error('不能同时使用data和params'))
-    } else if (data) {
+    // csrf
+    let headers = {
+        'Content-Type': 'application/json'
+    };
+    if (!/^(GET|HEAD|OPTIONS|TRACE)$/.test(method)) {
+        headers['X-CSRFToken'] = getCookie('csrftoken')
+    }
+    if (data) {
         body = JSON.stringify(data);
-        content_type = 'application/json'
     } else if (params) {
-        body = params;
-        content_type = 'x-www-form-urlencoded'
+        url += '?' + (new URLSearchParams(params)).toString();
     }
     return fetch(url, {
-        headers: {
-            'content-type': content_type,
-        },
+        headers: headers,
         method: method,
         body: body,
     }).then(res => {
-        if (res.status === 401 || res.status === 403) {
+        if (res.status === 401) {
             throw (new Error(res.status))
+        } else if (res.status === 403 || res.status === 401) {
+            Message.error({duration: 5000, showClose: true, message: '用户未登录'});
+            router.push({name: 'login'})
         }
         return res.json()
     }).catch(e => {

@@ -1,41 +1,40 @@
 <template>
 	<div class="login-wrap">
-        <router-link :to="{name: 'home'}">
-            <img class="logo" src="../../assets/logo.png">
-        </router-link>
-        <el-form class="login-form"
-                 :model="loginForm"
-                 :rules="rules"
-                 ref="loginForm">
-            <el-form-item prop="email">
-                <el-input type="email"
-                          v-model.trim="loginForm.email"
-                          auto-complete="email">
-                    <template slot="prepend">Email:</template>
-                </el-input>
-            </el-form-item>
-            <el-form-item prop="password">
-                <el-input type="password"
-                          v-model.trim="loginForm.password"
-                          @keypress.enter.native="submitForm('loginForm')"
-                          auto-complete="password">
-                    <template slot="prepend">密码</template>
-                </el-input>
-            </el-form-item>
-            <div class="info">
-                <router-link id="no-account" :to="{name: 'signin'}">还没有账号?</router-link>
-                <router-link id="forget-password" :to="{name: 'forgetPassword'}">忘记密码?</router-link>
-            </div>
-            <el-form-item>
-                <el-button type="primary" @click="submitForm('loginForm')">登陆</el-button>
-            </el-form-item>
-        </el-form>
+		<router-link :to="{name: 'home'}">
+			<img class="logo" src="../../assets/logo.png">
+		</router-link>
+		<el-form class="login-form"
+		         :model="loginForm"
+		         :rules="rules"
+		         ref="loginForm">
+			<el-form-item prop="email">
+				<el-input type="email"
+				          v-model.trim="loginForm.email"
+				          auto-complete="email">
+					<template slot="prepend">Email</template>
+				</el-input>
+			</el-form-item>
+			<el-form-item prop="password">
+				<el-input type="password"
+				          v-model.trim="loginForm.password"
+				          @keypress.enter.native="submitForm('loginForm')"
+				          auto-complete="password">
+					<template slot="prepend">密码</template>
+				</el-input>
+			</el-form-item>
+			<div class="info">
+				<router-link id="no-account" :to="{name: 'signin'}">还没有账号?</router-link>
+				<router-link id="forget-password" :to="{name: 'forgetPassword'}">忘记密码?</router-link>
+			</div>
+			<el-form-item>
+				<el-button type="primary" @click="submitForm('loginForm')">登陆</el-button>
+			</el-form-item>
+		</el-form>
 	</div>
 </template>
 
 <script>
     import api from '../../api'
-    import UserBackground from '../../components/Background'
 
     export default {
         name: "Login",
@@ -81,13 +80,11 @@
                                 this.loginForm.password = '';
                                 this.$message.error({showClose: true, message: data.error})
                             } else {
-                                this.$store.commit('userMutation', {
+                                let user = {
                                     id: data.data.id,
-                                    email: data.data.email,
                                     username: data.data.username,
-                                    phone: data.data.phone,
-                                    qq: data.data.qq
-                                });
+                                };
+                                this.$store.dispatch('userLogin', user);
                                 this.$router.push({name: 'home'})
                             }
                         })
@@ -104,53 +101,53 @@
 	@import "../../assets/css/consts.styl"
 	.login-wrap {
 
-        .logo {
-            height 80px
-            width 160px
-            padding 10px 5px
-            margin 10px 0 30px 0
-        }
+		.logo {
+			height 80px
+			width 160px
+			padding 10px 5px
+			margin 10px 0 30px 0
+		}
 
-        .login-form {
-            a {
-                font-size 12px
-                opacity 0.7
+		.login-form {
+			a {
+				font-size 12px
+				opacity 0.7
 
-                &:hover {
-                    opacity 1
-                }
-            }
+				&:hover {
+					opacity 1
+				}
+			}
 
-            label {
-                text-align center
-            }
+			label {
+				text-align center
+			}
 
-            .el-form-item {
-                margin 0 0 30px 0
+			.el-form-item {
+				margin 0 0 30px 0
 
-                .el-input-group__prepend {
-                    text-align center
-                    width 60px
-                }
+				.el-input-group__prepend {
+					text-align center
+					width 60px
+				}
 
-                .el-button {
-                    float right
-                    right 0
-                }
-            }
+				.el-button {
+					float right
+					right 0
+				}
+			}
 
-            .info {
-                margin-bottom 15px
+			.info {
+				margin-bottom 15px
 
-                #no-account {
-                }
+				#no-account {
+				}
 
-                #forget-password {
-                    float right
-                    right 0
-                }
-            }
-        }
+				#forget-password {
+					float right
+					right 0
+				}
+			}
+		}
 
-    }
+	}
 </style>

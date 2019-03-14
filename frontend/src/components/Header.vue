@@ -45,6 +45,7 @@
 
 <script>
     import api from '../api'
+    import {mapGetters} from 'vuex'
 
     export default {
         name: "Header",
@@ -59,7 +60,7 @@
                     if (data.error) {
                         alert(data.error)
                     } else {
-                        this.$store.commit('userMutation', null);
+                        this.$store.dispatch('userLogout');
                         this.$router.push({name: 'home'})
                     }
                 })
@@ -80,32 +81,38 @@
                     this.menuIndex = '0'
                 }
             }
+        },
+        computed: {
+            ...mapGetters([
+                'isLogin'
+            ])
         }
     }
 </script>
 
 <style lang="stylus">
-    .header-wrap {
-        .header {
-            width 100%
-            position fixed
-            top 0
-            z-index 1
-            box-shadow 0 2px 6px 0 rgba(0, 0, 0, 0.12)
+	.header-wrap {
 
-            #logo {
-                float left
-                padding 10px
-            }
+		.header {
+			width 100%
+			position fixed
+			top 0
+			z-index 1
+			box-shadow 0 2px 6px 0 rgba(0, 0, 0, 0.12)
 
-            .btn-header {
-                float right
-                margin 10px 10px 10px 0
-            }
+			#logo {
+				float left
+				padding 10px
+			}
 
-            .el-menu-item {
-                font-size 20px
-            }
-        }
-    }
+			.btn-header {
+				float right
+				margin 10px 10px 10px 0
+			}
+
+			.el-menu-item {
+				font-size 20px
+			}
+		}
+	}
 </style>

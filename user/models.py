@@ -60,13 +60,14 @@ class SigninUserInfo(models.Model):
         邮箱激活后，把SigninUserInfo中的信息放到User中，删除本身
         :return:
         '''
-        User.objects.create_user(
+        User.objects.create(
             username=self.username,
             password=self.password,
             email=self.email,
             phone=self.phone,
             qq=self.qq,
-        )
+            date_joined=self.date_joined
+        ).save()
         self.delete()
 
 

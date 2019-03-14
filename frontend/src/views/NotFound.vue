@@ -1,7 +1,7 @@
 <template>
     <div class="notfound-wrap">
-        <Background img-name="background-404.jpg"
-                    :blur="false"></Background>
+        <Background img-name="background.jpg"
+                    :gray="true"></Background>
         <div class="notfound">
             <p class="text-404">404 NotFound</p>
             <p class="text-lose">哎呀，这个页面走丢了~</p>
