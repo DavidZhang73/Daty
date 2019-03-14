@@ -17,9 +17,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'qq'
         ]
 
-
+        
 class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField()
+
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()

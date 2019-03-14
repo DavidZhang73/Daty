@@ -35,6 +35,7 @@ export default {
             uuid,
             password
         })
+
     },
     //Center
     //center.useInfo
@@ -48,7 +49,7 @@ export default {
     getUserInfo() {
         return fetchAPI('/api/user/', 'get')
     },
-
+  
     //Center.userPassword
     resetUserPassword(new_password) {
         return fetchAPI('/api/user/resetPassword/', 'post', {
