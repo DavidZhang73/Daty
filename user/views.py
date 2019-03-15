@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password
-from django.core.mail import send_mail
 from django.shortcuts import HttpResponseRedirect
 from django.views.generic.base import View
 from rest_framework.decorators import action
@@ -9,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from utils.api import API, APIViewSet
 from utils.decorators import validate_serializer
+from utils.email import send_email
 from . import models
 from . import serializers
 
@@ -69,11 +69,10 @@ class UserViewSet(APIViewSet):
                 qq=qq,
             )
             url = '/api/user/signinActive/' + str(user.id)
-            send_mail(
+            send_email(
                 subject=f'{settings.EMAIL_SUBJECT_PREFIX} 注册新账号',
                 message=f'请点击此链接完成注册：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[email]
+                email=email
             )
             return self.success(f'成功注册用户：{email}')
 
@@ -90,9 +89,10 @@ class UserViewSet(APIViewSet):
                 email=email
             )
             url = '/api/user/forgetPasswordReset/' + str(forgetPassword.id)
-            user[0].email_user(
+            send_email(
                 subject=f'{settings.EMAIL_SUBJECT_PREFIX} 重置密码',
-                message=f'请点击此链接重置密码：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。'
+                message=f'请点击此链接重置密码：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
+                email=user[0].email
             )
             return self.success(f'请在{email}中继续找回密码的操作')
 
