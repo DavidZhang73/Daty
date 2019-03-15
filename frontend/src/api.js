@@ -49,7 +49,7 @@ export default {
     getUserInfo() {
         return fetchAPI('/api/user/', 'get')
     },
-  
+
     //Center.userPassword
     resetUserPassword(new_password) {
         return fetchAPI('/api/user/changePassword/', 'post', {
@@ -99,7 +99,8 @@ function fetchAPI(url, method, data = null, params = null) {
     }
     if (data) {
         body = JSON.stringify(data);
-    } else if (params) {
+    }
+    if (params) {
         url += '?' + (new URLSearchParams(params)).toString();
     }
     return fetch(url, {
