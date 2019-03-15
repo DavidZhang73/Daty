@@ -142,6 +142,11 @@
                             if (data.error) {
                                 this.changeError();
                             } else {
+                                let user = {
+                                    id: this.$store.state.user.id,
+                                    username: data.data.username,
+                                };
+                                this.$store.dispatch('userLogin', user);
                                 this.changeSuccess();
                             }
                         })
