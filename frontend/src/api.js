@@ -1,5 +1,6 @@
 import {Message} from 'element-ui';
 import router from './router'
+import 'whatwg-fetch'
 
 export default {
     login(email, password) {
