@@ -3,7 +3,7 @@
 		<Background img-name="background.jpg"
 		            :blur="false"></Background>
 		<div class="home">
-			<img class="logo" src="../assets/logo_svg.svg" alt="LOGO">
+            <img class="logo" src="../assets/home_logo.svg" alt="LOGO">
 			<div class="button-row">
 				<router-link :to="{name: 'home'}">
 					<el-button type="primary">
@@ -41,14 +41,14 @@
 
 		.home {
 			position relative
-			padding-top 150px
+            padding-top 200px
 			margin 0 auto
 			width 500px
 
 			.logo {
-				width 500px
-				height 250px
-				margin-bottom 50px
+                width 512px
+                height 256px
+                margin-bottom 80px
 			}
 
 			.button-row {
