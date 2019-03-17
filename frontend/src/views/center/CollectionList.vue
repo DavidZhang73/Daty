@@ -1,7 +1,7 @@
 <template>
-	<div class="collection-list-wrap">
-		collectionList
-	</div>
+    <div class="collection-list-wrap">
+        collectionList
+    </div>
 </template>
 
 <script>
@@ -11,7 +11,7 @@
 </script>
 
 <style lang="stylus">
-	.collection-list-wrap {
+    .collection-list-wrap {
 
-	}
+    }
 </style>

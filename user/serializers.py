@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from . import models
 
 
@@ -6,6 +7,24 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
         fields = '__all__'
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=False)
+
+    class Meta:
+        model = models.User
+        fields = [
+            'email',
+            'username',
+            'phone',
+            'qq'
+        ]
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField()
+
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()

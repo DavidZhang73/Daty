@@ -4,15 +4,14 @@ import router from './router'
 import store from './store'
 
 import VueLS from 'vue-ls'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
 
 let options = {
     namespace: 'vuejs__',
     name: 'ls',
     storage: 'local',
 };
-
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.config.productionTip = false;
 

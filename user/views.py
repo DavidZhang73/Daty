@@ -1,19 +1,16 @@
 from django.conf import settings
-from django.core.mail import send_mail
-
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password
-from django.views.generic.base import View
 from django.shortcuts import HttpResponseRedirect
-
+from django.views.generic.base import View
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 
-from rest_framework.decorators import action
-
-from . import serializers
-from . import models
 from utils.api import API, APIViewSet
 from utils.decorators import validate_serializer
+from utils.email import send_email
+from . import models
+from . import serializers
 
 
 class UserViewSet(APIViewSet):
@@ -42,8 +39,7 @@ class UserViewSet(APIViewSet):
         auth.logout(request)
         return self.success("success")
 
-    @action(methods=['post'], detail=False, description='验证邮箱是否存在'
-            )
+    @action(methods=['post'], detail=False, description='验证邮箱是否存在')
     @validate_serializer(serializers.CheckEmailSerializer)
     def checkEmail(self, request):
         data = request.validated_data
@@ -73,11 +69,10 @@ class UserViewSet(APIViewSet):
                 qq=qq,
             )
             url = '/api/user/signinActive/' + str(user.id)
-            send_mail(
+            send_email(
                 subject=f'{settings.EMAIL_SUBJECT_PREFIX} 注册新账号',
                 message=f'请点击此链接完成注册：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[email]
+                email=email
             )
             return self.success(f'成功注册用户：{email}')
 
@@ -94,9 +89,10 @@ class UserViewSet(APIViewSet):
                 email=email
             )
             url = '/api/user/forgetPasswordReset/' + str(forgetPassword.id)
-            user[0].email_user(
+            send_email(
                 subject=f'{settings.EMAIL_SUBJECT_PREFIX} 重置密码',
-                message=f'请点击此链接重置密码：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。'
+                message=f'请点击此链接重置密码：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
+                email=user[0].email
             )
             return self.success(f'请在{email}中继续找回密码的操作')
 
@@ -135,3 +131,36 @@ class ForgetPasswordReset(View):
             return HttpResponseRedirect('/#/user/forgetPassword/reset/' + str(uuid))
         else:
             return HttpResponseRedirect('/#/user/login')
+
+
+class ProfileAPI(API):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        user = request.user
+        s = serializers.UserProfileSerializer(user)
+        return self.success(s.data)
+
+    @validate_serializer(serializers.UserProfileSerializer)
+    def post(self, request):
+        data = request.validated_data
+        user = request.user
+        user.username = data.get('username')
+        user.phone = data.get('phone')
+        user.qq = data.get('qq')
+        user.save()
+        s = serializers.UserProfileSerializer(user)
+        return self.success(s.data)
+
+
+class ChangePasswordAPI(API):
+    permission_classes = (IsAuthenticated,)
+
+    @validate_serializer(serializers.ChangePasswordSerializer)
+    def post(self, request):
+        user = request.user
+        data = request.validated_data
+        new_password = data.get('new_password')
+        user.set_password(new_password)
+        user.save()
+        return self.success("success")
