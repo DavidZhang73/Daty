@@ -4,22 +4,22 @@
                  :model="passwords"
                  :rules="rules"
                  ref="passwords"
-                 v-if="showForm">
-            <el-form-item prop="firstPassword">
+                 v-if="showForm"
+                 label-position="left"
+                 label-width="100px">
+            <el-form-item prop="firstPassword" label="新密码">
                 <el-input
                         type="text"
                         v-model.trim="passwords.firstPassword"
                         placeholder="密码不能为纯数字且须大于8位">
-                    <template slot="prepend">新密码</template>
                 </el-input>
             </el-form-item>
-            <el-form-item prop="secondPassword">
+            <el-form-item prop="secondPassword" label="确认新密码">
                 <el-input
-                        type="text"
+                        type="password"
                         v-model.trim="passwords.secondPassword"
                         placeholder="密码不能为纯数字且须大于8位"
                         @keypress.enter.native="submitForm('passwords')">
-                    <template slot="prepend">确认新密码</template>
                 </el-input>
             </el-form-item>
             <el-form-item>
@@ -164,9 +164,9 @@
         width 100%
 
         .user-password-form {
-            width 70%
+            width 60%
             height 100%
-            margin 0 auto
+            margin-left 60px
 
             .el-form-item {
 

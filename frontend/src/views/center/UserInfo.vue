@@ -5,35 +5,33 @@
                  :rules="rules"
                  ref="infoForm"
                  status-icon
-                 v-if="showForm">
-            <el-form-item prop="email">
+                 v-if="showForm"
+                 :label-position="labelPosition"
+                 label-width="50px">
+            <el-form-item prop="email" label="邮箱">
                 <el-input
                         type="text"
                         v-model.trim="infoForm.email"
                         disabled>
-                    <template slot="prepend">email</template>
                 </el-input>
             </el-form-item>
-            <el-form-item prop="name">
+            <el-form-item prop="name" label="姓名">
                 <el-input
                         type="text"
                         v-model.trim="infoForm.name">
-                    <template slot="prepend">姓名</template>
                 </el-input>
             </el-form-item>
-            <el-form-item prop="phoneNumber">
+            <el-form-item prop="phoneNumber" label="手机">
                 <el-input
                         type="text"
                         v-model.trim="infoForm.phoneNumber">
-                    <template slot="prepend">手机号</template>
                 </el-input>
             </el-form-item>
-            <el-form-item prop="QQ">
+            <el-form-item prop="QQ" label="QQ">
                 <el-input
                         type="text"
                         v-model.trim="infoForm.QQ"
                         @keypress.enter.native="submitForm('infoForm')">
-                    <template slot="prepend">QQ</template>
                 </el-input>
             </el-form-item>
             <el-form-item>
@@ -93,6 +91,7 @@
                 return callback()
             };
             return {
+                labelPosition: 'left',
                 showForm: true,
                 showFeedbackSuccess: false,
                 showFeedbackError: false,
@@ -202,16 +201,11 @@
         width 100%
 
         .el-form {
-            width 70%
+            width 60%
             height 100%
-            margin 0 auto
+            margin-left 60px
 
             .el-form-item {
-
-                .el-input-group__prepend {
-                    text-align center
-                    width 80px
-                }
 
                 .el-button {
                     float right
