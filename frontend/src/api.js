@@ -105,6 +105,7 @@ function fetchAPI(url, method, data = null, params = null) {
         url += '?' + (new URLSearchParams(params)).toString();
     }
     return fetch(url, {
+        credentials: 'include',
         headers: headers,
         method: method,
         body: body,

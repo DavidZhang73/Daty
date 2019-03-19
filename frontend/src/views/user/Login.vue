@@ -1,7 +1,7 @@
 <template>
 	<div class="login-wrap">
 		<router-link :to="{name: 'home'}">
-			<img class="logo" src="../../assets/logo.png">
+            <img class="logo" src="../../assets/logo.svg">
 		</router-link>
 		<el-form class="login-form"
 		         :model="loginForm"
