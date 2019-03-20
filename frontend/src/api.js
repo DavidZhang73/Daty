@@ -58,6 +58,11 @@ export default {
         })
     },
 
+    //Center.userGroup
+    updateUserGroup(params) {
+
+    }
+
 }
 
 
