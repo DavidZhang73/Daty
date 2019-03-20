@@ -71,15 +71,17 @@
             <el-table-column label="操作">
                 <template slot-scope="scope">
                     <el-button
+                            type="info"
                             size="mini"
-                            @click="handleEdit(scope.$index, scope.row)">编辑
+                            @click="handleEdit(scope.$index, scope.row)">
+                        编辑
                     </el-button>
                 </template>
             </el-table-column>
         </el-table>
 
         <el-pagination
-                 @size-change="getOrUpdateGroupInfo()"
+                @size-change="getOrUpdateGroupInfo()"
                 @current-change="getOrUpdateGroupInfo()"
                 :current-page.sync="params.page"
                 :page-size="20"
@@ -95,7 +97,7 @@
         data() {
             return {
                 params: {
-                    count: 1000,
+                    count: 1,
                     page: 1,
                     search: '',
                     filter: '',
@@ -141,12 +143,16 @@
         methods: {
             addNewGroup() {
                 console.log('addNewGroup');
+                //TODO
+
             },
             handleEdit(index, row) {
                 console.log(index, row);
+                //TODO
             },
             handleCurrentChange(val) {
                 console.log(`当前页: ${val}`);
+                //TODO
             },
             getOrUpdateGroupInfo() {
                 console.log('!');
