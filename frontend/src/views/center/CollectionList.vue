@@ -1,6 +1,6 @@
 <template>
     <div class="collection-list-wrap">
-        collectionList
+        CollectionList
     </div>
 </template>
 
