@@ -21,6 +21,7 @@
                     <el-button slot="append"
                                icon="el-icon-search"
                                @click="getOrUpdateGroupInfo()">
+                        搜索
                     </el-button>
                 </el-input>
 
@@ -48,22 +49,19 @@
                     type="index">
             </el-table-column>
             <el-table-column
-                    label="用户组名称"
-                    width="90px">
+                    label="用户组名称">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column
-                    label="人数"
-                    width="60px">
+                    label="人数">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.users_count }}</span>
                 </template>
             </el-table-column>
             <el-table-column
-                    label="类别"
-                    width="145px">
+                    label="类别">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.type }}</span>
                 </template>
@@ -99,7 +97,7 @@
                 @current-change="getOrUpdateGroupInfo()"
                 :current-page.sync="params.page"
                 :page-size="20"
-                layout="prev, pager, next, jumper"
+                layout="total, prev, pager, next, jumper"
                 :total="count">
         </el-pagination>
     </div>
@@ -170,7 +168,7 @@
         height 100%
 
         .group-list-menu {
-            width 70%
+            width 85%
             height 40px
             margin 0 auto
             margin-top 20px
@@ -184,7 +182,7 @@
                 }
 
                 .search {
-                    width 200px
+                    width 250px
                     margin-left 10px
                 }
 
@@ -202,12 +200,12 @@
         .el-table {
             margin 0 auto
             margin-top 30px
-            width 70%
+            width 85%
         }
 
         .el-pagination {
             margin 0 auto
-            width 70%
+            width 85%
             margin-top 40px
             margin-bottom 20px
         }
