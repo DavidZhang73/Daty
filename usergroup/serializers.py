@@ -5,11 +5,13 @@ from . import models
 
 
 class UserSerializer(serializers.ModelSerializer):
-    user = UserProfileSerializer(read_only=True)
+    id = serializers.CharField(required=False)
+    user = UserProfileSerializer(required=False)
 
     class Meta:
         model = models.User
         fields = '__all__'
+
 
 
 class UserGroupSerializer(serializers.ModelSerializer):
@@ -25,6 +27,9 @@ class UserGroupSerializer(serializers.ModelSerializer):
             'users',
             'created_datetime',
             'last_modified_datetime'
+        ]
+        read_only_fields = [
+            'creator'
         ]
 
     def save(self, **kwargs):

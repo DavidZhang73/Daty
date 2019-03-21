@@ -1,7 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -22,28 +21,46 @@ class TypeAPI(APIView):
         return Response(ret)
 
 
-class UserGroupAPI(GenericAPIView, mixins.RetrieveModelMixin):
+class UserGroupAPI(RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.UserGroupSerializer
     permission_classes = (IsAuthenticated,)
     lookup_field = 'id'
 
-    def get(self, request, id):
-        return self.retrieve(request)
+    def perform_destroy(self, instance):
+        for user in instance.users.all():
+            user.delete()
+        instance.delete()
 
-    def put(self, request, id):
-        pass
-
-    def delete(self, request, id):
-        pass
+    def perform_update(self, serializer):
+        s = self.get_serializer(data=self.request.data)
+        s.is_valid(raise_exception=True)
+        data = s.data
+        usergroup = self.get_object()
+        usergroup.name = data.get('name')
+        usergroup.type = data.get('type')
+        user_id_list = []
+        for user in data.get('users'):
+            user_id = user.get('id')
+            user_id_list.append(user_id)
+        for user in usergroup.users.all():
+            if not str(user.id) in user_id_list:
+                user.delete()
+        for user in data.get('users'):
+            user_id = user.get('id')
+            if user_id:
+                u = models.User.objects.get(id=user_id)
+                u.name = user.get('name')
+                u.save()
+            else:
+                u = models.User.objects.create(name=user.get('name'))
+                usergroup.users.add(u)
+        usergroup.save()
 
     def get_queryset(self):
         return models.UserGroup.objects.filter(creator=self.request.user)
 
 
-class UserGroupListCreateAPI(GenericAPIView,
-                             mixins.CreateModelMixin,
-                             mixins.ListModelMixin):
-    serializer_class = serializers.UserGroupListSerializer
+class UserGroupListCreateAPI(ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
     filterset_fields = [
@@ -58,11 +75,22 @@ class UserGroupListCreateAPI(GenericAPIView,
         'last_modified_datetime'
     ]
 
-    def get(self, request):
-        return self.list(request)
+    def perform_create(self, serializer):
+        data = serializer.data
+        usergroup = models.UserGroup.objects.create(
+            name=data.get('name'),
+            type=data.get('type'),
+            creator=self.request.user,
+        )
+        for user in data.get('users'):
+            u = models.User.objects.create(name=user.get('name'))
+            usergroup.users.add(u)
 
     def get_queryset(self):
         return models.UserGroup.objects.filter(creator=self.request.user)
 
-    # def get_serializer_class(self):
-    #     pass
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return serializers.UserGroupListSerializer
+        else:
+            return serializers.UserGroupSerializer

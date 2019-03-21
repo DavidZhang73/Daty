@@ -9,7 +9,8 @@ def custom_exception_handler(exc, context):
 
     # change key name to error
     if response is not None:
-        response.data['error'] = response.data.pop('detail')
+        if response.data.get('detail'):
+            response.data['error'] = response.data.pop('detail')
     else:
         response = Response({'error': exc.args[0]}, status=500)
     return response
