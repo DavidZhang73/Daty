@@ -18,6 +18,7 @@ import CollectionList from './views/center/CollectionList'
 import GroupList from './views/center/GroupList'
 import UserInfo from './views/center/UserInfo'
 import UserPassword from './views/center/UserPassword'
+import AddNewGroup from './views/center/AddNewGroup'
 
 import NotFound from './views/NotFound'
 
@@ -90,7 +91,12 @@ export default new Router({
                 {
                     path: 'groupList',
                     name: 'groupList',
-                    component: GroupList
+                    component: GroupList,
+                },
+                {
+                    path: 'addNewGroup',
+                    name: 'addNewGroup',
+                    component: AddNewGroup,
                 },
                 {
                     path: 'userInfo',

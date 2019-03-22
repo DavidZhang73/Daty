@@ -33,54 +33,78 @@
             </div>
 
             <div class="group-list-menu-right">
-                <el-button
-                        class="add-btn"
-                        icon="el-icon-plus"
-                        type="primary"
-                        @click="addNewGroup()">
-                    新建用户组
-                </el-button>
+                <router-link :to="{name : 'addNewGroup'}">
+                    <el-button
+                            class="add-btn"
+                            icon="el-icon-plus"
+                            type="primary"
+                            @click="addNewGroup()">
+                        新建用户组
+                    </el-button>
+                </router-link>
             </div>
         </div>
 
-        <el-table :data="tableData">
+        <el-table
+                :data="tableData"
+                @sort-change="sortChange"
+                v-loading="tableLoading"
+                element-loading-text="拼命加载中"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(0, 0, 0, 0.8)">
             <el-table-column
-                    label="序号"
-                    type="index">
+                    label="#"
+                    type="index"
+                    prop="number">
             </el-table-column>
             <el-table-column
-                    label="用户组名称">
+                    label="用户组名称"
+                    prop="name">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column
-                    label="人数">
+                    label="人数"
+                    prop="usersCount">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.users_count }}</span>
                 </template>
             </el-table-column>
             <el-table-column
-                    label="类别">
+                    label="类别"
+                    prop="type">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.type }}</span>
+                    <span style="margin-left: 10px"
+                          v-html="formatterType(scope,scope.row.type)">
+                        {{ scope.row.type }}</span>
                 </template>
             </el-table-column>
             <el-table-column
-                    label="创建日期">
+                    label="创建日期"
+                    sortable="custom"
+                    prop="created_datetime">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
-                    <span style="margin-left: 10px">{{ scope.row.created_datetime }}</span>
+                    <span style="margin-left: 10px"
+                          v-html="formatterDatetime(scope,scope.row.created_datetime)">
+                        {{ scope.row.created_datetime }}</span>
                 </template>
             </el-table-column>
             <el-table-column
-                    label="上次修改日期">
+                    label="上次修改日期"
+                    sortable="custom"
+                    prop="last_modified_datetime">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
-                    <span style="margin-left: 10px">{{ scope.row.last_modified_datetime }}</span>
+                    <span style="margin-left: 10px"
+                          v-html="formatterDatetime(scope,scope.row.last_modified_datetime)">
+                        {{ scope.row.last_modified_datetime }}</span>
                 </template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column
+                    label="操作"
+                    prop="operation">
                 <template slot-scope="scope">
                     <el-button
                             type="info"
@@ -119,6 +143,7 @@
                 options: [],
                 tableData: [],
                 count: 1,
+                tableLoading: true,
             }
         },
         mounted() {
@@ -138,27 +163,35 @@
                 //TODO
             },
             getOrUpdateGroupInfo() {
+                this.tableLoading = true;
                 api.getUserGroup(this.params).then(data => {
-                    for (var i = 0; i < data.results.length; i++) {
-                        if (data.results[i].type === 'NONEEDLOGIN') data.results[i].type = '不需要登陆';
-                        else if (data.results[i].type === 'ALREADYSIGNIN') data.results[i].type = '需要登陆已注册';
-                        else data.results[i].type = '需要登陆未注册';
-
-                        var tempStr1 = data.results[i].created_datetime;
-                        data.results[i].created_datetime = tempStr1.substring(0, 10) + " " + tempStr1.substring(11, 19);
-
-                        var tempStr2 = data.results[i].last_modified_datetime;
-                        data.results[i].last_modified_datetime = tempStr2.substring(0, 10) + " " + tempStr2.substring(11, 19);
-                    }
-
                     this.tableData = data.results;
                     this.count = data.count;
+                    this.tableLoading = false;
                 });
             },
             clearTypeAndSearch() {
                 this.params.search = '';
-            }
-        }
+            },
+            sortChange(col) {
+                if (col.order === 'ascending') {
+                    this.params.ordering = col.prop;
+                } else if (col.order === 'descending') {
+                    this.params.ordering = '-' + col.prop;
+                } else {
+                    this.params.ordering = '';
+                }
+                this.getOrUpdateGroupInfo();
+            },
+            formatterType(scope, value) {
+                if (value === 'NONEEDLOGIN') return '不需要登陆';
+                else if (value === 'ALREADYSIGNIN') return '需要登陆已注册';
+                else return '需要登陆未注册';
+            },
+            formatterDatetime(scope, value) {
+                return value.substring(0, 10) + " " + value.substring(11, 19);
+            },
+        },
     }
 </script>
 
