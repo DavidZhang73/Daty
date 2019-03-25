@@ -75,9 +75,8 @@
                     label="类别"
                     prop="type">
                 <template slot-scope="scope">
-                    <span style="margin-left: 10px"
-                          v-html="formatterType(scope,scope.row.type)">
-                        {{ scope.row.type }}</span>
+                    <span style="margin-left: 10px">
+                        {{ scope.row.type | formatterType}}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -86,9 +85,8 @@
                     prop="created_datetime">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
-                    <span style="margin-left: 10px"
-                          v-html="formatterDatetime(scope,scope.row.created_datetime)">
-                        {{ scope.row.created_datetime }}</span>
+                    <span style="margin-left: 10px">
+                        {{ scope.row.created_datetime | formatterDatetime}}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -97,9 +95,8 @@
                     prop="last_modified_datetime">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
-                    <span style="margin-left: 10px"
-                          v-html="formatterDatetime(scope,scope.row.last_modified_datetime)">
-                        {{ scope.row.last_modified_datetime }}</span>
+                    <span style="margin-left: 10px">
+                        {{ scope.row.last_modified_datetime | formatterDatetime}}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -183,15 +180,17 @@
                 }
                 this.getOrUpdateGroupInfo();
             },
-            formatterType(scope, value) {
+        },
+        filters: {
+            formatterType(value) {
                 if (value === 'NONEEDLOGIN') return '不需要登陆';
                 else if (value === 'ALREADYSIGNIN') return '需要登陆已注册';
                 else return '需要登陆未注册';
             },
-            formatterDatetime(scope, value) {
+            formatterDatetime(value) {
                 return value.substring(0, 10) + " " + value.substring(11, 19);
             },
-        },
+        }
     }
 </script>
 
