@@ -150,11 +150,6 @@
             this.getOrUpdateGroupInfo()
         },
         methods: {
-            addNewGroup() {
-                console.log('addNewGroup');
-                //TODO
-
-            },
             handleEdit(index, row) {
                 console.log(index, row);
                 //TODO
