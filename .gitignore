@@ -12,9 +12,6 @@ __pycache__/
 # Django files
 db.sqlite3
 
-#node.js files
-/frontend/node_modules
-
 # custom
 /daty/settings_prod.py
 /media/*
