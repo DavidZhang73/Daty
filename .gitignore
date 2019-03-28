@@ -17,6 +17,5 @@ db.sqlite3
 
 # custom
 /daty/settings_prod.py
-*/migrations/*
 /media/*
 /static/
