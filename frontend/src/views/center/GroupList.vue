@@ -55,25 +55,29 @@
             <el-table-column
                     label="#"
                     type="index"
-                    prop="number">
+                    prop="number"
+                    align="center">
             </el-table-column>
             <el-table-column
                     label="用户组名称"
-                    prop="name">
+                    prop="name"
+                    align="center">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.name }}</span>
                 </template>
             </el-table-column>
             <el-table-column
                     label="人数"
-                    prop="usersCount">
+                    prop="usersCount"
+                    align="center">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">{{ scope.row.users_count }}</span>
                 </template>
             </el-table-column>
             <el-table-column
                     label="类别"
-                    prop="type">
+                    prop="type"
+                    align="center">
                 <template slot-scope="scope">
                     <span style="margin-left: 10px">
                         {{ scope.row.type | formatterType}}</span>
@@ -82,7 +86,8 @@
             <el-table-column
                     label="创建日期"
                     sortable="custom"
-                    prop="created_datetime">
+                    prop="created_datetime"
+                    align="center">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
                     <span style="margin-left: 10px">
@@ -92,7 +97,8 @@
             <el-table-column
                     label="上次修改日期"
                     sortable="custom"
-                    prop="last_modified_datetime">
+                    prop="last_modified_datetime"
+                    align="center">
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
                     <span style="margin-left: 10px">
@@ -101,7 +107,8 @@
             </el-table-column>
             <el-table-column
                     label="操作"
-                    prop="operation">
+                    prop="operation"
+                    align="center">
                 <template slot-scope="scope">
                     <el-button
                             type="info"
