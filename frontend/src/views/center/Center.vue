@@ -2,6 +2,7 @@
     <div class="center-wrap">
         <Aside></Aside>
         <div class="center">
+            <CenterHeader class="centerHeader"></CenterHeader>
             <div class="form">
                 <router-view></router-view>
             </div>
@@ -11,22 +12,29 @@
 
 <script>
     import Aside from '../../components/center/Aside'
+    import CenterHeader from '../../components/center/CenterHeader'
 
     export default {
         name: "center",
         components: {
-            Aside
+            Aside,
+            CenterHeader
         }
     }
 </script>
 
 <style lang="stylus">
     .center-wrap {
+
         .center {
-            padding 60px 0 30px 200px
+            padding 5px 0 30px 200px
+
+            .centerHeader {
+                margin-top 60px
+            }
 
             .form {
-                margin 20px
+                margin 10px 20px 20px 20px
                 padding 20px
                 background-color #fff
                 border-radius 5px

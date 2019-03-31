@@ -37,8 +37,7 @@
                     <el-button
                             class="add-btn"
                             icon="el-icon-plus"
-                            type="primary"
-                            @click="addNewGroup()">
+                            type="primary">
                         新建用户组
                     </el-button>
                 </router-link>
