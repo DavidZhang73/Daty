@@ -10,7 +10,6 @@ django = "*"
 djangorestframework = "==3.9.2"
 django-filter = "*"
 psycopg2 = "*"
-django-cors-headers = "*"
 
 [requires]
 python_version = "3.7"
