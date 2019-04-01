@@ -197,12 +197,13 @@
                 this.showAddForm = !this.showAddForm;
             },
             submitGroupList(formName) {
+
                 //TODO
             },
             cancelAdd() {
                 this.showAddForm = false;
             },
-            handleDelete(index, row) {
+            handleDelete(index) {
                 this.userGroupInfo.userList.splice(index, 1);
             },
         },
