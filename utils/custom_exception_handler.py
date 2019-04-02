@@ -8,8 +8,8 @@ def custom_exception_handler(exc, context):
     response = exception_handler(exc, context)
 
     # change key name to error
-    if response is not None:
-        if response.data.get('detail'):
+    if response:
+        if isinstance(response.data, dict) and response.data.get('detail'):
             response.data['error'] = response.data.pop('detail')
     else:
         response = Response({'error': exc.args[0]}, status=500)

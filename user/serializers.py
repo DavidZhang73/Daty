@@ -10,8 +10,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=False)
-
     class Meta:
         model = models.User
         fields = [
@@ -20,15 +18,18 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'phone',
             'qq'
         ]
+        extra_kwargs = {
+            'email': {'required': False, 'read_only': True}
+        }
 
 
 class ChangePasswordSerializer(serializers.Serializer):
-    new_password = serializers.CharField()
+    new_password = serializers.CharField(label='新密码')
 
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    password = serializers.CharField()
+    password = serializers.CharField(label='密码')
 
 
 class CheckEmailSerializer(serializers.Serializer):
@@ -39,14 +40,23 @@ class SiginSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SigninUserInfo
         fields = '__all__'
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'password': {'write_only': True},
+            'date_joined': {"read_only": True}
+        }
 
 
 class ForgetPasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ForgetPassword
         fields = '__all__'
+        read_only_fields = [
+            'id',
+            'created_datetime'
+        ]
 
 
 class ForgetPasswordResetSerializer(serializers.Serializer):
     uuid = serializers.UUIDField()
-    password = serializers.CharField()
+    password = serializers.CharField(label='密码')

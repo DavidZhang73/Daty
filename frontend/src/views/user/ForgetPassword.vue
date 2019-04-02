@@ -41,8 +41,8 @@
                         if (data.error) {
                             this.$message.error({showClose: true, mseeage: data.error});
                         } else {
-                            if (data.data === 'Email未注册') {
-                                return callback(new Error(data.data))
+	                        if (data === 'Email未注册') {
+		                        return callback(new Error(data))
                             } else {
                                 return callback()
                             }

@@ -122,10 +122,10 @@
                 if (data.error) {
                     this.$message.error({showClose: true, message: data.error});
                 } else {
-                    this.infoForm.email = data.data.email;
-                    this.infoForm.name = data.data.username;
-                    this.infoForm.phoneNumber = data.data.phone;
-                    this.infoForm.QQ = data.data.qq;
+                    this.infoForm.email = data.email
+                    this.infoForm.name = data.username
+                    this.infoForm.phoneNumber = data.phone
+                    this.infoForm.QQ = data.qq
                 }
             })
         },
@@ -143,7 +143,7 @@
                             } else {
                                 let user = {
                                     id: this.$store.state.user.id,
-                                    username: data.data.username,
+                                    username: data.username,
                                 };
                                 this.$store.dispatch('userLogin', user);
                                 this.changeSuccess();

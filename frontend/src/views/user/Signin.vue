@@ -77,137 +77,137 @@
 </template>
 
 <script>
-    import api from '../../api'
+	import api from '../../api'
 
-    export default {
-        name: "Signin",
-        data() {
-            var validateEmail = (rule, value, callback) => {
-                let emailRex = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/;
-                if (!value) {
-                    return callback(new Error('请输入Email'))
-                } else if (!emailRex.test(value)) {
-                    return callback(new Error('Email格式不正确'))
-                } else {
-                    return api.checkEmail(value).then(data => {
-                        if (data.error) {
-                            alert(data.error)
-                        } else {
-                            if (data.data === 'Email已注册') {
-                                return callback(new Error(data.data))
-                            } else {
-                                return callback()
-                            }
-                        }
-                    });
-                }
-            };
-            var validateUsername = (rule, value, callback) => {
-                //必填。150个字符或者更少。包含字母，数字和仅有的@/./+/-/_符号。
-                if (!value) {
-                    return callback(new Error('请输入姓名'))
-                } else if (value.length > 150) {
-                    return callback(new Error('姓名应该小于150个字符'))
-                }
-                return callback()
-            };
-            var validatePhone = (rule, value, callback) => {
-                let phoneRex = /^1[34578]\d{9}$/;
-                if (!value) {
-                    return callback()
-                } else if (!phoneRex.test(value)) {
-                    return callback(new Error('手机号格式不正确'))
-                }
-                return callback()
-            };
-            var validateQQ = (rule, value, callback) => {
-                let qqRex = /[1-9][0-9]{4,}/;
-                if (!value) {
-                    return callback()
-                } else if (!qqRex.test(value)) {
-                    return callback(new Error('QQ格式不正确'))
-                }
-                return callback()
-            };
-            var validatePassword = (rule, value, callback) => {
-                let passwordRex = /^\d+$/;
-                if (!value) {
-                    return callback(new Error('请输入密码'))
-                } else if (value.length > 32 || value.length < 8) {
-                    return callback(new Error('密码应该大于8位小于32位'))
-                } else if (value === this.signinForm.name) {
-                    return callback(new Error('密码不能和姓名相同'))
-                } else if (passwordRex.test(value)) {
-                    return callback(new Error('密码不能全是数字'))
-                }
-                return callback()
-            };
-            var validateConfirmPassword = (rule, value, callback) => {
-                if (!value) {
-                    return callback(new Error('请输入确认密码'))
-                } else if (value !== this.signinForm.password) {
-                    return callback(new Error('确认密码与密码不同'))
-                }
-                return callback()
-            };
-            return {
-                countdown: 5,
-                signinForm: {
-                    email: '',
-                    username: '',
-                    phone: '',
-                    qq: '',
-                    password: '',
-                    confirmPassword: ''
-                },
-                rules: {
-                    email: [
-                        {validator: validateEmail, trigger: 'blur'}
-                    ],
-                    username: [
-                        {validator: validateUsername, trigger: 'blur'}
-                    ],
-                    phone: [
-                        {validator: validatePhone, trigger: 'blur'}
-                    ],
-                    qq: [
-                        {validator: validateQQ, trigger: 'blur'}
-                    ],
-                    password: [
-                        {validator: validatePassword, trigger: 'blur'}
-                    ],
-                    confirmPassword: [
-                        {validator: validateConfirmPassword, trigger: 'blur'}
-                    ]
-                }
-            };
-        },
-        methods: {
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        api.signin(
-                            this.signinForm.email,
-                            this.signinForm.username,
-                            this.signinForm.phone,
-                            this.signinForm.qq,
-                            this.signinForm.password,
-                        ).then(data => {
-                            if (data.error) {
-                                this.signinForm.password = '';
-                                this.signinForm.confirmPassword = '';
-                                this.$message.error({showClose: true, message: data.error})
-                            } else {
-                                this.$router.push({name: 'emailCheck'})
-                            }
-                        })
-                    } else {
-                        return false;
-                    }
-                });
-            },
-        }
-    }
+	export default {
+		name: 'Signin',
+		data () {
+			var validateEmail = (rule, value, callback) => {
+				let emailRex = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/
+				if (!value) {
+					return callback(new Error('请输入Email'))
+				} else if (!emailRex.test(value)) {
+					return callback(new Error('Email格式不正确'))
+				} else {
+					return api.checkEmail(value).then(data => {
+						if (data.error) {
+							this.$message.error({ showClose: true, mseeage: data.error })
+						} else {
+							if (data === 'Email已注册') {
+								return callback(new Error(data))
+							} else {
+								return callback()
+							}
+						}
+					})
+				}
+			}
+			var validateUsername = (rule, value, callback) => {
+				//必填。150个字符或者更少。包含字母，数字和仅有的@/./+/-/_符号。
+				if (!value) {
+					return callback(new Error('请输入姓名'))
+				} else if (value.length > 150) {
+					return callback(new Error('姓名应该小于150个字符'))
+				}
+				return callback()
+			}
+			var validatePhone = (rule, value, callback) => {
+				let phoneRex = /^1[34578]\d{9}$/
+				if (!value) {
+					return callback()
+				} else if (!phoneRex.test(value)) {
+					return callback(new Error('手机号格式不正确'))
+				}
+				return callback()
+			}
+			var validateQQ = (rule, value, callback) => {
+				let qqRex = /[1-9][0-9]{4,}/
+				if (!value) {
+					return callback()
+				} else if (!qqRex.test(value)) {
+					return callback(new Error('QQ格式不正确'))
+				}
+				return callback()
+			}
+			var validatePassword = (rule, value, callback) => {
+				let passwordRex = /^\d+$/
+				if (!value) {
+					return callback(new Error('请输入密码'))
+				} else if (value.length > 32 || value.length < 8) {
+					return callback(new Error('密码应该大于8位小于32位'))
+				} else if (value === this.signinForm.name) {
+					return callback(new Error('密码不能和姓名相同'))
+				} else if (passwordRex.test(value)) {
+					return callback(new Error('密码不能全是数字'))
+				}
+				return callback()
+			}
+			var validateConfirmPassword = (rule, value, callback) => {
+				if (!value) {
+					return callback(new Error('请输入确认密码'))
+				} else if (value !== this.signinForm.password) {
+					return callback(new Error('确认密码与密码不同'))
+				}
+				return callback()
+			}
+			return {
+				countdown: 5,
+				signinForm: {
+					email: '',
+					username: '',
+					phone: '',
+					qq: '',
+					password: '',
+					confirmPassword: ''
+				},
+				rules: {
+					email: [
+						{ validator: validateEmail, trigger: 'blur' }
+					],
+					username: [
+						{ validator: validateUsername, trigger: 'blur' }
+					],
+					phone: [
+						{ validator: validatePhone, trigger: 'blur' }
+					],
+					qq: [
+						{ validator: validateQQ, trigger: 'blur' }
+					],
+					password: [
+						{ validator: validatePassword, trigger: 'blur' }
+					],
+					confirmPassword: [
+						{ validator: validateConfirmPassword, trigger: 'blur' }
+					]
+				}
+			}
+		},
+		methods: {
+			submitForm (formName) {
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						api.signin(
+							this.signinForm.email,
+							this.signinForm.username,
+							this.signinForm.phone,
+							this.signinForm.qq,
+							this.signinForm.password,
+						).then(data => {
+							if (data.error) {
+								this.signinForm.password = ''
+								this.signinForm.confirmPassword = ''
+								this.$message.error({ showClose: true, message: data.error })
+							} else {
+								this.$router.push({ name: 'emailCheck' })
+							}
+						})
+					} else {
+						return false
+					}
+				})
+			},
+		}
+	}
 </script>
 
 <style lang="stylus">

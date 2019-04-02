@@ -35,7 +35,7 @@ class User(AbstractUser):
 
 class SigninUserInfo(models.Model):
     username_validator = UnicodeUsernameValidator()
-    id = models.CharField('ID', max_length=36, default=uuid.uuid1, primary_key=True)
+    id = models.CharField('ID', max_length=36, default=uuid.uuid4, primary_key=True)
     email = models.EmailField('Email')
     username = models.CharField(
         '姓名',
@@ -72,7 +72,7 @@ class SigninUserInfo(models.Model):
 
 
 class ForgetPassword(models.Model):
-    id = models.CharField('ID', max_length=36, default=uuid.uuid1, primary_key=True)
+    id = models.CharField('ID', max_length=36, default=uuid.uuid4, primary_key=True)
     email = models.EmailField('Email')
     created_datetime = models.DateTimeField('时间', default=timezone.now)
 

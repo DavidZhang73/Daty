@@ -1,105 +1,113 @@
 from django.conf import settings
 from django.contrib import auth
 from django.contrib.auth.hashers import make_password
+from django.db.models import QuerySet
 from django.shortcuts import HttpResponseRedirect
 from django.views.generic.base import View
-from rest_framework.decorators import action
+from rest_framework.exceptions import APIException
+from rest_framework.generics import GenericAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.serializers import Serializer
 
-from utils.api import API, APIViewSet
-from utils.decorators import validate_serializer
 from utils.email import send_email
 from . import models
 from . import serializers
 
 
-class UserViewSet(APIViewSet):
-    queryset = models.User.objects.all()
-    serializer_class = serializers.UserSerializer
+class LoginAPIView(GenericAPIView):
+    queryset = QuerySet()
+    serializer_class = serializers.LoginSerializer
 
-    @action(methods=['post'], detail=False, description='用户登录')
-    @validate_serializer(serializers.LoginSerializer)
-    def login(self, request):
-        data = request.validated_data
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
         user = auth.authenticate(email=data.get('email'), password=data.get("password"))
         if user:
             if not user.is_active:
-                return self.error("您的账户未激活或被关闭，请检查邮箱或者联系管理员")
+                raise APIException("您的账户未激活或被关闭，请检查邮箱或者联系管理员")
             else:
                 auth.login(request, user)
-                return self.success({
+                return Response({
                     'id': user.id,
                     'username': user.username,
                 })
         else:
-            return self.error('Email不存在或密码不正确')
+            raise APIException('Email不存在或密码不正确')
 
-    @action(methods=['get'], detail=False, description='用户登出')
-    def logout(self, request):
+
+class LogoutAPIView(GenericAPIView):
+    permission_classes = []
+    queryset = QuerySet()
+    serializer_class = Serializer()
+
+    def get(self, request):
         auth.logout(request)
-        return self.success("success")
+        return Response("success")
 
-    @action(methods=['post'], detail=False, description='验证邮箱是否存在')
-    @validate_serializer(serializers.CheckEmailSerializer)
-    def checkEmail(self, request):
-        data = request.validated_data
+
+class CheckEmailAPIView(GenericAPIView):
+    queryset = QuerySet()
+    serializer_class = serializers.CheckEmailSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
         email = data.get('email')
         if models.User.objects.filter(email=email):
-            return self.success('Email已注册')
+            return Response('Email已注册')
         else:
-            return self.success('Email未注册')
+            return Response('Email未注册')
 
-    @action(methods=['post'], detail=False, description='用户注册')
-    @validate_serializer(serializers.SiginSerializer)
-    def signin(self, request):
-        data = request.validated_data
-        email = data.get('email')
-        username = data.get('username')
-        phone = data.get('phone')
-        qq = data.get('qq')
-        password = data.get('password')
+
+class SigninAPIView(CreateAPIView):
+    queryset = QuerySet()
+    serializer_class = serializers.SiginSerializer
+
+    def perform_create(self, serializer):
+        email = serializer.validated_data['email']
         if models.User.objects.filter(email=email):
-            return self.error('Email已注册')
-        else:
-            user = models.SigninUserInfo.objects.create(
-                username=username,
-                password=make_password(password),
-                email=email,
-                phone=phone,
-                qq=qq,
-            )
-            url = '/api/user/signinActive/' + str(user.id)
-            send_email(
-                subject=f'{settings.EMAIL_SUBJECT_PREFIX} 注册新账号',
-                message=f'请点击此链接完成注册：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
-                email=email
-            )
-            return self.success(f'成功注册用户：{email}')
+            raise APIException('Email已注册')
+        serializer.validated_data['password'] = make_password(serializer.validated_data['password'])
+        signin_user_info = serializer.save()
+        url = '/api/user/signinActive/' + str(signin_user_info.id)
+        send_email(
+            subject=f'{settings.EMAIL_SUBJECT_PREFIX} 注册新账号',
+            message=f'请点击此链接完成注册：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
+            email=email
+        )
 
-    @action(methods=['post'], detail=False, description='用户忘记密码')
-    @validate_serializer(serializers.ForgetPasswordSerializer)
-    def forgetPassword(self, request):
-        data = request.validated_data
+
+class ForgetPasswordAPIView(CreateAPIView):
+    queryset = QuerySet()
+    serializer_class = serializers.ForgetPasswordSerializer
+
+    def perform_create(self, serializer):
+        data = serializer.validated_data
         email = data.get('email')
         user = models.User.objects.filter(email=email)
         if not user:
-            return self.error('Email未注册')
-        else:
-            forgetPassword = models.ForgetPassword.objects.create(
-                email=email
-            )
-            url = '/api/user/forgetPasswordReset/' + str(forgetPassword.id)
-            send_email(
-                subject=f'{settings.EMAIL_SUBJECT_PREFIX} 重置密码',
-                message=f'请点击此链接重置密码：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
-                email=user[0].email
-            )
-            return self.success(f'请在{email}中继续找回密码的操作')
+            raise APIException('Email未注册')
+        forgetPassword = serializer.save()
+        url = '/api/user/forgetPasswordReset/' + str(forgetPassword.id)
+        send_email(
+            subject=f'{settings.EMAIL_SUBJECT_PREFIX} 重置密码',
+            message=f'请点击此链接重置密码：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
+            email=user[0].email
+        )
+        return Response(f'请在{email}中继续找回密码的操作')
 
-    @action(methods=['post'], detail=False, description='用户忘记密码重置')
-    @validate_serializer(serializers.ForgetPasswordResetSerializer)
-    def forgetPasswordReset(self, request):
-        data = request.validated_data
+
+class ForgetPasswordResetAPIView(GenericAPIView):
+    queryset = models.ForgetPassword.objects.all()
+    serializer_class = serializers.ForgetPasswordResetSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
         uuid = data.get('uuid')
         password = data.get('password')
         forgetPassword = models.ForgetPassword.objects.filter(id=uuid)
@@ -109,9 +117,41 @@ class UserViewSet(APIViewSet):
             user = models.User.objects.get(email=email)
             user.set_password(password)
             user.save()
-            return self.success(f'成功重置用户{email}的密码')
+            return Response(f'成功重置用户{email}的密码')
         else:
-            return self.error(f'链接已失效')
+            raise APIException(f'链接已失效')
+
+
+class ProfileAPIView(GenericAPIView):
+    queryset = QuerySet()
+    serializer_class = serializers.UserProfileSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.update(request.user, serializer.validated_data)
+        return Response(serializer.validated_data)
+
+
+class ChangePasswordAPIView(GenericAPIView):
+    queryset = QuerySet()
+    serializer_class = serializers.ChangePasswordSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        user = request.user
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        new_password = data.get('new_password')
+        user.set_password(new_password)
+        user.save()
+        return Response("success")
 
 
 class SigninActiveUser(View):
@@ -131,36 +171,3 @@ class ForgetPasswordReset(View):
             return HttpResponseRedirect('/#/user/forgetPassword/reset/' + str(uuid))
         else:
             return HttpResponseRedirect('/#/user/login')
-
-
-class ProfileAPI(API):
-    permission_classes = (IsAuthenticated,)
-
-    def get(self, request):
-        user = request.user
-        s = serializers.UserProfileSerializer(user)
-        return self.success(s.data)
-
-    @validate_serializer(serializers.UserProfileSerializer)
-    def post(self, request):
-        data = request.validated_data
-        user = request.user
-        user.username = data.get('username')
-        user.phone = data.get('phone')
-        user.qq = data.get('qq')
-        user.save()
-        s = serializers.UserProfileSerializer(user)
-        return self.success(s.data)
-
-
-class ChangePasswordAPI(API):
-    permission_classes = (IsAuthenticated,)
-
-    @validate_serializer(serializers.ChangePasswordSerializer)
-    def post(self, request):
-        user = request.user
-        data = request.validated_data
-        new_password = data.get('new_password')
-        user.set_password(new_password)
-        user.save()
-        return self.success("success")
