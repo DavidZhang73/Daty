@@ -1,119 +1,104 @@
 <template>
     <el-row class="addNewGroup-wrap"
-            v-loading="addNewGroupLoading"
+            v-loading="Loading"
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(0, 0, 0, 0.8)">
         <el-col :xs="{span:24}"
                 :sm="{span:20}"
-                :lg="{span:16}">
-            <div class="selectLoginModel">
-                <el-radio v-model="radio" :label="radioOptions[0].label">{{radioOptions[0].name}}</el-radio>
-                <el-radio v-model="radio" :label="radioOptions[1].label" disabled>{{radioOptions[1].name}}</el-radio>
-                <el-radio v-model="radio" :label="radioOptions[2].label" disabled>{{radioOptions[2].name}}</el-radio>
-            </div>
-
-            <el-form class="addNewGroupForm-NONEEDLOGIN"
-                     label-width="100px"
-                     :model="userGroupInfoNONEEDLOGIN"
-                     ref="userGroupInfoNONEEDLOGIN"
-                     :rules="userGroupInfoRulesNONEEDLOGIN"
-                     status-icon
+                :lg="{span:18}">
+            <el-form class="addNewGroupForm"
+                     :model="userGroupForm"
+                     ref="userGroupForm"
                      label-position="left"
-                     v-if="showNONEEDLOGINForm">
-                <el-form-item prop="userGroupName" label="用户组名称">
-                    <el-input
-                            type="text"
-                            placeholder="请输入用户组名称"
-                            v-model.trim="userGroupInfoNONEEDLOGIN.userGroupName">
-                    </el-input>
+                     label-width="100px"
+                     :rules="userGroupFormRules"
+                     status-icon>
+                <el-form-item label="用户类型" prop="type">
+                    <el-radio-group v-model="userGroupForm.type"
+                                    @change="handleChange">
+                        <el-radio v-for="item in radioOptions"
+                                  :label="item.value">{{item.label}}
+                        </el-radio>
+                    </el-radio-group>
                 </el-form-item>
-                <el-form-item prop="userList" label="用户组成员">
-                    <el-table :data="userGroupInfoNONEEDLOGIN.userList">
-                        <el-table-column label="#" type="index" align="center">
-                        </el-table-column>
-                        <el-table-column label="用户名称" align="center">
-                            <template slot-scope="scope">
-                                <span style="margin-left: 10px">{{ scope.row.name }}</span>
-                            </template>
-                        </el-table-column>
+                <el-form-item label="用户组名称" prop="name">
+                    <el-input v-model.trim="userGroupForm.name" placeholder="请输入用户组名称"></el-input>
+                </el-form-item>
+                <el-form-item label="用户列表" prop="users">
+                    <el-table :data="userGroupForm.users" v-if="userGroupForm.type === 'NONEEDLOGIN'">
+                        <el-table-column type="index" align="center"></el-table-column>
+                        <el-table-column label="用户名称" align="center" prop="name"></el-table-column>
                         <el-table-column label="操作" align="center">
                             <template slot-scope="scope">
                                 <el-button
                                         size="mini"
                                         type="danger"
-                                        @click="handleDeleteInNONEEDLOGIN(scope.$index, scope.row)"
-                                        plain>删除
+                                        @click="handleDelete(scope.$index, scope.row)">删除
                                 </el-button>
                             </template>
                         </el-table-column>
                     </el-table>
-                    <el-button class="addNewGroupBtn"
-                               icon="el-icon-circle-plus-outline"
+
+                    <el-table :data="userGroupForm.users" v-if="userGroupForm.type === 'ALREADYSIGNIN'">
+                        <el-table-column type="index" align="center"></el-table-column>
+                        <el-table-column label="用户" align="center"></el-table-column>
+                        <el-table-column label="操作" align="center"></el-table-column>
+                    </el-table>
+
+                    <el-table :data="userGroupForm.users" v-if="userGroupForm.type === 'REQUIRESIGNIN'">
+                        <el-table-column type="index" align="center"></el-table-column>
+                        <el-table-column label="用户" align="center"></el-table-column>
+                        <el-table-column label="操作" align="center"></el-table-column>
+                    </el-table>
+
+                    <el-button class="addBtn"
                                type="success"
-                               @click="handleAddUserForNONEEDLOGIN"
+                               icon="el-icon-circle-plus-outline"
                                size="mini"
+                               @click="addNewUser"
                                plain>添加用户
                     </el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-button
-                            class="submitGroupListBtn"
                             type="primary"
-                            v-if="!showAddFormNONEEDLOGIN"
-                            icon="el-icon-check"
-                            size="small"
-                            @click="submitGroupListNONEEDLOGIN('userGroupInfoNONEEDLOGIN')">保存
+                            class="submitBtn"
+                            v-if="!(showAddNoNeedLoginUserForm||showAddAlreadySignInUserForm||showAddRequireSignInUserForm)"
+                            @click="submitUserGroupForm('userGroupForm')">保存
                     </el-button>
                 </el-form-item>
             </el-form>
 
-            <el-form v-if="showALREADYSIGNINForm">
-                <el-form-item label="showALREADYSIGNINForm"></el-form-item>
-            </el-form>
-
-            <el-form v-if="showREQUIRESIGNINForm">
-                <el-form-item label="showREQUIRESIGNINForm"></el-form-item>
-            </el-form>
-        </el-col>
-        <el-col :xs="{span:24}"
-                :sm="{span:20}"
-                :lg="{span:16}"
-                v-if="showAddFormNONEEDLOGIN">
-            <el-card class="box-card">
-                <el-form
-                        :model="addNewUserNONEEDLOGIN"
-                        label-width="100px"
-                        label-position="left"
-                        class="addNewUser-form"
-                        ref="addNewUserNONEEDLOGIN"
-                        :rules="addNewUserRulesNONEEDLOGIN">
-                    <el-form-item label="用户名" prop="userName">
+            <el-card class="addNoNeedLoginUser" v-if="showAddNoNeedLoginUserForm">
+                <el-form :model="NoNeedLoginUserForm"
+                         ref="NoNeedLoginUserForm"
+                         :rules="NoNeedLoginUserFormRules"
+                         label-position="left"
+                         label-width="100px"
+                         status-icon>
+                    <el-form-item label="用户名称" prop="name">
                         <el-input
-                                type="text"
-                                placeholder="请输入用户名称"
-                                v-model="addNewUserNONEEDLOGIN.userName"
-                                @keypress.enter.native="submitAddNewUserFormForNONEEDLOGIN('addNewUserNONEEDLOGIN')"></el-input>
+                                v-model.trim="NoNeedLoginUserForm.name"
+                                placeholder="请输入用户名"
+                                @keypress.enter.native="submitNewNoNeedLoginUser('NoNeedLoginUserForm')"
+                                clearable></el-input>
                     </el-form-item>
-                    <el-form-item>
-                        <div class="btnGroup">
-                            <el-button
-                                    class="addBtn"
-                                    type="primary"
-                                    size="small"
-                                    plain
-                                    @click="submitAddNewUserFormForNONEEDLOGIN('addNewUserNONEEDLOGIN')">添加
-                            </el-button>
-                            <el-button
-                                    class="cancelBtn"
-                                    type="danger"
-                                    size="small"
-                                    plain
-                                    @click="cancelAddInNONEEDLOGIN">取消
-                            </el-button>
-                        </div>
+                    <el-form-item class="btnGroup">
+                        <el-button type="primary" size="mini" @click="submitNewNoNeedLoginUser('NoNeedLoginUserForm')"
+                                   plain>添加
+                        </el-button>
+                        <el-button type="danger" size="mini" @click="cancelAddNoNeedLoginUser" plain>取消</el-button>
                     </el-form-item>
                 </el-form>
+            </el-card>
+
+            <el-card class="addAlreadySignInUser" v-if="showAddAlreadySignInUserForm">
+                <p>TEST-01</p>
+            </el-card>
+
+            <el-card class="addRequireSignInInUser" v-if="showAddRequireSignInUserForm">
+                <p>TEST-02</p>
             </el-card>
         </el-col>
     </el-row>
@@ -125,164 +110,170 @@
     export default {
         name: "AddNewGroup",
         data() {
-            var validateUserGroupNameNONEEDLOGIN = (rule, value, callback) => {
+            var validateUsername = (rule, value, callback) => {
                 if (!value) {
-                    return callback(new Error('用户组名称不可为空'))
-                } else if (value.length > 150) {
-                    return callback(new Error('用户组名称应该小于150个字符'))
+                    return callback(new Error('用户名称不可为空'))
+                } else if (value.length > 128) {
+                    return callback(new Error('用户名称应该小于128个字符'))
                 }
                 return callback()
             };
-            var validateUserNameNONEEDLOGIN = (rule, value, callback) => {
+            var validateUserGroupName = (rule, value, callback) => {
                 if (!value) {
-                    return callback(new Error('用户名称不可为空'))
-                } else if (value.length > 150) {
-                    return callback(new Error('用户名称应该小于150个字符'))
+                    return callback(new Error('用户组名称不可为空'))
+                } else if (value.length > 128) {
+                    return callback(new Error('用户组名称应该小于128个字符'))
+                }
+                return callback()
+            };
+            var validateUsers = (rule, value, callback) => {
+                if (value.length === 0) {
+                    return callback(new Error('用户列表不能为空'))
                 }
                 return callback()
             };
             return {
-                addNewGroupLoading: true,
-                radio: 'NONEEDLOGIN',
-                userGroupInfoNONEEDLOGIN: {
-                    userGroupName: '',
-                    userList: [],
+                Loading: true,
+                userGroupForm: {
+                    type: 'NONEEDLOGIN',
+                    name: '',
+                    users: [],
                 },
-                showAddFormNONEEDLOGIN: false,
-                addNewUserNONEEDLOGIN: {
-                    userName: '',
-                },
-                radioOptions: [
-                    {
-                        label: '',
-                        name: ''
-                    },
-                    {
-                        label: '',
-                        name: ''
-                    },
-                    {
-                        label: '',
-                        name: ''
-                    }
-                ],
-                showNONEEDLOGINForm: true,
-                showALREADYSIGNINForm: false,
-                showREQUIRESIGNINForm: false,
-                userGroupInfoRulesNONEEDLOGIN: {
-                    userGroupName: [
-                        {validator: validateUserGroupNameNONEEDLOGIN, trigger: 'blur'}
+                userGroupFormRules: {
+                    name: [
+                        {validator: validateUserGroupName, trigger: 'blur'}
                     ],
+                    users: [
+                        {validator: validateUsers, trigger: 'blur'}
+                    ]
                 },
-                addNewUserRulesNONEEDLOGIN: {
-                    userName: [
-                        {validator: validateUserNameNONEEDLOGIN, trigger: 'blur'}
-                    ],
+                radioOptions: [],
+
+                NoNeedLoginUserForm: {
+                    name: '',
                 },
+                NoNeedLoginUserFormRules: {
+                    name: [
+                        {validator: validateUsername, trigger: 'blur'}
+                    ]
+                },
+                showAddNoNeedLoginUserForm: false,
+
+                AlreadySignInUserForm: {
+                    name: '',
+                },
+                AlreadySignInUserFormRules: {},
+                showAddAlreadySignInUserForm: false,
+
+                RequireSignInInUserForm: {
+                    name: '',
+                },
+                RequireSignInUserFormRules: {},
+                showAddRequireSignInUserForm: false,
+
             }
         },
-        mounted() {
-            this.addNewGroupLoading = true;
-            api.getUserGroupType().then(data => {
-                for (var i = 0; i < data.length; i++) {
-                    this.radioOptions[i].label = data[i].value;
-                    this.radioOptions[i].name = data[i].label;
-                }
-                this.addNewGroupLoading = false;
-            });
-        },
         methods: {
-            submitAddNewUserFormForNONEEDLOGIN(formName) {
+            handleChange() {
+                this.NoNeedLoginUserForm.name = '';
+                this.AlreadySignInUserForm.name = '';
+                this.RequireSignInInUserForm.name = '';
+                this.showAddNoNeedLoginUserForm = false;
+                this.showAddAlreadySignInUserForm = false;
+                this.showAddRequireSignInUserForm = false;
+            },
+            addNewUser() {
+                if (this.userGroupForm.type === 'ALREADYSIGNIN') {
+                    this.showAddNoNeedLoginUserForm = false;
+                    this.showAddAlreadySignInUserForm = true;
+                    this.showAddRequireSignInUserForm = false;
+                } else if (this.userGroupForm.type === 'REQUIRESIGNIN') {
+                    this.showAddNoNeedLoginUserForm = false;
+                    this.showAddAlreadySignInUserForm = false;
+                    this.showAddRequireSignInUserForm = true;
+                } else {
+                    this.showAddNoNeedLoginUserForm = true;
+                    this.showAddAlreadySignInUserForm = false;
+                    this.showAddRequireSignInUserForm = false;
+                }
+            },
+            submitNewNoNeedLoginUser(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        var userMap = [];
-                        userMap["name"] = this.addNewUserNONEEDLOGIN.userName;
-                        this.userGroupInfoNONEEDLOGIN.userList.push(userMap);
-                        this.addNewUserNONEEDLOGIN.userName = '';
+                        this.userGroupForm.users = JSON.parse(JSON.stringify(this.userGroupForm.users.concat(this.NoNeedLoginUserForm)));
+                        this.NoNeedLoginUserForm.name = '';
                     } else return false;
                 });
             },
-            handleAddUserForNONEEDLOGIN() {
-                this.showAddFormNONEEDLOGIN = !this.showAddFormNONEEDLOGIN;
+            cancelAddNoNeedLoginUser() {
+                this.NoNeedLoginUserForm.name = '';
+                this.showAddNoNeedLoginUserForm = false;
             },
-            submitGroupListNONEEDLOGIN(formName) {
-
-
-                //TODO
+            submitUserGroupForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        api.updateUserGroup(
+                            this.userGroupForm.name,
+                            this.userGroupForm.type,
+                            this.userGroupForm.users
+                        ).then(data => {
+                            if (data.error) {
+                                this.$message.error({showClose: true, message: data.error});
+                            } else {
+                                this.$router.push({name: 'groupList'});
+                            }
+                        })
+                    } else return false;
+                })
             },
-            cancelAddInNONEEDLOGIN() {
-                this.showAddFormNONEEDLOGIN = false;
-            },
-            handleDeleteInNONEEDLOGIN(index) {
-                this.userGroupInfoNONEEDLOGIN.userList.splice(index, 1);
-            },
-        },
-        watch: {
-            radio(newVal) {
-                if (newVal === "ALREADYSIGNIN") {
-                    this.showNONEEDLOGINForm = false;
-                    this.showALREADYSIGNINForm = true;
-                    this.showREQUIRESIGNINForm = false;
-                    if (this.showAddFormNONEEDLOGIN) this.showAddFormNONEEDLOGIN = false;
-                } else if (newVal === "REQUIRESIGNIN") {
-                    this.showNONEEDLOGINForm = false;
-                    this.showALREADYSIGNINForm = false;
-                    this.showREQUIRESIGNINForm = true;
-                    if (this.showAddFormNONEEDLOGIN) this.showAddFormNONEEDLOGIN = false;
-                } else {
-                    this.showNONEEDLOGINForm = true;
-                    this.showALREADYSIGNINForm = false;
-                    this.showREQUIRESIGNINForm = false;
-                    if (this.showAddFormNONEEDLOGIN) this.showAddFormNONEEDLOGIN = false;
-                }
+            handleDelete(index) {
+                this.userGroupForm.users.splice(index, 1);
             }
+        },
+        mounted() {
+            this.Loading = true;
+            api.getUserGroupType().then(data => {
+                this.radioOptions = data;
+                this.Loading = false;
+            })
         }
     }
 </script>
 
 <style lang="stylus">
     .addNewGroup-wrap {
-        .selectLoginModel {
-            margin-top 20px
-            margin-bottom 30px
-        }
 
-        .addNewGroupForm-NONEEDLOGIN {
-
-            .el-input {
-            }
+        .addNewGroupForm {
+            width 100%
 
             .el-form-item {
-                margin-bottom 15px
+                width 100%
 
-                .submitGroupListBtn {
-                    float right
-                    right 0
+                .el-table {
+                    width 100%
                 }
 
-                .addNewGroupBtn {
+                .addBtn {
                     width 100%
                     margin-top 10px
                 }
+
+                .submitBtn {
+                    float right
+                    right 0
+                }
             }
         }
 
-        .box-card {
+        .addNoNeedLoginUser {
             margin-left 100px
 
             .el-card__body {
-                padding 10px 20px 5px 20px
+                padding-bottom 0
 
-                .addNewUser-form {
-
-                    .el-form-item {
-                        margin-bottom 5px
-
-                        .btnGroup {
-                            float right
-                            right 0
-                        }
-                    }
+                .btnGroup {
+                    float right
+                    right 0
                 }
             }
         }

@@ -2,8 +2,8 @@
     <el-row class="collection-list-wrap">
         <el-col class="collection-list-menu"
                 :xs="{span:24}"
-                :sm="{span:20,offset:2}"
-                :lg="{span:16,offset:4}">
+                :sm="{span:24}"
+                :lg="{span:20,offset:2}">
             <el-select class="order"
                        placeholder="按时间排序"
                        v-model="params.type"

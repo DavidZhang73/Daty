@@ -58,12 +58,21 @@ export default {
         })
     },
 
+    //Center.GroupList
     getUserGroupType() {
         return fetchAPI('/api/usergroup/type/', 'get')
     },
 
     getUserGroup(params) {
         return fetchAPI('/api/usergroup/', 'get', null, params)
+    },
+
+    updateUserGroup(name, type, users) {
+        return fetchAPI('/api/usergroup/','post',{
+            name,
+            type,
+            users
+        })
     }
 }
 
