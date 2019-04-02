@@ -81,8 +81,8 @@
                                 this.$message.error({showClose: true, message: data.error})
                             } else {
                                 let user = {
-                                    id: data.data.id,
-                                    username: data.data.username,
+	                                id: data.id,
+	                                username: data.username,
                                 };
                                 this.$store.dispatch('userLogin', user);
                                 this.$router.push({name: 'home'})
