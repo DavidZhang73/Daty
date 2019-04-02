@@ -28,7 +28,7 @@
                 <el-button
                         class="clearBtn"
                         icon="el-icon-delete"
-                        @click="clearTypeAndSearch();getOrUpdateGroupInfo();">清空搜索
+                        @click="clearSearch();getOrUpdateGroupInfo();">清空搜索
                 </el-button>
             </div>
 
@@ -168,7 +168,7 @@
                     this.tableLoading = false;
                 });
             },
-            clearTypeAndSearch() {
+            clearSearch() {
                 this.params.search = '';
             },
             sortChange(col) {
