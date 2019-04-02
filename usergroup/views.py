@@ -23,8 +23,8 @@ class TypeAPI(APIView):
 
 class UserGroupAPI(RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.UserGroupSerializer
-    permission_classes = (IsAuthenticated,)
     lookup_field = 'id'
+    permission_classes = (IsAuthenticated,)
 
     def perform_destroy(self, instance):
         for user in instance.users.all():
@@ -61,6 +61,7 @@ class UserGroupAPI(RetrieveUpdateDestroyAPIView):
 
 
 class UserGroupListCreateAPI(ListCreateAPIView):
+    serializer_class = serializers.UserGroupSerializer
     permission_classes = (IsAuthenticated,)
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
     filterset_fields = [
@@ -76,11 +77,11 @@ class UserGroupListCreateAPI(ListCreateAPIView):
     ]
 
     def perform_create(self, serializer):
-        data = serializer.data
+        data = serializer.validated_data
         usergroup = models.UserGroup.objects.create(
             name=data.get('name'),
             type=data.get('type'),
-            creator=self.request.user,
+            creator=self.request.user
         )
         for user in data.get('users'):
             u = models.User.objects.create(name=user.get('name'))
@@ -88,9 +89,3 @@ class UserGroupListCreateAPI(ListCreateAPIView):
 
     def get_queryset(self):
         return models.UserGroup.objects.filter(creator=self.request.user)
-
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return serializers.UserGroupListSerializer
-        else:
-            return serializers.UserGroupSerializer

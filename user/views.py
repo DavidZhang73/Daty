@@ -38,9 +38,9 @@ class LoginAPIView(GenericAPIView):
 
 
 class LogoutAPIView(GenericAPIView):
-    permission_classes = []
     queryset = QuerySet()
     serializer_class = Serializer()
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         auth.logout(request)
@@ -97,7 +97,6 @@ class ForgetPasswordAPIView(CreateAPIView):
             message=f'请点击此链接重置密码：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
             email=user[0].email
         )
-        return Response(f'请在{email}中继续找回密码的操作')
 
 
 class ForgetPasswordResetAPIView(GenericAPIView):

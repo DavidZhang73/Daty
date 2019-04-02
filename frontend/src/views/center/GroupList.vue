@@ -90,7 +90,7 @@
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
                     <span style="margin-left: 10px">
-                        {{ scope.row.created_datetime | formatterDatetime}}</span>
+                        {{ scope.row.created_datetime}}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -101,7 +101,7 @@
                 <template slot-scope="scope">
                     <i class="el-icon-time"></i>
                     <span style="margin-left: 10px">
-                        {{ scope.row.last_modified_datetime | formatterDatetime}}</span>
+                        {{ scope.row.last_modified_datetime}}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -187,10 +187,7 @@
                 if (value === 'NONEEDLOGIN') return '不需要登陆';
                 else if (value === 'ALREADYSIGNIN') return '需要登陆已注册';
                 else return '需要登陆未注册';
-            },
-            formatterDatetime(value) {
-                return value.substring(0, 10) + " " + value.substring(11, 19);
-            },
+            }
         }
     }
 </script>
