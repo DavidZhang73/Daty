@@ -19,6 +19,7 @@ import GroupList from './views/center/GroupList'
 import UserInfo from './views/center/UserInfo'
 import UserPassword from './views/center/UserPassword'
 import AddNewGroup from './views/center/AddNewGroup'
+import EditUserGroup from './views/center/EditUserGroup'
 
 import NotFound from './views/NotFound'
 
@@ -92,6 +93,12 @@ export default new Router({
                     path: 'groupList',
                     name: 'groupList',
                     component: GroupList,
+                },
+                {
+                    path: 'editUserGroup/:id',
+                    name: 'editUserGroup',
+                    component: EditUserGroup,
+                    props: true,
                 },
                 {
                     path: 'addNewGroup',

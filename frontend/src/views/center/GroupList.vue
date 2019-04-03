@@ -158,8 +158,7 @@
         },
         methods: {
             handleEdit(index, row) {
-                console.log(index, row);
-                //TODO
+                this.$router.push({name: 'editUserGroup', params: {id: row.id}});
             },
             getOrUpdateGroupInfo() {
                 this.tableLoading = true;
