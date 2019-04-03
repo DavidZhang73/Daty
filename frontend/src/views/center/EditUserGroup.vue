@@ -7,7 +7,6 @@
         <el-col :xs="{span:24}"
                 :sm="{span:20}"
                 :lg="{span:18}">
-
         </el-col>
     </el-row>
 </template>
