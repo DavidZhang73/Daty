@@ -97,7 +97,7 @@
                 <p>TEST-01</p>
             </el-card>
 
-            <el-card class="addRequireSignInInUser" v-if="showAddRequireSignInUserForm">
+            <el-card class="addRequireSignInUser" v-if="showAddRequireSignInUserForm">
                 <p>TEST-02</p>
             </el-card>
         </el-col>

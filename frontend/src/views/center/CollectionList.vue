@@ -70,6 +70,8 @@
     .collection-list-wrap {
 
         .collection-list-menu {
+            height 40px
+            margin-top 20px
 
             .order {
                 width 160px
@@ -81,14 +83,12 @@
             }
 
             .clearBtn {
-                width 120px
                 margin-left 10px
             }
 
             .addBtn {
                 float right
                 right 0
-                width 140px
             }
         }
 

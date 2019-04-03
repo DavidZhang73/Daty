@@ -1,8 +1,10 @@
 <template>
-    <div class="group-list-wrap">
+    <el-row class="group-list-wrap">
 
-        <div class="group-list-menu">
-            <div class="group-list-menu-left">
+        <el-col :xs="{span:24}"
+                :sm="{span:20}"
+                :lg="{span:20,offset:2}">
+            <div class="group-list-menu">
                 <el-select
                         class="order"
                         v-model="params.type"
@@ -30,104 +32,103 @@
                         icon="el-icon-delete"
                         @click="clearSearch();getOrUpdateGroupInfo();">清空搜索
                 </el-button>
-            </div>
 
-            <div class="group-list-menu-right">
                 <router-link :to="{name : 'addNewGroup'}">
                     <el-button
-                            class="add-btn"
+                            class="addBtn"
                             icon="el-icon-plus"
                             type="primary">
                         新建用户组
                     </el-button>
                 </router-link>
             </div>
-        </div>
 
-        <el-table
-                :data="tableData"
-                @sort-change="sortChange"
-                v-loading="tableLoading"
-                element-loading-text="拼命加载中"
-                element-loading-spinner="el-icon-loading"
-                element-loading-background="rgba(0, 0, 0, 0.8)">
-            <el-table-column
-                    label="#"
-                    type="index"
-                    prop="number"
-                    align="center">
-            </el-table-column>
-            <el-table-column
-                    label="用户组名称"
-                    prop="name"
-                    align="center">
-                <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.name }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="人数"
-                    prop="usersCount"
-                    align="center">
-                <template slot-scope="scope">
-                    <span style="margin-left: 10px">{{ scope.row.users_count }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="类别"
-                    prop="type"
-                    align="center">
-                <template slot-scope="scope">
+            <el-table
+                    :data="tableData"
+                    @sort-change="sortChange"
+                    v-loading="tableLoading"
+                    element-loading-text="拼命加载中"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.8)">
+                <el-table-column
+                        label="#"
+                        type="index"
+                        prop="number"
+                        align="center">
+                </el-table-column>
+                <el-table-column
+                        label="用户组名称"
+                        prop="name"
+                        align="center">
+                    <template slot-scope="scope">
+                        <span style="margin-left: 10px">{{ scope.row.name }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="人数"
+                        prop="usersCount"
+                        align="center">
+                    <template slot-scope="scope">
+                        <span style="margin-left: 10px">{{ scope.row.users_count }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="类别"
+                        prop="type"
+                        align="center">
+                    <template slot-scope="scope">
                     <span style="margin-left: 10px">
                         {{ scope.row.type | formatterType}}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="创建日期"
-                    sortable="custom"
-                    prop="created_datetime"
-                    align="center">
-                <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
-                    <span style="margin-left: 10px">
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="创建日期"
+                        sortable="custom"
+                        prop="created_datetime"
+                        align="center">
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        <span style="margin-left: 10px">
                         {{ scope.row.created_datetime}}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="上次修改日期"
-                    sortable="custom"
-                    prop="last_modified_datetime"
-                    align="center">
-                <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
-                    <span style="margin-left: 10px">
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="上次修改日期"
+                        sortable="custom"
+                        prop="last_modified_datetime"
+                        align="center">
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        <span style="margin-left: 10px">
                         {{ scope.row.last_modified_datetime}}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="操作"
-                    prop="operation"
-                    align="center">
-                <template slot-scope="scope">
-                    <el-button
-                            type="info"
-                            size="mini"
-                            @click="handleEdit(scope.$index, scope.row)">
-                        编辑
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="操作"
+                        prop="operation"
+                        align="center">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="info"
+                                size="mini"
+                                @click="handleEdit(scope.$index, scope.row)">
+                            编辑
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
 
-        <el-pagination
-                @size-change="getOrUpdateGroupInfo()"
-                @current-change="getOrUpdateGroupInfo()"
-                :current-page.sync="params.page"
-                :page-size="20"
-                layout="total, prev, pager, next, jumper"
-                :total="count">
-        </el-pagination>
-    </div>
+            <el-pagination
+                    @size-change="getOrUpdateGroupInfo()"
+                    @current-change="getOrUpdateGroupInfo()"
+                    :current-page.sync="params.page"
+                    :page-size="20"
+                    layout="total, prev, pager, next, jumper"
+                    :total="count">
+            </el-pagination>
+        </el-col>
+
+    </el-row>
 </template>
 
 <script>
@@ -198,30 +199,25 @@
         height 100%
 
         .group-list-menu {
-            width 85%
+            width 100%
             height 40px
             margin 0 auto
             margin-top 20px
 
-            .group-list-menu-left {
-                float left
-                left 0
-
-                .order {
-                    width 160px
-                }
-
-                .search {
-                    width 250px
-                    margin-left 10px
-                }
-
-                .clearBtn {
-                    margin-left 10px
-                }
+            .order {
+                width 160px
             }
 
-            .group-list-menu-right {
+            .search {
+                width 250px
+                margin-left 10px
+            }
+
+            .clearBtn {
+                margin-left 10px
+            }
+
+            .addBtn {
                 float right
                 right 0
             }
@@ -230,12 +226,11 @@
         .el-table {
             margin 0 auto
             margin-top 30px
-            width 85%
+            width 100%
         }
 
         .el-pagination {
-            margin 0 auto
-            width 85%
+            width 100%
             margin-top 40px
             margin-bottom 20px
         }
