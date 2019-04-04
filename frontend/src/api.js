@@ -68,11 +68,15 @@ export default {
     },
 
     updateUserGroup(name, type, users) {
-        return fetchAPI('/api/usergroup/','post',{
+        return fetchAPI('/api/usergroup/', 'post', {
             name,
             type,
             users
         })
+    },
+
+    getUserGroupById(params, id) {
+        return fetchAPI('/api/usergroup/' + id + '/', 'get', null, params)
     }
 }
 
