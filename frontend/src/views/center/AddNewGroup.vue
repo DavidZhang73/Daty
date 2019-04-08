@@ -41,13 +41,13 @@
                     </el-table>
 
                     <el-table :data="userGroupForm.users" v-if="userGroupForm.type === 'ALREADYSIGNIN'">
-                        <el-table-column type="index" align="center"></el-table-column>
+                        <el-table-column type="index" label="#" align="center"></el-table-column>
                         <el-table-column label="用户" align="center"></el-table-column>
                         <el-table-column label="操作" align="center"></el-table-column>
                     </el-table>
 
                     <el-table :data="userGroupForm.users" v-if="userGroupForm.type === 'REQUIRESIGNIN'">
-                        <el-table-column type="index" align="center"></el-table-column>
+                        <el-table-column type="index" label="#" align="center"></el-table-column>
                         <el-table-column label="用户" align="center"></el-table-column>
                         <el-table-column label="操作" align="center"></el-table-column>
                     </el-table>
@@ -212,14 +212,17 @@
             submitUserGroupForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        this.Loading = true;
                         api.updateUserGroup(
                             this.userGroupForm.name,
                             this.userGroupForm.type,
                             this.userGroupForm.users
                         ).then(data => {
                             if (data.error) {
+                                this.Loading = false;
                                 this.$message.error({showClose: true, message: data.error});
                             } else {
+                                this.Loading = false;
                                 this.$router.push({name: 'groupList'});
                             }
                         })
@@ -242,6 +245,7 @@
 
 <style lang="stylus">
     .addNewGroup-wrap {
+        width 100%
 
         .addNewGroupForm {
             width 100%

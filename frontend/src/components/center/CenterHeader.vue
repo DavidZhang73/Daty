@@ -21,12 +21,14 @@
                 this.title = '新增用户组';
             } else if (this.$route.name === 'userInfo') {
                 this.title = '修改个人信息';
+            } else if (this.$route.name === 'editUserGroup') {
+                this.title = '编辑用户组'
             } else {
                 this.title = '修改密码';
             }
         },
         watch: {
-            $route:function (newVal) {
+            $route: function (newVal) {
                 if (newVal.name === 'groupList') {
                     this.title = '用户组列表';
                 } else if (newVal.name === 'addNewGroup') {
@@ -35,6 +37,8 @@
                     this.title = '修改个人信息';
                 } else if (newVal.name === 'userPassword') {
                     this.title = '修改密码';
+                } else if (newVal.name === 'editUserGroup') {
+                    this.title = '编辑用户组'
                 } else {
                     this.title = '文件集列表';
                 }

@@ -77,6 +77,18 @@ export default {
 
     getUserGroupById(params, id) {
         return fetchAPI('/api/usergroup/' + id + '/', 'get', null, params)
+    },
+
+    updateUserGroupById(id, name, type, users) {
+        return fetchAPI('/api/usergroup/' + id + '/', 'put', {
+            name,
+            type,
+            users
+        })
+    },
+
+    deleteUserGroup(id) {
+        return fetchAPI('/api/usergroup/' + id + '/', 'delete')
     }
 }
 

@@ -2,7 +2,7 @@
     <el-row class="group-list-wrap">
 
         <el-col :xs="{span:24}"
-                :sm="{span:20}"
+                :sm="{span:24}"
                 :lg="{span:20,offset:2}">
             <div class="group-list-menu">
                 <el-select
@@ -61,7 +61,7 @@
                         prop="name"
                         align="center">
                     <template slot-scope="scope">
-                        <span style="margin-left: 10px">{{ scope.row.name }}</span>
+                        <span>{{ scope.row.name }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -69,7 +69,7 @@
                         prop="usersCount"
                         align="center">
                     <template slot-scope="scope">
-                        <span style="margin-left: 10px">{{ scope.row.users_count }}</span>
+                        <span>{{ scope.row.users_count }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -77,7 +77,7 @@
                         prop="type"
                         align="center">
                     <template slot-scope="scope">
-                    <span style="margin-left: 10px">
+                    <span>
                         {{ scope.row.type | formatterType}}</span>
                     </template>
                 </el-table-column>
@@ -88,7 +88,7 @@
                         align="center">
                     <template slot-scope="scope">
                         <i class="el-icon-time"></i>
-                        <span style="margin-left: 10px">
+                        <span>
                         {{ scope.row.created_datetime}}</span>
                     </template>
                 </el-table-column>
@@ -99,7 +99,7 @@
                         align="center">
                     <template slot-scope="scope">
                         <i class="el-icon-time"></i>
-                        <span style="margin-left: 10px">
+                        <span>
                         {{ scope.row.last_modified_datetime}}</span>
                     </template>
                 </el-table-column>
