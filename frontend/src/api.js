@@ -146,6 +146,9 @@ function fetchAPI(url, method, data = null, params = null) {
             Message.error({duration: 5000, showClose: true, message: '用户未登录'});
             router.push({name: 'login'});
             // throw (new Error(res.status))
+        }
+        if (res.status === 204) {
+            return res.text()
         } else {
             return res.json()
         }
