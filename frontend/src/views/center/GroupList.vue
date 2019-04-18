@@ -49,7 +49,7 @@
                     v-loading="tableLoading"
                     element-loading-text="拼命加载中"
                     element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(0, 0, 0, 0.8)">
+                    element-loading-background="rgba(255, 255, 255, 1)">
                 <el-table-column
                         label="#"
                         type="index"

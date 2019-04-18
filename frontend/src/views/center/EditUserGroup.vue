@@ -3,7 +3,7 @@
             v-loading="Loading"
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(0, 0, 0, 0.8)">
+            element-loading-background="rgba(255, 255, 255, 1)">
         <el-col :xs="{span:24}"
                 :sm="{span:20}"
                 :lg="{span:18}">

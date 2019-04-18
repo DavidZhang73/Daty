@@ -89,7 +89,18 @@ export default {
 
     deleteUserGroup(id) {
         return fetchAPI('/api/usergroup/' + id + '/', 'delete')
-    }
+    },
+
+    //Center.CollectionList
+    getCollectionListOrder() {
+        //get
+        //TODO
+    },
+
+    getCollectionList(params) {
+        //get
+        //TODO
+    },
 }
 
 
