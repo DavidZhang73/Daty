@@ -23,8 +23,12 @@
                 this.title = '修改个人信息';
             } else if (this.$route.name === 'editUserGroup') {
                 this.title = '编辑用户组'
+            } else if (this.$route.name === 'userPassword') {
+                this.title = '修改密码'
+            } else if (this.$route.name === 'addNewCollection') {
+                this.title = '新增文件集'
             } else {
-                this.title = '修改密码';
+                this.title = '未知页';
             }
         },
         watch: {
@@ -39,8 +43,12 @@
                     this.title = '修改密码';
                 } else if (newVal.name === 'editUserGroup') {
                     this.title = '编辑用户组'
+                } else if (newVal.name === 'collectionList') {
+                    this.title = '文件集列表'
+                } else if (newVal.name === 'addNewCollection') {
+                    this.title = '新增文件集'
                 } else {
-                    this.title = '文件集列表';
+                    this.title = '未知页';
                 }
             }
         }

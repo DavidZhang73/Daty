@@ -6,7 +6,7 @@
             <div class="collection-list-menu">
                 <el-select class="order"
                            placeholder="按时间排序"
-                           v-model="params.type"
+                           v-model="params.ordering"
                            @change="getOrUpdateCollectionList()"
                            clearable>
                     <el-option
@@ -28,7 +28,7 @@
                         icon="el-icon-delete"
                         @click="clearSearch();getOrUpdateCollectionList();">清空搜索
                 </el-button>
-                <router-link :to="{name : 'home'}">
+                <router-link :to="{name : 'addNewCollection'}">
                     <el-button
                             class="addBtn"
                             icon="el-icon-plus"
@@ -74,10 +74,18 @@
                 params: {
                     page: 1,
                     search: '',
-                    type: '',
                     ordering: '',
                 },
-                options: [],
+                options: [
+                    {
+                        label: '发布时间升序',
+                        value: 'ascending'
+                    },
+                    {
+                        label: '发布时间倒序',
+                        value: 'descending'
+                    }
+                ],
                 tableData: [],
                 tableLoading: true,
                 count: 1,
