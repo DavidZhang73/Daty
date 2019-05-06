@@ -2,45 +2,53 @@
     <el-row class="collection-list-wrap">
         <el-col :xs="{span:24}"
                 :sm="{span:24}"
-                :lg="{span:20,offset:2}">
-            <div class="collection-list-menu">
-                <el-select class="order"
-                           placeholder="按时间排序"
-                           v-model="params.ordering"
-                           @change="getOrUpdateCollectionList()"
-                           clearable>
-                    <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                    </el-option>
-                </el-select>
-                <el-input class="search" placeholder="搜索..." v-model="params.search">
-                    <el-button slot="append"
-                               icon="el-icon-search"
-                               @click="getOrUpdateCollectionList()">
-                        搜索
-                    </el-button>
-                </el-input>
-                <el-button
-                        class="clearBtn"
-                        icon="el-icon-delete"
-                        @click="clearSearch();getOrUpdateCollectionList();">清空搜索
-                </el-button>
-                <router-link :to="{name : 'addNewCollection'}">
+                :lg="{span:24}">
+            <el-row :gutter="10" class="collection-list-menu">
+                <el-col v-bind="layout">
+                    <router-link :to="{name : 'addNewCollection'}">
+                        <el-button
+                                class="addBtn"
+                                icon="el-icon-plus"
+                                type="primary">
+                            新建文件集
+                        </el-button>
+                    </router-link>
+                </el-col>
+                <el-col v-bind="layout">
+                    <el-select class="order"
+                               placeholder="按时间排序"
+                               v-model="params.ordering"
+                               @change="getOrUpdateCollectionList()"
+                               clearable>
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+                <el-col v-bind="layout">
+                    <el-input class="search" placeholder="搜索..." v-model="params.search">
+                        <el-button slot="append"
+                                   icon="el-icon-search"
+                                   @click="getOrUpdateCollectionList()">
+                            搜索
+                        </el-button>
+                    </el-input>
+                </el-col>
+                <el-col v-bind="layout">
                     <el-button
-                            class="addBtn"
-                            icon="el-icon-plus"
-                            type="primary">
-                        新建文件集
+                            class="clearBtn"
+                            icon="el-icon-delete"
+                            @click="clearSearch();getOrUpdateCollectionList();">清空搜索
                     </el-button>
-                </router-link>
-            </div>
+                </el-col>
+            </el-row>
 
             <el-table :data="tableData"
                       @sort-change="sortChange"
-                      v-loading="tableLoading"
+                      v-loading="false"
                       element-loading-text="拼命加载中"
                       element-loading-spinner="el-icon-loading"
                       element-loading-background="rgba(255, 255, 255, 1)">
@@ -49,6 +57,63 @@
                         type="index"
                         prop="number"
                         align="center">
+                </el-table-column>
+                <el-table-column
+                        label="文件集名称"
+                        prop="name"
+                        align="center">
+                    <template slot-scope="scope">
+                        {{scope.row.name}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="创建人"
+                        prop="creator"
+                        align="center">
+                    <template slot-scope="scope">
+                        {{scope.row.creator}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="类别"
+                        prop="type"
+                        align="center">
+                    <template slot-scope="scope">
+                        {{scope.row.type}}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="创建日期"
+                        prop="created_datetime"
+                        align="center">
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        <span>
+                        {{ scope.row.created_datetime}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="截至日期"
+                        prop="ending_datetime"
+                        align="center">
+                    <template slot-scope="scope">
+                        <i class="el-icon-time"></i>
+                        <span>
+                        {{ scope.row.ending_datetime}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="操作"
+                        prop="operation"
+                        align="center">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="info"
+                                size="mini"
+                                @click="handleEdit(scope.$index, scope.row)">
+                            编辑
+                        </el-button>
+                    </template>
                 </el-table-column>
             </el-table>
 
@@ -71,6 +136,11 @@
         name: "CollectionList",
         data() {
             return {
+                layout: {
+                    xs: {span: 12},
+                    sm: {span: 12},
+                    lg: {span: 6}
+                },
                 params: {
                     page: 1,
                     search: '',
@@ -86,7 +156,16 @@
                         value: 'descending'
                     }
                 ],
-                tableData: [],
+                tableData: [
+                    {
+                        id: 1,
+                        name: 'test-1',
+                        creator: 'egg',
+                        type: 'NONEEDLOGIN',
+                        created_datetime: '2019',
+                        ending_datetime: '2020'
+                    }
+                ],
                 tableLoading: true,
                 count: 1,
             }
@@ -112,6 +191,9 @@
             sortChange(col) {
                 //TODO
             },
+            handleEdit(index, row) {
+                this.$router.push({name: 'editCollection', params: {id: row.id}});
+            }
         }
     }
 </script>
@@ -128,21 +210,19 @@
             margin-top 20px
 
             .order {
-                width 160px
+                width 100%
             }
 
             .search {
-                width 250px
-                margin-left 10px
+                width 100%
             }
 
             .clearBtn {
-                margin-left 10px
+                width 100%
             }
 
             .addBtn {
-                float right
-                right 0
+                width 100%
             }
         }
 
@@ -157,6 +237,5 @@
             margin-top 40px
             margin-bottom 20px
         }
-
     }
 </style>

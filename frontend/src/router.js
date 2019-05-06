@@ -16,6 +16,7 @@ import ForgetPasswordResetSuccess from './views/user/ForgetPasswordResetSuccess'
 import Center from './views/center/Center'
 import CollectionList from './views/center/CollectionList'
 import AddNewCollection from './views/center/AddNewCollection'
+import EditCollection from './views/center/EditCollection'
 import GroupList from './views/center/GroupList'
 import UserInfo from './views/center/UserInfo'
 import UserPassword from './views/center/UserPassword'
@@ -94,6 +95,12 @@ export default new Router({
                     path: 'addNewCollection',
                     name: 'addNewCollection',
                     component: AddNewCollection
+                },
+                {
+                    path: 'editCollection/:id',
+                    name: 'editCollection',
+                    component: EditCollection,
+                    props: true
                 },
                 {
                     path: 'groupList',

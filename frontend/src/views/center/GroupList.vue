@@ -3,45 +3,50 @@
 
         <el-col :xs="{span:24}"
                 :sm="{span:24}"
-                :lg="{span:20,offset:2}">
-            <div class="group-list-menu">
-                <el-select
-                        class="order"
-                        v-model="params.type"
-                        placeholder="按类别筛选"
-                        @change="getOrUpdateGroupInfo()"
-                        clearable>
-                    <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                    </el-option>
-                </el-select>
-
-                <el-input class="search" placeholder="搜索..." v-model="params.search">
-                    <el-button slot="append"
-                               icon="el-icon-search"
-                               @click="getOrUpdateGroupInfo()">
-                        搜索
-                    </el-button>
-                </el-input>
-
-                <el-button
-                        class="clearBtn"
-                        icon="el-icon-delete"
-                        @click="clearSearch();getOrUpdateGroupInfo();">清空搜索
-                </el-button>
-
-                <router-link :to="{name : 'addNewGroup'}">
+                :lg="{span:24}">
+            <el-row :gutter="10" class="group-list-menu">
+                <el-col v-bind="layout">
+                    <router-link :to="{name : 'addNewGroup'}">
+                        <el-button
+                                class="addBtn"
+                                icon="el-icon-plus"
+                                type="primary">
+                            新建用户组
+                        </el-button>
+                    </router-link>
+                </el-col>
+                <el-col v-bind="layout">
+                    <el-select
+                            class="order"
+                            v-model="params.type"
+                            placeholder="按类别筛选"
+                            @change="getOrUpdateGroupInfo()"
+                            clearable>
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+                <el-col v-bind="layout">
+                    <el-input class="search" placeholder="搜索..." v-model="params.search">
+                        <el-button slot="append"
+                                   icon="el-icon-search"
+                                   @click="getOrUpdateGroupInfo()">
+                            搜索
+                        </el-button>
+                    </el-input>
+                </el-col>
+                <el-col v-bind="layout">
                     <el-button
-                            class="addBtn"
-                            icon="el-icon-plus"
-                            type="primary">
-                        新建用户组
+                            class="clearBtn"
+                            icon="el-icon-delete"
+                            @click="clearSearch();getOrUpdateGroupInfo();">清空搜索
                     </el-button>
-                </router-link>
-            </div>
+                </el-col>
+            </el-row>
 
             <el-table
                     :data="tableData"
@@ -138,6 +143,11 @@
         name: "GroupList",
         data() {
             return {
+                layout: {
+                    xs: {span: 12},
+                    sm: {span: 12},
+                    lg: {span: 6}
+                },
                 params: {
                     page: 1,
                     search: '',
@@ -204,21 +214,19 @@
             margin-top 20px
 
             .order {
-                width 160px
+                width 100%
             }
 
             .search {
-                width 250px
-                margin-left 10px
+                width 100%
             }
 
             .clearBtn {
-                margin-left 10px
+                width 100%
             }
 
             .addBtn {
-                float right
-                right 0
+                width 100%
             }
         }
 
