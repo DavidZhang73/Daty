@@ -137,7 +137,7 @@
         data() {
             return {
                 layout: {
-                    xs: {span: 12},
+                    xs: {span: 24},
                     sm: {span: 12},
                     lg: {span: 6}
                 },
@@ -209,21 +209,28 @@
             height 40px
             margin-top 20px
 
-            .order {
-                width 100%
+            .el-col {
+                padding-top 5px
+                padding-bottom 5px
+
+                .order {
+                    width 100%
+                }
+
+                .search {
+                    width 100%
+                }
+
+                .clearBtn {
+                    width 100%
+                }
+
+                .addBtn {
+                    width 100%
+                }
             }
 
-            .search {
-                width 100%
-            }
 
-            .clearBtn {
-                width 100%
-            }
-
-            .addBtn {
-                width 100%
-            }
         }
 
         .el-table {

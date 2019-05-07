@@ -1,7 +1,7 @@
 <template>
     <div class="center-wrap">
         <Aside></Aside>
-        <div class="center">
+        <div class="center" :style="centerPadding">
             <CenterHeader class="centerHeader"></CenterHeader>
             <div class="form">
                 <router-view></router-view>
@@ -16,6 +16,11 @@
 
     export default {
         name: "center",
+        data() {
+            return {
+                centerPadding: 'padding-left: 200px;'
+            }
+        },
         components: {
             Aside,
             CenterHeader
@@ -27,7 +32,9 @@
     .center-wrap {
 
         .center {
-            padding 5px 0 30px 200px
+            padding-top 5px
+            padding-right 0
+            padding-bottom 30px
 
             .centerHeader {
                 margin-top 60px
