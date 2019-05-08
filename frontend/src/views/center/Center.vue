@@ -1,6 +1,6 @@
 <template>
     <div class="center-wrap">
-        <Aside></Aside>
+        <Aside :screenWidth="screenWidth"></Aside>
         <div class="center" :style="centerPadding">
             <CenterHeader class="centerHeader"></CenterHeader>
             <div class="form">
@@ -18,7 +18,28 @@
         name: "center",
         data() {
             return {
-                centerPadding: 'padding-left: 200px;'
+                centerPadding: '',
+                screenWidth: document.body.clientWidth,
+            }
+        },
+        mounted() {
+            var that = this;
+            window.onresize = function () {
+                that.screenWidth = document.body.clientWidth;
+            };
+            if (that.screenWidth >= 1200) {
+                that.centerPadding = 'padding-left: 200px;';
+            } else if (that.screenWidth >= 768 && that.screenWidth < 1200) {
+                that.centerPadding = 'padding-left: 50px;';
+            }
+        },
+        watch: {
+            'screenWidth': function (newVal) {
+                if (newVal >= 1200) {
+                    this.centerPadding = 'padding-left: 200px;';
+                } else if (newVal >= 768 && newVal < 1200) {
+                    this.centerPadding = 'padding-left: 50px;';
+                }
             }
         },
         components: {

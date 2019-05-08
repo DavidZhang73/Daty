@@ -1,10 +1,11 @@
 <template>
-    <div class="aside-wrap">
-        <div class="aside-lg hidden-sm-and-down" :style="asideWidth">
+    <div class="aside-wrap" :style="asideWidth">
+        <div class="aside" v-if="showAside">
             <el-menu
                     router
                     :default-active="$route.path"
-                    class="aside-menu">
+                    class="aside-menu"
+                    :collapse="isCollapse">
                 <el-submenu index="1">
                     <template slot="title">
                         <i class="el-icon-menu"></i>
@@ -23,24 +24,6 @@
                 </el-submenu>
             </el-menu>
         </div>
-
-        <div class="aside-sm hidden-lg-and-up" :style="asideWidth">
-            <el-menu
-                    router
-                    :default-active="$route.path"
-                    class="aside-menu">
-                <el-submenu index="1">
-                    <template slot="title">
-                        <i class="el-icon-menu"></i>
-                    </template>
-                </el-submenu>
-                <el-submenu index="2">
-                    <template slot="title">
-                        <i class="el-icon-setting"></i>
-                    </template>
-                </el-submenu>
-            </el-menu>
-        </div>
     </div>
 </template>
 
@@ -49,29 +32,37 @@
 
     export default {
         name: "Aside",
+        props: {
+            screenWidth: Number
+        },
         data() {
             return {
+                isCollapse: false,
+                showAside: false,
                 asideWidth: '',
-                screenWidth: document.body.clientWidth,
             }
         },
         mounted() {
-            var _this = this;
-            window.onresize = function () {
-                _this.screenWidth = document.documentElement.clientWidth;
-            };
-            if (_this.screenWidth >= 1200) {
-                _this.asideWidth = 'width: 200px;';
-            } else if (_this.screenWidth >= 768 && _this.screenWidth < 1200) {
-                _this.asideWidth = 'width: 50px;'
+            if (this.screenWidth >= 1200) {
+                this.asideWidth = 'width: 200px;';
+                this.showAside = true;
+                this.isCollapse = false;
+            } else if (this.screenWidth >= 768 && this.screenWidth < 1200) {
+                this.asideWidth = 'width: 50px;';
+                this.showAside = true;
+                this.isCollapse = true;
             }
         },
         watch: {
             'screenWidth': function (newVal) {
                 if (newVal >= 1200) {
                     this.asideWidth = 'width: 200px;';
+                    this.showAside = true;
+                    this.isCollapse = false;
                 } else if (newVal >= 768 && newVal < 1200) {
-                    this.asideWidth = 'width: 50px;'
+                    this.asideWidth = 'width: 50px;';
+                    this.showAside = true;
+                    this.isCollapse = true;
                 }
             }
         },
@@ -87,7 +78,7 @@
         bottom 30px
         height 100%
 
-        .aside-lg {
+        .aside {
             height 100%
 
             .aside-menu {
