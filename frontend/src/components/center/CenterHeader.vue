@@ -64,7 +64,7 @@
         background-color white
 
         p {
-            padding 17px 0px 17px 40px
+            padding 17px 0px 17px 60px
             border-bottom 1px solid #e6e6e6
         }
     }

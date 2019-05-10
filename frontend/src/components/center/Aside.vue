@@ -1,6 +1,6 @@
 <template>
-    <div class="aside-wrap" :style="asideWidth">
-        <div class="aside" v-if="showAside">
+    <div class="aside-wrap">
+        <div class="aside" v-if="showAside" :style="asideWidth">
             <el-menu
                     router
                     :default-active="$route.path"
@@ -24,12 +24,35 @@
                 </el-submenu>
             </el-menu>
         </div>
+        <div class="aside-xs-btn" v-if="showAsideXs">
+            <el-button icon="el-icon-s-unfold" @click="changeShowStatus"></el-button>
+            <el-menu
+                    router
+                    :default-active="$route.path"
+                    class="aside-menu"
+                    v-if="showAsideMenu">
+                <el-submenu index="1">
+                    <template slot="title">
+                        <i class="el-icon-menu"></i>
+                        <span>管理</span>
+                    </template>
+                    <el-menu-item index="/center/collectionList">文件集</el-menu-item>
+                    <el-menu-item index="/center/groupList">用户组</el-menu-item>
+                </el-submenu>
+                <el-submenu index="2">
+                    <template slot="title">
+                        <i class="el-icon-setting"></i>
+                        <span>用户</span>
+                    </template>
+                    <el-menu-item index="/center/userInfo">修改信息</el-menu-item>
+                    <el-menu-item index="/center/userPassword">修改密码</el-menu-item>
+                </el-submenu>
+            </el-menu>
+        </div>
     </div>
 </template>
 
 <script>
-    import 'element-ui/lib/theme-chalk/display.css'
-
     export default {
         name: "Aside",
         props: {
@@ -39,6 +62,8 @@
             return {
                 isCollapse: false,
                 showAside: false,
+                showAsideXs: false,
+                showAsideMenu: false,
                 asideWidth: '',
             }
         },
@@ -47,10 +72,16 @@
                 this.asideWidth = 'width: 200px;';
                 this.showAside = true;
                 this.isCollapse = false;
+                this.showAsideXs = false;
             } else if (this.screenWidth >= 768 && this.screenWidth < 1200) {
-                this.asideWidth = 'width: 50px;';
+                this.asideWidth = 'width: 64px;';
                 this.showAside = true;
                 this.isCollapse = true;
+                this.showAsideXs = false;
+            } else {
+                this.asideWidth = 'width: 56px;';
+                this.showAside = false;
+                this.showAsideXs = true;
             }
         },
         watch: {
@@ -59,14 +90,25 @@
                     this.asideWidth = 'width: 200px;';
                     this.showAside = true;
                     this.isCollapse = false;
+                    this.showAsideXs = false;
                 } else if (newVal >= 768 && newVal < 1200) {
-                    this.asideWidth = 'width: 50px;';
+                    this.asideWidth = 'width: 64px;';
                     this.showAside = true;
                     this.isCollapse = true;
+                    this.showAsideXs = false;
+                } else {
+                    this.asideWidth = 'width: 56px;';
+                    this.showAside = false;
+                    this.showAsideXs = true;
                 }
             }
         },
-        methods: {}
+        methods: {
+            changeShowStatus() {
+                this.showAsideMenu = !this.showAsideMenu;
+                this.$emit('changeCenterPadding');
+            }
+        }
     }
 </script>
 
@@ -83,7 +125,21 @@
 
             .aside-menu {
                 height 100%
+                width 100%
+            }
+        }
 
+        .aside-xs-btn {
+            width 100%
+
+            .el-button {
+                border 0
+                margin-top 3px
+                padding 10px !important
+
+                i {
+                    font-size 36px
+                }
             }
         }
     }
