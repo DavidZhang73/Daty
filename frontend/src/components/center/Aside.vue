@@ -29,7 +29,7 @@
             <el-menu
                     router
                     :default-active="$route.path"
-                    class="aside-menu"
+                    class="aside-xs-menu"
                     v-if="showAsideMenu">
                 <el-submenu index="1">
                     <template slot="title">
@@ -134,13 +134,18 @@
 
             .el-button {
                 border 0
-                margin-top 3px
+                margin-top 4px
                 padding 10px !important
 
                 i {
                     font-size 36px
                 }
             }
+        }
+
+        .aside-xs-menu {
+            position fixed
+            height 100%
         }
     }
 </style>

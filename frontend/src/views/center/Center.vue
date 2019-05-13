@@ -2,7 +2,7 @@
     <div class="center-wrap">
         <Aside :screenWidth="screenWidth"
                @changeCenterPadding="changeCenterPadding"></Aside>
-        <div class="center" :style="centerPadding" v-if="showCenter">
+        <div class="center" :style="centerPadding">
             <CenterHeader class="centerHeader"></CenterHeader>
             <div class="form">
                 <router-view></router-view>
@@ -19,7 +19,7 @@
         name: "center",
         data() {
             return {
-                showCenter: true,
+                showAsideXs: false,
                 centerPadding: '',
                 screenWidth: document.body.clientWidth,
             }
@@ -50,7 +50,12 @@
         },
         methods: {
             changeCenterPadding() {
-                this.showCenter = !this.showCenter;
+                this.showAsideXs = !this.showAsideXs;
+                if (this.showAsideXs) {
+                    this.centerPadding = 'padding-left: 200px;';
+                } else {
+                    this.centerPadding = 'padding-left: 0px;';
+                }
             }
         },
         components: {

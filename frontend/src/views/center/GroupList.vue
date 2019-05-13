@@ -144,7 +144,7 @@
         data() {
             return {
                 layout: {
-                    xs: {span: 12},
+                    xs: {span: 24},
                     sm: {span: 12},
                     lg: {span: 6}
                 },
@@ -213,20 +213,25 @@
             margin 0 auto
             margin-top 20px
 
-            .order {
-                width 100%
-            }
+            .el-col {
+                padding-top 5px
+                padding-bottom 5px
 
-            .search {
-                width 100%
-            }
+                .order {
+                    width 100%
+                }
 
-            .clearBtn {
-                width 100%
-            }
+                .search {
+                    width 100%
+                }
 
-            .addBtn {
-                width 100%
+                .clearBtn {
+                    width 100%
+                }
+
+                .addBtn {
+                    width 100%
+                }
             }
         }
 

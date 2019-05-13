@@ -9,7 +9,11 @@
                 background-color="#FFFFFF"
                 text-color="#000"
                 active-text-color="#000000">
-            <img id="logo" src="../assets/logo.svg" height="40px" width="80px">
+            <img class="hidden-xs-only"
+                 id="logo"
+                 src="../assets/logo.svg"
+                 height="40px"
+                 width="80px">
             <el-button-group class="btn-header" v-if="!isLogin">
                 <router-link
                         class="el-button el-button--info is-plain"
@@ -46,6 +50,7 @@
 <script>
     import api from '../api'
     import {mapGetters} from 'vuex'
+    import 'element-ui/lib/theme-chalk/display.css'
 
     export default {
         name: "Header",
@@ -88,28 +93,28 @@
 </script>
 
 <style lang="stylus">
-	.header-wrap {
+    .header-wrap {
 
-		.header {
-			width 100%
-			position fixed
-			top 0
-			z-index 1
-			box-shadow 0 2px 6px 0 rgba(0, 0, 0, 0.12)
+        .header {
+            width 100%
+            position fixed
+            top 0
+            z-index 1
+            box-shadow 0 2px 6px 0 rgba(0, 0, 0, 0.12)
 
-			#logo {
-				float left
-				padding 10px
-			}
+            #logo {
+                float left
+                padding 10px
+            }
 
-			.btn-header {
-				float right
-				margin 10px 10px 10px 0
-			}
+            .btn-header {
+                float right
+                margin 10px 10px 10px 0
+            }
 
-			.el-menu-item {
-				font-size 20px
-			}
-		}
-	}
+            .el-menu-item {
+                font-size 20px
+            }
+        }
+    }
 </style>
