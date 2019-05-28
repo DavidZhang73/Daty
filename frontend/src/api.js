@@ -2,6 +2,7 @@ import {Message} from 'element-ui';
 import router from './router'
 import 'whatwg-fetch'
 
+``
 export default {
     login(email, password) {
         return fetchAPI('/api/user/login/', 'post', {
@@ -99,6 +100,17 @@ export default {
 
     getCollectionList(params) {
         //get
+        //TODO
+    },
+
+    //Center.addNewCollection
+    getOrUpdateAllUserGroups() {
+        //get
+        //TODO
+    },
+
+    updateCollection(name, fileRequire, timeBegin, timeEnd, fileUUID, userGroup) {
+        //post
         //TODO
     },
 }

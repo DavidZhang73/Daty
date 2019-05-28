@@ -83,18 +83,58 @@
     export default {
         name: "AddNewCollection",
         data() {
+            var validateName = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('文件集名称不可为空'))
+                } else if (value.length > 128) {
+                    return callback(new Error('文件集名称应该小于128个字符'))
+                }
+                return callback()
+            };
+            var validateFileRequire = (rule, value, callback) => {
+                if (value.length > 300) {
+                    return callback(new Error('文件要求应该小于300个字符'))
+                }
+                return callback()
+            };
+            var validateUserGroups = (rule, value, callback) => {
+                if (value.length === 0) {
+                    return callback(new Error('用户组不能为空'))
+                }
+                return callback()
+            };
+            var validateTime = (rule, value, callback) => {
+                if (value.length === 0) {
+                    return callback(new Error('起止日期不可为空'))
+                }
+                return callback()
+            };
             return {
                 formLoading: false,
                 collectionForm: {
                     name: '',
                     fileRequire: '',
+                    time: [],
                     timeBegin: '',
                     timeEnd: '',
                     fileUUID: '',
                     userGroup: [],
                 },
                 timeList: [],
-                collectionFormRules: {},
+                collectionFormRules: {
+                    name: [
+                        {validator: validateName, trigger: 'blur'}
+                    ],
+                    fileRequire: [
+                        {validator: validateFileRequire, trigger: 'blur'}
+                    ],
+                    userGroup: [
+                        {validator: validateUserGroups, trigger: 'blur'}
+                    ],
+                    time: [
+                        {validator: validateTime, trigger: 'blur'}
+                    ]
+                },
                 userGroups: [
                     {
                         key: 1,
@@ -145,6 +185,7 @@
         },
         watch: {
             timeList(newVal) {
+                this.collectionForm.time = JSON.parse(JSON.stringify(newVal));
                 this.collectionForm.timeBegin = JSON.parse(JSON.stringify(newVal[0]));
                 this.collectionForm.timeEnd = JSON.parse(JSON.stringify(newVal[1]));
             }
@@ -152,12 +193,10 @@
         methods: {
             getOrUpdateGroupInfo() {
                 this.formLoading = true;
-                api.getUserGroup(this.params).then(data => {
-                    this.tableData = data.results;
-                    this.count = data.count;
+                api.getOrUpdateAllUserGroups().then(data => {
+                    //TODO
                     this.formLoading = false;
-                });
-                //TODO
+                })
             },
             transferHandleChange() {
                 console.log(this.collectionForm.userGroup);
@@ -186,7 +225,11 @@
                 //TODO
             },
             submitCollectionForm(formName) {
-                //TODO
+                this.$ref[formName].validate((valid) => {
+                    if (valid) {
+                        //TODO
+                    } else return false;
+                })
             }
         }
     }

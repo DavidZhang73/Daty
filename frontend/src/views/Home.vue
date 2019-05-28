@@ -5,13 +5,13 @@
 		<div class="home">
 			<img class="logo" src="../assets/home_logo.svg" alt="LOGO">
 			<div class="button-row">
-				<router-link :to="{name: 'home'}">
+				<router-link :to="{name: 'addNewCollection'}">
 					<el-button type="primary">
 						<i class="el-icon-download"></i>
 						我要收文件
 					</el-button>
 				</router-link>
-				<router-link :to="{name: 'home'}">
+				<router-link :to="{name: 'collectionList'}">
 					<el-button type="primary" id="last-btn">
 						<i class="el-icon-upload2"></i>
 						我要交文件
