@@ -123,7 +123,22 @@
             }
         },
         mounted() {
-            var timeBeginFormat = JSON.parse(JSON.stringify(this.timeBegin.substring(0, 3) + this.timeBegin.substring(5, 6)));
+            let timeBeginFormatYY = this.collectionForm.timeBegin.substring(0, 4);
+            let timeBeginFormatMM = this.collectionForm.timeBegin.substring(5, 7);
+            let timeBeginFormatDD = this.collectionForm.timeBegin.substring(8, 10);
+            let timeBeginFormatHH = this.collectionForm.timeBegin.substring(11, 13);
+            let timeBeginFormatMin = this.collectionForm.timeBegin.substring(14, 16);
+            let timeBeginFormatSS = this.collectionForm.timeBegin.substring(17, 19);
+
+            let timeEndFormatYY = this.collectionForm.timeBegin.substring(0, 4);
+            let timeEndFormatMM = this.collectionForm.timeBegin.substring(5, 7);
+            let timeEndFormatDD = this.collectionForm.timeBegin.substring(8, 10);
+            let timeEndFormatHH = this.collectionForm.timeBegin.substring(11, 13);
+            let timeEndFormatMin = this.collectionForm.timeBegin.substring(14, 16);
+            let timeEndFormatSS = this.collectionForm.timeBegin.substring(17, 19);
+
+            this.timeList.push(new Date(timeBeginFormatYY, timeBeginFormatMM, timeBeginFormatDD, timeBeginFormatHH, timeBeginFormatMin, timeBeginFormatSS));
+            this.timeList.push(new Date(timeEndFormatYY, timeEndFormatMM, timeEndFormatDD, timeEndFormatHH, timeEndFormatMin, timeEndFormatSS));
         },
         methods: {
             transferHandleChange() {
