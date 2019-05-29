@@ -188,6 +188,7 @@
                 this.collectionForm.time = JSON.parse(JSON.stringify(newVal));
                 this.collectionForm.timeBegin = JSON.parse(JSON.stringify(newVal[0]));
                 this.collectionForm.timeEnd = JSON.parse(JSON.stringify(newVal[1]));
+                console.log(this.collectionForm.timeBegin);
             }
         },
         methods: {

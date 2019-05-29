@@ -110,8 +110,15 @@
                         <el-button
                                 type="info"
                                 size="mini"
-                                @click="handleEdit(scope.$index, scope.row)">
+                                @click="handleEdit(scope.$index, scope.row)"
+                                v-if="scope.row.id === $store.state.user.id">
                             编辑
+                        </el-button>
+                        <el-button
+                                type="primary"
+                                size="mini"
+                                @click="handleSubFile(scope.$index, scope.row)">
+                            提交文件
                         </el-button>
                     </template>
                 </el-table-column>
@@ -164,6 +171,13 @@
                         type: 'NONEEDLOGIN',
                         created_datetime: '2019',
                         ending_datetime: '2020'
+                    },
+                    {
+                        id: 3,
+                        name: 'admin-test',
+                        type: 'NONEEDLOGIN',
+                        created_datetime: '2019',
+                        ending_datetime: '2020',
                     }
                 ],
                 tableLoading: true,
@@ -193,6 +207,9 @@
             },
             handleEdit(index, row) {
                 this.$router.push({name: 'editCollection', params: {id: row.id}});
+            },
+            handleSubFile(index, row) {
+                //TODO
             }
         }
     }
