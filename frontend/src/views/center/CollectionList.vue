@@ -79,7 +79,7 @@
                         prop="type"
                         align="center">
                     <template slot-scope="scope">
-                        {{scope.row.type}}
+                        {{scope.row.type | formatterType}}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -115,10 +115,11 @@
                             编辑
                         </el-button>
                         <el-button
+                                style="margin-left: 3px;"
                                 type="primary"
                                 size="mini"
                                 @click="handleSubFile(scope.$index, scope.row)">
-                            提交文件
+                            提交
                         </el-button>
                     </template>
                 </el-table-column>
@@ -175,6 +176,7 @@
                     {
                         id: 3,
                         name: 'admin-test',
+                        creator: 'daty',
                         type: 'NONEEDLOGIN',
                         created_datetime: '2019',
                         ending_datetime: '2020',
@@ -210,6 +212,13 @@
             },
             handleSubFile(index, row) {
                 //TODO
+            }
+        },
+        filters: {
+            formatterType(value) {
+                if (value === 'NONEEDLOGIN') return '不需要登陆';
+                else if (value === 'ALREADYSIGNIN') return '需要登陆已注册';
+                else return '需要登陆未注册';
             }
         }
     }

@@ -51,6 +51,23 @@
                                         value-format="yyyy-MM-dd hh:mm:ss">
                         </el-date-picker>
                     </el-form-item>
+                    <el-form-item label="模板文件" prop="fileUUID">
+                        <el-upload
+                                class="upload"
+                                drag
+                                :action="action"
+                                :before-upload="beforeUploadCheck"
+                                :before-remove="beforeRemove"
+                                :on-error="uploadErr"
+                                :on-remove="uploadRemove"
+                                :on-success="uploadSuc"
+                                :file-list="fileList"
+                                :limit="1">
+                            <i class="el-icon-upload"></i>
+                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                            <div class="el-upload__tip" slot="tip">文件大小不得超过10MB</div>
+                        </el-upload>
+                    </el-form-item>
                 </el-form>
             </el-col>
         </el-row>
@@ -72,9 +89,16 @@
                     timeEnd: '2019-05-29 11:49:39',
                     fileUUID: '',
                     userGroup: [1, 4],
+                    URL: '',
                 },
                 collectionFormRules: {},
                 timeList: [],
+                fileList: [
+                    {
+                        name: 'test',
+                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+                    }
+                ],
                 userGroups: [
                     {
                         key: 1,
@@ -120,6 +144,7 @@
                         }
                     }]
                 },
+                action: 'https://jsonplaceholder.typicode.com/posts/',
             }
         },
         mounted() {
@@ -144,7 +169,37 @@
             transferHandleChange() {
                 //TODO
             },
+            beforeUploadCheck(file) {
+                const isLt10M = file.size / 1024 / 1024 < 10;
+                if (!isLt10M) {
+                    this.$message.error('上传失败，文件大小超过10MB !');
+                }
+                return isLt10M
+            },
+            uploadErr() {
+                this.$message.error('上传失败，请尝试重新上传 !');
+            },
+            uploadRemove() {
+                this.fileList.length = 0;
+            },
+            uploadSuc(response, file) {
+                console.log(file);
+                let fileNameMap = new Map();
+                let fileName = fileNameMap.set('name', file.name);
+                let fileUIDMap = new Map();
+                let fileUID = fileUIDMap.set('uid', file.uid);
+                this.collectionForm.fileUUID = JSON.parse(JSON.stringify(file.uid));
+            },
+            beforeRemove(file) {
+                return this.$confirm(`确定移除 ${file.name}？`);
+            },
         },
+        watch: {
+            fileList(newVal) {
+                console.log("newVal: ");
+                console.log(newVal);
+            }
+        }
     }
 </script>
 
