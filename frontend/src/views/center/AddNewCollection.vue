@@ -226,7 +226,9 @@
                 //TODO
             },
             submitCollectionForm(formName) {
-                this.$ref[formName].validate((valid) => {
+                console.log(formName);
+                console.log(this.collectionForm);
+                this.$refs[formName].validate((valid) => {
                     if (valid) {
                         //TODO
                     } else return false;

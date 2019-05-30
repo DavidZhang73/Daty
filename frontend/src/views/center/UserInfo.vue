@@ -1,44 +1,52 @@
 <template>
     <div class="user-info-wrap">
-        <el-form class="user-info-form"
-                 :model="infoForm"
-                 :rules="rules"
-                 ref="infoForm"
-                 status-icon
-                 v-if="showForm"
-                 :label-position="labelPosition"
-                 label-width="50px">
-            <el-form-item prop="email" label="邮箱">
-                <el-input
-                        type="text"
-                        v-model.trim="infoForm.email"
-                        disabled>
-                </el-input>
-            </el-form-item>
-            <el-form-item prop="name" label="姓名">
-                <el-input
-                        type="text"
-                        v-model.trim="infoForm.name">
-                </el-input>
-            </el-form-item>
-            <el-form-item prop="phoneNumber" label="手机">
-                <el-input
-                        type="text"
-                        v-model.trim="infoForm.phoneNumber">
-                </el-input>
-            </el-form-item>
-            <el-form-item prop="QQ" label="QQ">
-                <el-input
-                        type="text"
-                        v-model.trim="infoForm.QQ"
-                        @keypress.enter.native="submitForm('infoForm')">
-                </el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submitForm('infoForm')">保存修改</el-button>
-            </el-form-item>
-        </el-form>
-
+        <el-row v-loading="Loading"
+                element-loading-text="拼命加载中"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(255, 255, 255, 1)">
+            <el-col :lg="{span: 18}"
+                    :sm="{span: 20}"
+                    :xs="{span: 24}">
+                <el-form class="user-info-form"
+                         :model="infoForm"
+                         :rules="rules"
+                         ref="infoForm"
+                         status-icon
+                         v-if="showForm"
+                         label-position="left"
+                         label-width="100px">
+                    <el-form-item prop="email" label="邮箱">
+                        <el-input
+                                type="text"
+                                v-model.trim="infoForm.email"
+                                disabled>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="name" label="姓名">
+                        <el-input
+                                type="text"
+                                v-model.trim="infoForm.name">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="phoneNumber" label="手机">
+                        <el-input
+                                type="text"
+                                v-model.trim="infoForm.phoneNumber">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="QQ" label="QQ">
+                        <el-input
+                                type="text"
+                                v-model.trim="infoForm.QQ"
+                                @keypress.enter.native="submitForm('infoForm')">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitForm('infoForm')">保存修改</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
         <div class="feedback-success" v-if="showFeedbackSuccess">
             <div class="icon-success">
                 <i class="el-icon-circle-check-outline"></i>
@@ -91,7 +99,6 @@
                 return callback()
             };
             return {
-                labelPosition: 'left',
                 showForm: true,
                 showFeedbackSuccess: false,
                 showFeedbackError: false,
@@ -115,17 +122,20 @@
                         {validator: validateQQ, trigger: 'blur'}
                     ],
                 },
+                Loading: true,
             };
         },
         mounted() {
+            this.Loading = true;
             api.getUserInfo().then(data => {
                 if (data.error) {
                     this.$message.error({showClose: true, message: data.error});
                 } else {
-                    this.infoForm.email = data.email
-                    this.infoForm.name = data.username
-                    this.infoForm.phoneNumber = data.phone
-                    this.infoForm.QQ = data.qq
+                    this.infoForm.email = data.email;
+                    this.infoForm.name = data.username;
+                    this.infoForm.phoneNumber = data.phone;
+                    this.infoForm.QQ = data.qq;
+                    this.Loading = false;
                 }
             })
         },
@@ -196,14 +206,10 @@
 
 <style lang="stylus">
     .user-info-wrap {
-        margin-top 50px
-        height 100%
         width 100%
 
         .el-form {
-            width 60%
-            height 100%
-            margin-left 60px
+            width 100%
 
             .el-form-item {
 

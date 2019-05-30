@@ -1,31 +1,37 @@
 <template>
     <div class="user-password-wrap">
-        <el-form class="user-password-form"
-                 :model="passwords"
-                 :rules="rules"
-                 ref="passwords"
-                 v-if="showForm"
-                 label-position="left"
-                 label-width="100px">
-            <el-form-item prop="firstPassword" label="新密码">
-                <el-input
-                        type="text"
-                        v-model.trim="passwords.firstPassword"
-                        placeholder="密码不能为纯数字且须大于8位">
-                </el-input>
-            </el-form-item>
-            <el-form-item prop="secondPassword" label="确认新密码">
-                <el-input
-                        type="password"
-                        v-model.trim="passwords.secondPassword"
-                        placeholder="密码不能为纯数字且须大于8位"
-                        @keypress.enter.native="submitForm('passwords')">
-                </el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submitForm('passwords')">提交</el-button>
-            </el-form-item>
-        </el-form>
+        <el-row>
+            <el-col :lg="{span: 18}"
+                    :sm="{span: 20}"
+                    :xs="{span: 24}">
+                <el-form class="user-password-form"
+                         :model="passwords"
+                         :rules="rules"
+                         ref="passwords"
+                         v-if="showForm"
+                         label-position="left"
+                         label-width="100px">
+                    <el-form-item prop="firstPassword" label="新密码">
+                        <el-input
+                                type="text"
+                                v-model.trim="passwords.firstPassword"
+                                placeholder="密码不能为纯数字且须大于8位">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item prop="secondPassword" label="确认新密码">
+                        <el-input
+                                type="password"
+                                v-model.trim="passwords.secondPassword"
+                                placeholder="密码不能为纯数字且须大于8位"
+                                @keypress.enter.native="submitForm('passwords')">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitForm('passwords')">提交</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
 
         <div class="feedback-success" v-if="showFeedbackSuccess">
             <div class="icon-success">
@@ -159,14 +165,11 @@
 
 <style lang="stylus">
     .user-password-wrap {
-        margin-top 50px
-        height 100%
         width 100%
 
         .user-password-form {
-            width 60%
+            width 100%
             height 100%
-            margin-left 60px
 
             .el-form-item {
 

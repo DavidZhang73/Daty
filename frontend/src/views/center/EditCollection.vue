@@ -1,5 +1,5 @@
 <template>
-    <div class="EditCollection-wrap">
+    <div class="editCollection-wrap">
         <el-row
                 v-loading="false"
                 element-loading-text="拼命加载中"
@@ -9,7 +9,7 @@
                     :sm="{span: 20}"
                     :xs="{span: 24}">
                 <el-form
-                        class="EditCollection-form"
+                        class="editCollection-form"
                         :model="collectionForm"
                         ref="collectionForm"
                         label-position="left"
@@ -57,16 +57,30 @@
                                 drag
                                 :action="action"
                                 :before-upload="beforeUploadCheck"
-                                :before-remove="beforeRemove"
                                 :on-error="uploadErr"
                                 :on-remove="uploadRemove"
                                 :on-success="uploadSuc"
+                                :before-remove="beforeRemove"
                                 :file-list="fileList"
                                 :limit="1">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                            <div class="el-upload__tip" slot="tip">文件大小不得超过10MB</div>
+                            <div class="el-upload__tip" slot="tip">文件大小不得超过10MB,每个文件集只能存在一个模板文件,请删除原文件后再上传</div>
                         </el-upload>
+                    </el-form-item>
+                    <el-form-item>
+                        <div class="btnGroup">
+                            <el-button
+                                    type="primary"
+                                    class="submitBtn"
+                                    @click="submitCollectionForm('collectionForm')">提交
+                            </el-button>
+                            <el-button
+                                    type="danger"
+                                    class="deleteBtn"
+                                    @click="deleteCollectionForm">删除
+                            </el-button>
+                        </div>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -79,6 +93,32 @@
     export default {
         name: "EditCollection",
         data() {
+            var validateName = (rule, value, callback) => {
+                if (!value) {
+                    return callback(new Error('文件集名称不可为空'))
+                } else if (value.length > 128) {
+                    return callback(new Error('文件集名称应该小于128个字符'))
+                }
+                return callback()
+            };
+            var validateFileRequire = (rule, value, callback) => {
+                if (value.length > 300) {
+                    return callback(new Error('文件要求应该小于300个字符'))
+                }
+                return callback()
+            };
+            var validateUserGroups = (rule, value, callback) => {
+                if (value.length === 0) {
+                    return callback(new Error('用户组不能为空'))
+                }
+                return callback()
+            };
+            var validateTime = (rule, value, callback) => {
+                if (value.length === 0) {
+                    return callback(new Error('起止日期不可为空'))
+                }
+                return callback()
+            };
             return {
                 formLoading: true,
                 collectionForm: {
@@ -91,7 +131,20 @@
                     userGroup: [1, 4],
                     URL: '',
                 },
-                collectionFormRules: {},
+                collectionFormRules: {
+                    name: [
+                        {validator: validateName, trigger: 'blur'}
+                    ],
+                    fileRequire: [
+                        {validator: validateFileRequire, trigger: 'blur'}
+                    ],
+                    userGroup: [
+                        {validator: validateUserGroups, trigger: 'blur'}
+                    ],
+                    time: [
+                        {validator: validateTime, trigger: 'blur'}
+                    ]
+                },
                 timeList: [],
                 fileList: [
                     {
@@ -148,6 +201,7 @@
             }
         },
         mounted() {
+            //DateTimePickerData Pre-Load
             let timeBeginFormatYY = this.collectionForm.timeBegin.substring(0, 4);
             let timeBeginFormatMM = this.collectionForm.timeBegin.substring(5, 7);
             let timeBeginFormatDD = this.collectionForm.timeBegin.substring(8, 10);
@@ -164,45 +218,93 @@
 
             this.timeList.push(new Date(timeBeginFormatYY, timeBeginFormatMM, timeBeginFormatDD, timeBeginFormatHH, timeBeginFormatMin, timeBeginFormatSS));
             this.timeList.push(new Date(timeEndFormatYY, timeEndFormatMM, timeEndFormatDD, timeEndFormatHH, timeEndFormatMin, timeEndFormatSS));
+            this.collectionForm.time.push(JSON.parse(JSON.stringify(this.collectionForm.timeBegin)));
+            this.collectionForm.time.push(JSON.parse(JSON.stringify(this.collectionForm.timeEnd)));
         },
         methods: {
             transferHandleChange() {
                 //TODO
             },
             beforeUploadCheck(file) {
-                const isLt10M = file.size / 1024 / 1024 < 10;
+                let isLt10M = file.size / 1024 / 1024 < 10;
                 if (!isLt10M) {
                     this.$message.error('上传失败，文件大小超过10MB !');
                 }
-                return isLt10M
+                return isLt10M;
             },
             uploadErr() {
                 this.$message.error('上传失败，请尝试重新上传 !');
             },
             uploadRemove() {
-                this.fileList.length = 0;
+                this.fileList.pop();
+                //TODO
             },
             uploadSuc(response, file) {
-                console.log(file);
-                let fileNameMap = new Map();
-                let fileName = fileNameMap.set('name', file.name);
-                let fileUIDMap = new Map();
-                let fileUID = fileUIDMap.set('uid', file.uid);
                 this.collectionForm.fileUUID = JSON.parse(JSON.stringify(file.uid));
+                let fileObj = {};
+                fileObj.name = file.name;
+                fileObj.uid = file.uid;
+                this.fileList.push(fileObj);
+                console.log(this.fileList);
             },
             beforeRemove(file) {
                 return this.$confirm(`确定移除 ${file.name}？`);
             },
+            submitCollectionForm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        console.log('submit');
+                        //TODO
+                    } else return false;
+                })
+            },
+            deleteCollectionForm() {
+                this.$confirm('此操作将永久删除该文件集, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    //api
+                    //TODO
+                    this.Loading = false;
+                    this.$router.push({name: 'collectionList'});
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            }
         },
         watch: {
-            fileList(newVal) {
-                console.log("newVal: ");
-                console.log(newVal);
+            timeList(newVal) {
+                this.collectionForm.time = JSON.parse(JSON.stringify(newVal));
+                this.collectionForm.timeBegin = JSON.parse(JSON.stringify(newVal[0]));
+                this.collectionForm.timeEnd = JSON.parse(JSON.stringify(newVal[1]));
             }
         }
     }
 </script>
 
 <style lang="stylus">
+    .editCollection-wrap {
+        width 100%
 
+        .editCollection-form {
+            width 100%
+
+            .el-form-item {
+                width 100%
+
+                .btnGroup {
+                    float right
+                    right 0
+                }
+            }
+        }
+    }
 </style>
