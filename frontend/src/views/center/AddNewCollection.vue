@@ -1,9 +1,13 @@
 <template>
     <div class="addNewCollection-wrap">
-        <el-row>
+        <el-row v-loading="formLoading"
+                element-loading-text="拼命加载中"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(255, 255, 255, 1)">
             <el-col :lg="{span: 18}"
                     :sm="{span: 20}"
-                    :xs="{span: 24}">
+                    :xs="{span: 24}"
+                    style="text-align: left">
                 <el-form class="addNewCollection-form"
                          :model="collectionForm"
                          ref="collectionForm"
@@ -22,11 +26,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="用户组" prop="userGroup">
-                        <div style="text-align: left"
-                             v-loading="formLoading"
-                             element-loading-text="正在读取用户组列表"
-                             element-loading-spinner="el-icon-loading"
-                             element-loading-background="rgba(255, 255, 255, 1)">
+                        <div>
                             <el-transfer
                                     style="text-align: left; display: inline-block"
                                     v-model="collectionForm.userGroup"
@@ -34,7 +34,6 @@
                                     :titles="['已有用户组', '已选中用户组']"
                                     :button-texts="['删除', '添加']"
                                     :format="{noChecked: '${total}',hasChecked: '${checked}/${total}'}"
-                                    @change="transferHandleChange"
                                     :data="userGroups">
                             </el-transfer>
                         </div>
@@ -58,7 +57,9 @@
                                 :before-upload="beforeUploadCheck"
                                 :on-error="uploadErr"
                                 :on-remove="uploadRemove"
-                                :on-success="uploadSuc">
+                                :on-success="uploadSuc"
+                                :headers="headers"
+                                :limit="1">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                             <div class="el-upload__tip" slot="tip">文件大小不得超过10MB</div>
@@ -110,14 +111,14 @@
                 return callback()
             };
             return {
-                formLoading: false,
+                formLoading: true,
                 collectionForm: {
                     name: '',
                     fileRequire: '',
                     time: [],
                     timeBegin: '',
                     timeEnd: '',
-                    fileUUID: '',
+                    fileId: '',
                     userGroup: [],
                 },
                 timeList: [],
@@ -135,24 +136,7 @@
                         {validator: validateTime, trigger: 'blur'}
                     ]
                 },
-                userGroups: [
-                    {
-                        key: 1,
-                        label: 'aaa'
-                    },
-                    {
-                        key: 2,
-                        label: 'bbb'
-                    },
-                    {
-                        key: 3,
-                        label: 'ccc'
-                    },
-                    {
-                        key: 4,
-                        label: 'ddd'
-                    }
-                ],
+                userGroups: [],
                 pickerOptions: {
                     shortcuts: [{
                         text: '最近一周',
@@ -180,7 +164,8 @@
                         }
                     }]
                 },
-                action: 'https://jsonplaceholder.typicode.com/posts/'
+                action: '/api/file/',
+                headers: {},
             }
         },
         watch: {
@@ -188,22 +173,31 @@
                 this.collectionForm.time = JSON.parse(JSON.stringify(newVal));
                 this.collectionForm.timeBegin = JSON.parse(JSON.stringify(newVal[0]));
                 this.collectionForm.timeEnd = JSON.parse(JSON.stringify(newVal[1]));
-                console.log(this.collectionForm.timeBegin);
             }
         },
+        mounted() {
+            this.getOrUpdateGroupInfo();
+            this.getHeaders();
+        },
         methods: {
+            getHeaders() {
+                this.headers['X-CSRFToken'] = this.getCookie('csrftoken');
+                this.headers['credentials'] = 'include';
+            },
             getOrUpdateGroupInfo() {
                 this.formLoading = true;
                 api.getOrUpdateAllUserGroups().then(data => {
-                    //TODO
+                    for (var i = 0; i < data.results.length; i++) {
+                        let temp = {};
+                        temp.key = data.results[i].id;
+                        temp.label = data.results[i].name;
+                        this.userGroups.push(temp);
+                    }
                     this.formLoading = false;
                 })
             },
-            transferHandleChange() {
-                console.log(this.collectionForm.userGroup);
-                //TODO
-            },
             beforeUploadCheck(file) {
+                console.log(this.headers);
                 const isLt10M = file.size / 1024 / 1024 < 10;
                 if (!isLt10M) {
                     this.$message.error('上传失败，文件大小超过10MB !');
@@ -212,27 +206,52 @@
             },
             uploadErr(err, file) {
                 this.$message.error('上传失败，请尝试重新上传 !');
-                console.log(err);
-                console.log(file.uid);
-                //TODO
             },
             uploadRemove(file) {
                 console.log(file);
                 //TODO
             },
             uploadSuc(response, file) {
-                this.collectionForm.fileUUID = JSON.parse(JSON.stringify(file.uid));
                 console.log(response);
-                //TODO
+                this.collectionForm.fileId = response.id;
             },
             submitCollectionForm(formName) {
-                console.log(formName);
-                console.log(this.collectionForm);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        //TODO
+                        this.formLoading = true;
+                        api.updateCollection(
+                            this.$store.state.user.id,
+                            this.collectionForm.name,
+                            this.collectionForm.fileRequire,
+                            this.collectionForm.timeBegin,
+                            this.collectionForm.timeEnd,
+                            this.collectionForm.fileId,
+                            this.collectionForm.userGroup
+                        ).then(data => {
+                            if (data.error) {
+                                this.formLoading = false;
+                                this.$message.error({showClose: true, message: data.error});
+                            } else {
+                                this.formLoading = false;
+                                this.$router.push({name: 'collectionList'});
+                            }
+                        })
                     } else return false;
                 })
+            },
+            getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
             }
         }
     }

@@ -17,6 +17,7 @@ import Center from './views/center/Center'
 import CollectionList from './views/center/CollectionList'
 import AddNewCollection from './views/center/AddNewCollection'
 import EditCollection from './views/center/EditCollection'
+import FileUploadAndDownload from './views/center/FileUploadAndDownload'
 import GroupList from './views/center/GroupList'
 import UserInfo from './views/center/UserInfo'
 import UserPassword from './views/center/UserPassword'
@@ -100,6 +101,12 @@ export default new Router({
                     path: 'editCollection/:id',
                     name: 'editCollection',
                     component: EditCollection,
+                    props: true
+                },
+                {
+                    path: 'fileUploadAndDownload/:id',
+                    name: 'fileUploadAndDownload',
+                    component: FileUploadAndDownload,
                     props: true
                 },
                 {

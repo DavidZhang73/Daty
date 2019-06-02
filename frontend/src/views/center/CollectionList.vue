@@ -47,8 +47,7 @@
             </el-row>
 
             <el-table :data="tableData"
-                      @sort-change="sortChange"
-                      v-loading="false"
+                      v-loading="tableLoading"
                       element-loading-text="拼命加载中"
                       element-loading-spinner="el-icon-loading"
                       element-loading-background="rgba(255, 255, 255, 1)">
@@ -71,35 +70,27 @@
                         prop="creator"
                         align="center">
                     <template slot-scope="scope">
-                        {{scope.row.creator}}
+                        {{scope.row.creator.username}}
                     </template>
                 </el-table-column>
                 <el-table-column
-                        label="类别"
-                        prop="type"
-                        align="center">
-                    <template slot-scope="scope">
-                        {{scope.row.type | formatterType}}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                        label="创建日期"
-                        prop="created_datetime"
+                        label="开始日期"
+                        prop="start_datetime"
                         align="center">
                     <template slot-scope="scope">
                         <i class="el-icon-time"></i>
                         <span>
-                        {{ scope.row.created_datetime}}</span>
+                        {{ scope.row.start_datetime}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
                         label="截至日期"
-                        prop="ending_datetime"
+                        prop="end_datetime"
                         align="center">
                     <template slot-scope="scope">
                         <i class="el-icon-time"></i>
                         <span>
-                        {{ scope.row.ending_datetime}}</span>
+                        {{ scope.row.end_datetime}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -111,7 +102,7 @@
                                 type="info"
                                 size="mini"
                                 @click="handleEdit(scope.$index, scope.row)"
-                                v-if="scope.row.id === $store.state.user.id">
+                                v-if="scope.row.creator.id === $store.state.user.id">
                             编辑
                         </el-button>
                         <el-button
@@ -119,7 +110,7 @@
                                 type="primary"
                                 size="mini"
                                 @click="handleSubFile(scope.$index, scope.row)">
-                            提交
+                            提交/下载
                         </el-button>
                     </template>
                 </el-table-column>
@@ -157,39 +148,19 @@
                 options: [
                     {
                         label: '发布时间升序',
-                        value: 'ascending'
+                        value: 'create_datetime'
                     },
                     {
                         label: '发布时间倒序',
-                        value: 'descending'
+                        value: '-create_datetime'
                     }
                 ],
-                tableData: [
-                    {
-                        id: 1,
-                        name: 'test-1',
-                        creator: 'egg',
-                        type: 'NONEEDLOGIN',
-                        created_datetime: '2019',
-                        ending_datetime: '2020'
-                    },
-                    {
-                        id: 3,
-                        name: 'admin-test',
-                        creator: 'daty',
-                        type: 'NONEEDLOGIN',
-                        created_datetime: '2019',
-                        ending_datetime: '2020',
-                    }
-                ],
+                tableData: [],
                 tableLoading: true,
                 count: 1,
             }
         },
         mounted() {
-            api.getCollectionListOrder().then(data => {
-                this.options = data;
-            });
             this.getOrUpdateCollectionList();
         },
         methods: {
@@ -204,21 +175,11 @@
             clearSearch() {
                 this.params.search = '';
             },
-            sortChange(col) {
-                //TODO
-            },
             handleEdit(index, row) {
                 this.$router.push({name: 'editCollection', params: {id: row.id}});
             },
             handleSubFile(index, row) {
-                //TODO
-            }
-        },
-        filters: {
-            formatterType(value) {
-                if (value === 'NONEEDLOGIN') return '不需要登陆';
-                else if (value === 'ALREADYSIGNIN') return '需要登陆已注册';
-                else return '需要登陆未注册';
+                this.$router.push({name: 'fileUploadAndDownload', params: {id: row.id}});
             }
         }
     }

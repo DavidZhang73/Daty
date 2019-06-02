@@ -29,6 +29,8 @@
                 this.title = '修改密码';
             } else if (this.$route.name === 'addNewCollection') {
                 this.title = '新增文件集';
+            } else if (this.$route.name === 'fileUploadAndDownload') {
+                this.title = '上传/下载文件';
             } else {
                 this.title = '未知页';
             }
@@ -51,6 +53,8 @@
                     this.title = '文件集列表';
                 } else if (newVal.name === 'addNewCollection') {
                     this.title = '新增文件集';
+                } else if (newVal.name === 'fileUploadAndDownload') {
+                    this.title = '上传/下载文件';
                 } else {
                     this.title = '未知页';
                 }

@@ -1,8 +1,7 @@
 from rest_framework import serializers
 
 from user.serializers import UserSerializer
-from usergroup.serializers import UserGroupSerializer
-from utils.serializers import UploadFileDetailSerializer
+from utils.serializers import UploadFileSerializer
 from . import models
 
 
@@ -16,9 +15,8 @@ class CollectionSerializer(serializers.ModelSerializer):
 
 
 class CollectionDetailSerializer(serializers.ModelSerializer):
-    usergroup = UserGroupSerializer(many=True)
-    template_file = UploadFileDetailSerializer()
     creator = UserSerializer()
+    template_file = UploadFileSerializer()
 
     class Meta:
         model = models.Collection
