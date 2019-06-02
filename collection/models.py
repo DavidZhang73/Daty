@@ -14,7 +14,7 @@ class Collection(models.Model):
     usergroup = models.ManyToManyField(verbose_name='用户组', to=UserGroup)
     start_datetime = models.DateTimeField('开始日期时间')
     end_datetime = models.DateTimeField('结束日期时间')
-    template_file = models.ForeignKey(verbose_name='模板文件', to=UploadFile, on_delete=models.CASCADE)
+    template_file = models.ForeignKey(verbose_name='模板文件', to=UploadFile, on_delete=models.CASCADE, null=True)
     create_datetime = models.DateTimeField('创建日期时间', auto_now_add=True)
     creator = models.ForeignKey(verbose_name='创建人', to=User, on_delete=models.CASCADE)
 

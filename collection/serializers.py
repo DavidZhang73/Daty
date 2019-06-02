@@ -10,12 +10,15 @@ class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Collection
         fields = '__all__'
+        kwargs = {
+            'creator': {'read_only': True}
+        }
 
 
 class CollectionDetailSerializer(serializers.ModelSerializer):
     usergroup = UserGroupSerializer(many=True)
     template_file = UploadFileDetailSerializer()
-    creator = UserSerializer
+    creator = UserSerializer()
 
     class Meta:
         model = models.Collection

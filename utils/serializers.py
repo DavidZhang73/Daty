@@ -7,7 +7,7 @@ from . import models
 class UploadFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UploadFile
-        field = '__all__'
+        fieldss = '__all__'
 
 
 class UploadFileDetailSerializer(serializers.ModelSerializer):
@@ -15,4 +15,4 @@ class UploadFileDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.UploadFile
-        field = '__all__'
+        fields = '__all__'

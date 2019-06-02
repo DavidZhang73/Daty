@@ -61,11 +61,11 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
-    'DATETIME_INPUT_FORMATS': '%Y-%m-%d %H:%M:%S',
+    'DATETIME_INPUT_FORMATS': ['%Y-%m-%d %H:%M:%S'],
     'DATE_FORMAT': '%Y-%m-%d',
-    'DATE_INPUT_FORMATS': '%Y-%m-%d',
+    'DATE_INPUT_FORMATS': ['%Y-%m-%d'],
     'TIME_FORMAT': '%H:%M:%S',
-    'TIME_INPUT_FORMATS': '%H:%M:%S'
+    'TIME_INPUT_FORMATS': ['%H:%M:%S']
 }
 
 ROOT_URLCONF = 'daty.urls'

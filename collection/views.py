@@ -1,12 +1,12 @@
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.filters import SearchFilter, OrderingFilter
-from django.shortcuts import get_object_or_404
+
 from . import models
 from . import serializers
 
 
-class CollectionAPIView(generics.ListCreateAPIView):
+class CollectionAPI(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = [
@@ -28,8 +28,7 @@ class CollectionAPIView(generics.ListCreateAPIView):
             creator=self.request.user
         )
         for usergroup in data.get('usergroup'):
-            ug = get_object_or_404(models.UserGroup, id=usergroup)
-            collection.usergroup.add(ug)
+            collection.usergroup.add(usergroup)
 
     def get_queryset(self):
         return models.Collection.objects.filter(creator=self.request.user)
@@ -39,3 +38,12 @@ class CollectionAPIView(generics.ListCreateAPIView):
             return serializers.CollectionSerializer
         else:
             return serializers.CollectionDetailSerializer
+
+
+class CollectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    lookup_field = 'pk'
+    serializer_class = serializers.CollectionSerializer
+
+    def get_queryset(self):
+        return models.Collection.objects.filter(creator=self.request.user)
