@@ -54,9 +54,9 @@
                                 class="upload"
                                 drag
                                 :action="action"
+                                :headers="headers"
                                 :before-upload="beforeUploadCheck"
                                 :on-error="uploadErr"
-                                :on-remove="uploadRemove"
                                 :on-success="uploadSuc"
                                 :before-remove="beforeRemove"
                                 :file-list="fileList"
@@ -165,14 +165,21 @@
                         }
                     }]
                 },
-                action: 'https://jsonplaceholder.typicode.com/posts/',
+                action: '/api/file/',
+                headers: {},
             }
         },
         mounted() {
             //api
             this.getCollectionInfo();
+            //getHeaders
+            this.getHeaders();
         },
         methods: {
+            getHeaders() {
+                this.headers['X-CSRFToken'] = this.getCookie('csrftoken');
+                this.headers['credentials'] = 'include';
+            },
             getCollectionInfo() {
                 this.formLoading = true;
                 api.getOrUpdateAllUserGroups().then(data => {
@@ -183,13 +190,17 @@
                         this.userGroups.push(temp);
                     }
                 });
-                api.getCollectionListById(this.$route.params.id).then(data => {
+                api.getCollectionById(this.$route.params.id).then(data => {
                     this.collectionForm = data;
+                    this.collectionForm.template_file = data.template_file.id;
                     //Time
-                    let timeBegin = new Date(data.start_datetime);
-                    let timeEnd = new Date(data.end_datetime);
-                    this.timeList.push(timeBegin);
-                    this.timeList.push(timeEnd);
+                    this.timeList.push(this.collectionForm.start_datetime);
+                    this.timeList.push(this.collectionForm.end_datetime);
+                    //File
+                    let file = {};
+                    file['name'] = data.template_file.name;
+                    file['url'] = data.file;
+                    this.fileList.push(file);
                     this.formLoading = false;
                 });
             },
@@ -203,22 +214,14 @@
             uploadErr() {
                 this.$message.error('上传失败，请尝试重新上传 !');
             },
-            uploadRemove() {
-                this.fileList.pop();
-                //TODO
-            },
             uploadSuc(response, file) {
-                this.collectionForm.template_file = JSON.parse(JSON.stringify(file.uid));
-                let fileObj = {};
-                fileObj.name = file.name;
-                fileObj.uid = file.uid;
-                this.fileList.push(fileObj);
-                console.log(this.fileList);
+                this.collectionForm.template_file = response.id;
             },
             beforeRemove(file) {
                 return this.$confirm(`确定移除 ${file.name}？`);
             },
             submitCollectionForm(formName) {
+                // console.log(this.collectionForm);
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.formLoading = true;
@@ -264,6 +267,20 @@
                         message: '已取消删除'
                     });
                 });
+            },
+            getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
             }
         },
         watch: {

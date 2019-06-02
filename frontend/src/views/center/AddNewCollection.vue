@@ -56,13 +56,12 @@
                                 :action="action"
                                 :before-upload="beforeUploadCheck"
                                 :on-error="uploadErr"
-                                :on-remove="uploadRemove"
                                 :on-success="uploadSuc"
                                 :headers="headers"
                                 :limit="1">
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                            <div class="el-upload__tip" slot="tip">文件大小不得超过10MB</div>
+                            <div class="el-upload__tip" slot="tip">文文件大小不得超过10MB,每个文件集只能存在一个模板文件,请删除原文件后再上传</div>
                         </el-upload>
                     </el-form-item>
                     <el-form-item>
@@ -197,7 +196,6 @@
                 })
             },
             beforeUploadCheck(file) {
-                console.log(this.headers);
                 const isLt10M = file.size / 1024 / 1024 < 10;
                 if (!isLt10M) {
                     this.$message.error('上传失败，文件大小超过10MB !');
@@ -207,12 +205,7 @@
             uploadErr(err, file) {
                 this.$message.error('上传失败，请尝试重新上传 !');
             },
-            uploadRemove(file) {
-                console.log(file);
-                //TODO
-            },
             uploadSuc(response, file) {
-                console.log(response);
                 this.collectionForm.fileId = response.id;
             },
             submitCollectionForm(formName) {

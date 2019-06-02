@@ -115,7 +115,7 @@ export default {
     },
 
     //Center.editCollection
-    getCollectionListById(id) {
+    getCollectionById(id) {
         return fetchAPI('/api/collection/' + id + '/', 'get', null);
     },
 
