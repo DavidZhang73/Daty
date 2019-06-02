@@ -93,14 +93,8 @@ export default {
     },
 
     //Center.CollectionList
-    getCollectionListOrder() {
-        //get
-        //TODO
-    },
-
     getCollectionList(params) {
-        //get
-        //TODO
+        return fetchAPI('/api/collection/','get',null,params);
     },
 
     //Center.addNewCollection

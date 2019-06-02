@@ -265,6 +265,7 @@
                     type: 'warning'
                 }).then(() => {
                     //api
+                    console.log('del');
                     //TODO
                     this.Loading = false;
                     this.$router.push({name: 'collectionList'});

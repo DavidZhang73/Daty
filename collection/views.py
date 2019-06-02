@@ -13,7 +13,7 @@ class CollectionAPI(generics.ListCreateAPIView):
         'name'
     ]
     ordering_fields = [
-        'created_datetime'
+        'create_datetime'
     ]
 
     def perform_create(self, serializer):
@@ -31,7 +31,7 @@ class CollectionAPI(generics.ListCreateAPIView):
             collection.usergroup.add(usergroup)
 
     def get_queryset(self):
-        return models.Collection.objects.filter(creator=self.request.user)
+        return models.Collection.objects.filter(creator=self.request.user).order_by('create_datetime')
 
     def get_serializer_class(self):
         if self.request.stream and self.request.stream.method == 'POST':
@@ -46,4 +46,4 @@ class CollectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.CollectionSerializer
 
     def get_queryset(self):
-        return models.Collection.objects.filter(creator=self.request.user)
+        return models.Collection.objects.filter(creator=self.request.user).order_by('create_datetime')
