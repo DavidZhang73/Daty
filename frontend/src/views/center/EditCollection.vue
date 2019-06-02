@@ -1,7 +1,6 @@
 <template>
     <div class="editCollection-wrap">
-        <el-row
-                v-loading="false"
+        <el-row v-loading="formLoading"
                 element-loading-text="拼命加载中"
                 element-loading-spinner="el-icon-loading"
                 element-loading-background="rgba(255, 255, 255, 1)">
@@ -23,24 +22,23 @@
                         <el-input type="textarea"
                                   :autosize="{ minRows: 3, maxRows: 6}"
                                   placeholder="请输入文件要求"
-                                  v-model.trim="collectionForm.fileRequire">
+                                  v-model.trim="collectionForm.description">
                         </el-input>
                     </el-form-item>
-                    <el-form-item label="用户组" prop="userGroup">
+                    <el-form-item label="用户组" prop="usergroup">
                         <div style="text-align: left">
                             <el-transfer
                                     style="text-align: left; display: inline-block"
-                                    v-model="collectionForm.userGroup"
+                                    v-model="collectionForm.usergroup"
                                     filterable
                                     :titles="['已有用户组', '已选中用户组']"
                                     :button-texts="['删除', '添加']"
                                     :format="{noChecked: '${total}',hasChecked: '${checked}/${total}'}"
-                                    @change="transferHandleChange"
                                     :data="userGroups">
                             </el-transfer>
                         </div>
                     </el-form-item>
-                    <el-form-item label="提交起止日期" prop="time">
+                    <el-form-item label="提交起止日期" prop="start_datetime">
                         <el-date-picker v-model="timeList"
                                         type="datetimerange"
                                         align="right"
@@ -89,6 +87,7 @@
 </template>
 
 <script>
+    import api from '../../api'
 
     export default {
         name: "EditCollection",
@@ -114,62 +113,31 @@
                 return callback()
             };
             var validateTime = (rule, value, callback) => {
-                if (value.length === 0) {
+                if (!value) {
                     return callback(new Error('起止日期不可为空'))
                 }
                 return callback()
             };
             return {
                 formLoading: true,
-                collectionForm: {
-                    name: 'test',
-                    fileRequire: 'testRe',
-                    time: [],
-                    timeBegin: '2019-04-29 11:49:39',
-                    timeEnd: '2019-05-29 11:49:39',
-                    fileUUID: '',
-                    userGroup: [1, 4],
-                    URL: '',
-                },
+                collectionForm: {},
                 collectionFormRules: {
                     name: [
                         {validator: validateName, trigger: 'blur'}
                     ],
-                    fileRequire: [
+                    description: [
                         {validator: validateFileRequire, trigger: 'blur'}
                     ],
-                    userGroup: [
+                    usergroup: [
                         {validator: validateUserGroups, trigger: 'blur'}
                     ],
-                    time: [
+                    start_datetime: [
                         {validator: validateTime, trigger: 'blur'}
                     ]
                 },
                 timeList: [],
-                fileList: [
-                    {
-                        name: 'test',
-                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                    }
-                ],
-                userGroups: [
-                    {
-                        key: 1,
-                        label: 'aaa'
-                    },
-                    {
-                        key: 2,
-                        label: 'bbb'
-                    },
-                    {
-                        key: 3,
-                        label: 'ccc'
-                    },
-                    {
-                        key: 4,
-                        label: 'ddd'
-                    }
-                ],
+                fileList: [],
+                userGroups: [],
                 pickerOptions: {
                     shortcuts: [{
                         text: '最近一周',
@@ -201,29 +169,29 @@
             }
         },
         mounted() {
-            //DateTimePickerData Pre-Load
-            let timeBeginFormatYY = this.collectionForm.timeBegin.substring(0, 4);
-            let timeBeginFormatMM = this.collectionForm.timeBegin.substring(5, 7);
-            let timeBeginFormatDD = this.collectionForm.timeBegin.substring(8, 10);
-            let timeBeginFormatHH = this.collectionForm.timeBegin.substring(11, 13);
-            let timeBeginFormatMin = this.collectionForm.timeBegin.substring(14, 16);
-            let timeBeginFormatSS = this.collectionForm.timeBegin.substring(17, 19);
-
-            let timeEndFormatYY = this.collectionForm.timeBegin.substring(0, 4);
-            let timeEndFormatMM = this.collectionForm.timeBegin.substring(5, 7);
-            let timeEndFormatDD = this.collectionForm.timeBegin.substring(8, 10);
-            let timeEndFormatHH = this.collectionForm.timeBegin.substring(11, 13);
-            let timeEndFormatMin = this.collectionForm.timeBegin.substring(14, 16);
-            let timeEndFormatSS = this.collectionForm.timeBegin.substring(17, 19);
-
-            this.timeList.push(new Date(timeBeginFormatYY, timeBeginFormatMM, timeBeginFormatDD, timeBeginFormatHH, timeBeginFormatMin, timeBeginFormatSS));
-            this.timeList.push(new Date(timeEndFormatYY, timeEndFormatMM, timeEndFormatDD, timeEndFormatHH, timeEndFormatMin, timeEndFormatSS));
-            this.collectionForm.time.push(JSON.parse(JSON.stringify(this.collectionForm.timeBegin)));
-            this.collectionForm.time.push(JSON.parse(JSON.stringify(this.collectionForm.timeEnd)));
+            //api
+            this.getCollectionInfo();
         },
         methods: {
-            transferHandleChange() {
-                //TODO
+            getCollectionInfo() {
+                this.formLoading = true;
+                api.getOrUpdateAllUserGroups().then(data => {
+                    for (var i = 0; i < data.results.length; i++) {
+                        let temp = {};
+                        temp.key = data.results[i].id;
+                        temp.label = data.results[i].name;
+                        this.userGroups.push(temp);
+                    }
+                });
+                api.getCollectionListById(this.$route.params.id).then(data => {
+                    this.collectionForm = data;
+                    //Time
+                    let timeBegin = new Date(data.start_datetime);
+                    let timeEnd = new Date(data.end_datetime);
+                    this.timeList.push(timeBegin);
+                    this.timeList.push(timeEnd);
+                    this.formLoading = false;
+                });
             },
             beforeUploadCheck(file) {
                 let isLt10M = file.size / 1024 / 1024 < 10;
@@ -240,7 +208,7 @@
                 //TODO
             },
             uploadSuc(response, file) {
-                this.collectionForm.fileUUID = JSON.parse(JSON.stringify(file.uid));
+                this.collectionForm.template_file = JSON.parse(JSON.stringify(file.uid));
                 let fileObj = {};
                 fileObj.name = file.name;
                 fileObj.uid = file.uid;
@@ -253,8 +221,25 @@
             submitCollectionForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        console.log('submit');
-                        //TODO
+                        this.formLoading = true;
+                        api.updateCollectionById(
+                            this.$route.params.id,
+                            this.collectionForm.name,
+                            this.$store.state.user.id,
+                            this.collectionForm.description,
+                            this.collectionForm.start_datetime,
+                            this.collectionForm.end_datetime,
+                            this.collectionForm.template_file,
+                            this.collectionForm.usergroup
+                        ).then(data => {
+                            if (data.error) {
+                                this.formLoading = false;
+                                this.$message.error({showClose: true, message: data.error});
+                            } else {
+                                this.formLoading = false;
+                                this.$router.push({name: 'collectionList'});
+                            }
+                        })
                     } else return false;
                 })
             },
@@ -265,9 +250,9 @@
                     type: 'warning'
                 }).then(() => {
                     //api
-                    console.log('del');
-                    //TODO
-                    this.Loading = false;
+                    this.formLoading = true;
+                    api.deleteCollectionById(this.$route.params.id);
+                    this.formLoading = false;
                     this.$router.push({name: 'collectionList'});
                     this.$message({
                         type: 'success',
@@ -283,9 +268,10 @@
         },
         watch: {
             timeList(newVal) {
-                this.collectionForm.time = JSON.parse(JSON.stringify(newVal));
-                this.collectionForm.timeBegin = JSON.parse(JSON.stringify(newVal[0]));
-                this.collectionForm.timeEnd = JSON.parse(JSON.stringify(newVal[1]));
+                if (newVal) {
+                    this.collectionForm.start_datetime = newVal[0];
+                    this.collectionForm.end_datetime = newVal[1];
+                }
             }
         }
     }

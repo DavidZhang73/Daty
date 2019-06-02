@@ -94,19 +94,46 @@ export default {
 
     //Center.CollectionList
     getCollectionList(params) {
-        return fetchAPI('/api/collection/','get',null,params);
+        return fetchAPI('/api/collection/', 'get', null, params);
     },
 
     //Center.addNewCollection
     getOrUpdateAllUserGroups() {
-        //get
-        //TODO
+        return fetchAPI('/api/usergroup/list/', 'get');
     },
 
-    updateCollection(name, fileRequire, timeBegin, timeEnd, fileUUID, userGroup) {
-        //post
-        //TODO
+    updateCollection(creator, name, description, start_datetime, end_datetime, template_file, usergroup) {
+        return fetchAPI('/api/collection/', 'post', {
+            creator,
+            name,
+            description,
+            start_datetime,
+            end_datetime,
+            template_file,
+            usergroup
+        })
     },
+
+    //Center.editCollection
+    getCollectionListById(id) {
+        return fetchAPI('/api/collection/' + id + '/', 'get', null);
+    },
+
+    deleteCollectionById(id) {
+        return fetchAPI('/api/collection/' + id + '/', 'delete');
+    },
+
+    updateCollectionById(id, name, creator, description, start_datetime, end_datetime, template_file, usergroup) {
+        return fetchAPI('/api/collection/' + id + '/', 'put', {
+            name,
+            creator,
+            description,
+            start_datetime,
+            end_datetime,
+            template_file,
+            usergroup
+        })
+    }
 }
 
 

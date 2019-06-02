@@ -43,7 +43,12 @@ class CollectionAPI(generics.ListCreateAPIView):
 class CollectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     lookup_field = 'pk'
-    serializer_class = serializers.CollectionSerializer
 
     def get_queryset(self):
         return models.Collection.objects.filter(creator=self.request.user).order_by('create_datetime')
+
+    def get_serializer_class(self):
+        if self.request.stream and self.request.stream.method == 'PUT':
+            return serializers.CollectionSerializer
+        else:
+            return serializers.CollectionDetailSerializer
