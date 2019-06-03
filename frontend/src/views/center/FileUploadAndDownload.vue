@@ -15,7 +15,18 @@
                 <p class="time">提交开始时间：{{collectionInfo.start_datetime}}</p>
                 <p class="time">提交截至时间：{{collectionInfo.end_datetime}}</p>
                 <el-divider content-position="left">文件要求</el-divider>
-                <p class="require">{{collectionInfo.description}}</p>
+                <p class="require">{{collectionInfo.description || '无'}}</p>
+                <el-divider content-position="left">模板文件</el-divider>
+                <div v-if="template_file" class="template-file">
+                    <span>
+                        <el-button
+                                type="primary" size="mini"
+                                plain>下载
+                        </el-button>
+                    </span>
+                    <span class="file-name">{{template_file.name}}</span>
+                </div>
+                <div v-else class="template-file">无</div>
                 <el-collapse v-model="activeNames">
                     <el-collapse-item v-for="item in items" :name="item.userGroupID">
                         <template slot="title">
@@ -36,10 +47,8 @@
                                 :action="action"
                                 :before-upload="beforeUploadCheck"
                                 :on-error="uploadErr"
-                                :on-remove="uploadRemove"
                                 :on-success="uploadSuc"
                                 :before-remove="beforeRemove"
-                                :file-list="fileList"
                                 :limit="1">
                             <el-popover
                                     placement="top-start"
@@ -56,6 +65,7 @@
                             </el-popover>
                         </el-upload>
                         <el-button
+                                v-if="$store.state.user.id === creator.id"
                                 class="downloadBtn"
                                 size="small"
                                 type="info"
@@ -76,12 +86,15 @@
         name: "fileUploadAndDownload",
         data() {
             return {
+                params: {},
+                headers: {},
                 Loading: true,
-                action: 'https://jsonplaceholder.typicode.com/posts/',
+                action: '/api/file/',
                 collectionInfo: {},
                 creator: {},
+                template_file: {},
                 activeNames: [],
-                fileList: [],
+                fileList: {},
                 items: [
                     {
                         userGroupTitle: 'test-1',
@@ -103,14 +116,26 @@
         },
         mounted() {
             this.getCollectionInfo();
+            this.getHeaders();
         },
         methods: {
+            getHeaders() {
+                this.headers['X-CSRFToken'] = this.getCookie('csrftoken');
+                this.headers['credentials'] = 'include';
+            },
             getCollectionInfo() {
                 this.Loading = true;
                 api.getCollectionById(this.$route.params.id).then(data => {
                     this.collectionInfo = data;
                     this.creator = data.creator;
-                    this.Loading = false;
+                    this.template_file = data.template_file;
+                    this.params['collection_id'] = this.$route.params.id;
+
+                    api.getFileListById(this.params).then(data => {
+                        console.log(data);
+
+                        this.Loading = false;
+                    });
                 });
             },
             beforeUploadCheck(file) {
@@ -123,23 +148,28 @@
             uploadErr() {
                 this.$message.error('上传失败，请尝试重新上传 !');
             },
-            uploadRemove() {
-                this.fileList.pop();
-                //TODO
-            },
             uploadSuc(response, file) {
                 //TODO
-                let fileObj = {};
-                fileObj.name = file.name;
-                fileObj.uid = file.uid;
-                this.fileList.push(fileObj);
-                console.log(this.fileList);
             },
             beforeRemove(file) {
                 return this.$confirm(`确定移除 ${file.name}？`);
             },
             downloadFile() {
                 //TODO
+            },
+            getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
             }
         }
     }
@@ -162,6 +192,14 @@
 
         .require {
             margin 5px 20px 20px 20px
+        }
+
+        .template-file {
+            margin 5px 20px 20px 20px
+
+            .file-name {
+                margin-left 20px
+            }
         }
 
         .el-collapse {

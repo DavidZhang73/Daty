@@ -133,6 +133,11 @@ export default {
             template_file,
             usergroup
         })
+    },
+
+    //Center.FileUploadAndDownload
+    getFileListById(params) {
+        return fetchAPI('/api/collection/file/', 'get', null, params);
     }
 }
 
