@@ -3,6 +3,7 @@ from django.contrib import auth
 from django.contrib.auth.hashers import make_password
 from django.db.models import QuerySet
 from django.shortcuts import HttpResponseRedirect
+from django.template import loader
 from django.views.generic.base import View
 from rest_framework.exceptions import APIException
 from rest_framework.generics import GenericAPIView, CreateAPIView
@@ -95,7 +96,8 @@ class ForgetPasswordAPIView(CreateAPIView):
         send_email(
             subject=f'{settings.EMAIL_SUBJECT_PREFIX} 重置密码',
             message=f'请点击此链接重置密码：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
-            email=user[0].email
+            email=user[0].email,
+            html_message=loader.render_to_string('', {})
         )
 
 
