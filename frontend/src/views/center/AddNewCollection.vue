@@ -186,10 +186,10 @@
             getOrUpdateGroupInfo() {
                 this.formLoading = true;
                 api.getOrUpdateAllUserGroups().then(data => {
-                    for (var i = 0; i < data.results.length; i++) {
+                  for (var i = 0; i < data.length; i++) {
                         let temp = {};
-                        temp.key = data.results[i].id;
-                        temp.label = data.results[i].name;
+                    temp.key = data[i].id
+                    temp.label = data[i].name
                         this.userGroups.push(temp);
                     }
                     this.formLoading = false;

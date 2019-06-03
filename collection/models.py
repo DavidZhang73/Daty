@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 
 from user.models import User
+from usergroup.models import User as UserGroupUser
 from usergroup.models import UserGroup
 from utils.models import UploadFile
 
@@ -21,3 +22,19 @@ class Collection(models.Model):
     class Meta:
         verbose_name = '文件集'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+
+class CollectionFile(models.Model):
+    file = models.ForeignKey(verbose_name='文件', to=UploadFile, on_delete=models.CASCADE, null=True)
+    collection = models.ForeignKey(verbose_name='文件集', to=Collection, on_delete=models.CASCADE)
+    uploader = models.ForeignKey(verbose_name='上传人', to=UserGroupUser, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = '文件集文件'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return f'{self.collection.name}-{self.uploader.name}'

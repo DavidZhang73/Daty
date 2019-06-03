@@ -7,6 +7,10 @@ from . import serializers
 
 
 class CollectionAPI(generics.ListCreateAPIView):
+    """
+    获得文件集列表
+    新建文件集
+    """
     permission_classes = (permissions.IsAuthenticated,)
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = [
@@ -29,6 +33,11 @@ class CollectionAPI(generics.ListCreateAPIView):
         )
         for usergroup in data.get('usergroup'):
             collection.usergroup.add(usergroup)
+            for user in usergroup.users.all():
+                models.CollectionFile.objects.create(
+                    collection=collection,
+                    uploader=user
+                )
 
     def get_queryset(self):
         return models.Collection.objects.filter(creator=self.request.user).order_by('create_datetime')
@@ -41,6 +50,11 @@ class CollectionAPI(generics.ListCreateAPIView):
 
 
 class CollectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    """
+    获得指定文件集
+    更改指定文件集
+    删除指定文件集
+    """
     permission_classes = (permissions.IsAuthenticated,)
     lookup_field = 'pk'
 
@@ -52,3 +66,24 @@ class CollectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
             return serializers.CollectionSerializer
         else:
             return serializers.CollectionDetailSerializer
+
+
+class CollectionFileAPI(generics.ListAPIView):
+    """
+    获得文件集文件列表
+    """
+    serializer_class = serializers.CollectionFileDetailSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        collection_id = self.request.query_params.get('collection_id')
+        return models.CollectionFile.objects.filter(collection_id=collection_id)
+
+
+class CollectionFileUploadAPI(generics.UpdateAPIView):
+    """
+   文件集文件上传
+    """
+    serializer_class = serializers.CollectionFileUploadSerializer
+    queryset = models.CollectionFile.objects.all()
+    lookup_field = 'pk'

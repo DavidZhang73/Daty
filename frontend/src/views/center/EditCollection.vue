@@ -183,22 +183,22 @@
             getCollectionInfo() {
                 this.formLoading = true;
                 api.getOrUpdateAllUserGroups().then(data => {
-                    for (var i = 0; i < data.results.length; i++) {
+                    for (var i = 0; i < data.length; i++) {
                         let temp = {};
-                        temp.key = data.results[i].id;
-                        temp.label = data.results[i].name;
+                        temp.key = data[i].id
+                        temp.label = data[i].name
                         this.userGroups.push(temp);
                     }
                 });
                 api.getCollectionById(this.$route.params.id).then(data => {
                     this.collectionForm = data;
-                    this.collectionForm.template_file = data.template_file.id;
+                    this.collectionForm.template_file = data.template_file ? data.template_file.id : null
                     //Time
                     this.timeList.push(this.collectionForm.start_datetime);
                     this.timeList.push(this.collectionForm.end_datetime);
                     //File
                     let file = {};
-                    file['name'] = data.template_file.name;
+                    file['name'] = data.template_file ? data.template_file.name : null
                     file['url'] = data.file;
                     this.fileList.push(file);
                     this.formLoading = false;
