@@ -27,12 +27,12 @@
                     <span class="file-name">{{template_file.name}}</span>
                 </div>
                 <div v-else class="template-file">无</div>
-                <el-collapse v-model="activeNames">
-                    <el-collapse-item v-for="item in items" :name="item.userGroupID">
+                <el-collapse v-model="activeNames" accordion>
+                    <el-collapse-item v-for="fileInfo in fileList" :name="fileInfo.id">
                         <template slot="title">
-                            {{item.userGroupTitle}}
+                            {{fileInfo.uploader.name}}
                             <el-tag
-                                    v-if="item.url"
+                                    v-if="fileInfo.file"
                                     size="mini"
                                     type="success"
                                     effect="light">已提交
@@ -49,6 +49,7 @@
                                 :on-error="uploadErr"
                                 :on-success="uploadSuc"
                                 :before-remove="beforeRemove"
+                                :headers="headers"
                                 :limit="1">
                             <el-popover
                                     placement="top-start"
@@ -69,11 +70,25 @@
                                 class="downloadBtn"
                                 size="small"
                                 type="info"
-                                @click="downloadFile"
+                                @click="downloadFile(fileInfo.file)"
                                 plain>下载文件
                         </el-button>
                     </el-collapse-item>
                 </el-collapse>
+                <div class="btnGroup">
+                    <el-button
+                            class="downloadAll"
+                            type="primary"
+                            @click="downloadAllFiles">下载全部
+                    </el-button>
+                    <el-button
+                            class="shareCollection"
+                            type="info"
+                            v-clipboard:copy="url"
+                            v-clipboard:success="onCopy"
+                            v-clipboard:error="onError">复制分享链接
+                    </el-button>
+                </div>
             </el-col>
         </el-row>
     </div>
@@ -93,25 +108,9 @@
                 collectionInfo: {},
                 creator: {},
                 template_file: {},
-                activeNames: [],
-                fileList: {},
-                items: [
-                    {
-                        userGroupTitle: 'test-1',
-                        userGroupID: 1,
-                        url: ''
-                    },
-                    {
-                        userGroupTitle: 'test-2',
-                        userGroupID: 2,
-                        url: '123'
-                    },
-                    {
-                        userGroupTitle: 'test-3',
-                        userGroupID: 3,
-                        url: '123'
-                    }
-                ]
+                activeNames: '',
+                fileList: [],
+                url: window.location.href,
             }
         },
         mounted() {
@@ -126,6 +125,7 @@
             getCollectionInfo() {
                 this.Loading = true;
                 api.getCollectionById(this.$route.params.id).then(data => {
+
                     this.collectionInfo = data;
                     this.creator = data.creator;
                     this.template_file = data.template_file;
@@ -133,7 +133,7 @@
 
                     api.getFileListById(this.params).then(data => {
                         console.log(data);
-
+                        this.fileList = data;
                         this.Loading = false;
                     });
                 });
@@ -149,13 +149,46 @@
                 this.$message.error('上传失败，请尝试重新上传 !');
             },
             uploadSuc(response, file) {
-                //TODO
+                console.log(response);
+                api.uploadFileById(this.activeNames, response.id);
+                this.collectionInfo = {};
+                this.creator = {};
+                this.template_file = {};
+                this.fileList = [];
+                this.getCollectionInfo();
             },
             beforeRemove(file) {
                 return this.$confirm(`确定移除 ${file.name}？`);
             },
-            downloadFile() {
+            downloadFile(file) {
+                let tempFileObj = {};
+                tempFileObj = file;
+                if (tempFileObj) {
+                    window.location.href = tempFileObj.url;
+                } else {
+                    this.$message({
+                        showClose: true,
+                        type: 'error',
+                        message: '该用户没有提交文件'
+                    });
+                }
+            },
+            downloadAllFiles() {
                 //TODO
+            },
+            onCopy() {
+                this.$message({
+                    showClose: true,
+                    type: 'success',
+                    message: '链接已复制到剪切板'
+                });
+            },
+            onError() {
+                this.$message({
+                    showClose: true,
+                    type: 'error',
+                    message: '复制失败，请重试'
+                });
             },
             getCookie(name) {
                 var cookieValue = null;
@@ -220,6 +253,12 @@
                     margin 10px 10px 0 10px
                 }
             }
+        }
+
+        .btnGroup {
+            margin-top 10px
+            float right
+            right 0
         }
     }
 </style>

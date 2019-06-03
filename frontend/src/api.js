@@ -138,6 +138,12 @@ export default {
     //Center.FileUploadAndDownload
     getFileListById(params) {
         return fetchAPI('/api/collection/file/', 'get', null, params);
+    },
+
+    uploadFileById(fileListId, id) {
+        return fetchAPI('/api/collection/file/' + fileListId + '/', 'put', {
+            id
+        });
     }
 }
 
