@@ -20,8 +20,10 @@
                 <div v-if="template_file" class="template-file">
                     <span>
                         <el-button
-                                type="primary" size="mini"
-                                plain>下载
+                                type="primary"
+                                size="mini"
+                                plain
+                                @click="downloadSingleFile(collectionInfo.template_file)">下载
                         </el-button>
                     </span>
                     <span class="file-name">{{template_file.name}}</span>
@@ -66,16 +68,16 @@
                             </el-popover>
                         </el-upload>
                         <el-button
-                                v-if="$store.state.user.id === creator.id"
+                                v-if="$store.state.user && $store.state.user.id === creator.id"
                                 class="downloadBtn"
                                 size="small"
                                 type="info"
-                                @click="downloadFile(fileInfo.file)"
+                                @click="downloadSingleFile(fileInfo.file)"
                                 plain>下载文件
                         </el-button>
                     </el-collapse-item>
                 </el-collapse>
-                <div class="btnGroup">
+                <div class="btnGroup" v-if="$store.state.user && $store.state.user.id === creator.id">
                     <el-button
                             class="downloadAll"
                             type="primary"
@@ -125,12 +127,10 @@
             getCollectionInfo() {
                 this.Loading = true;
                 api.getCollectionById(this.$route.params.id).then(data => {
-
                     this.collectionInfo = data;
                     this.creator = data.creator;
                     this.template_file = data.template_file;
                     this.params['collection_id'] = this.$route.params.id;
-
                     api.getFileListById(this.params).then(data => {
                         console.log(data);
                         this.fileList = data;
@@ -149,7 +149,6 @@
                 this.$message.error('上传失败，请尝试重新上传 !');
             },
             uploadSuc(response, file) {
-                console.log(response);
                 api.uploadFileById(this.activeNames, response.id);
                 this.collectionInfo = {};
                 this.creator = {};
@@ -160,11 +159,11 @@
             beforeRemove(file) {
                 return this.$confirm(`确定移除 ${file.name}？`);
             },
-            downloadFile(file) {
+            downloadSingleFile(file) {
                 let tempFileObj = {};
                 tempFileObj = file;
                 if (tempFileObj) {
-                    window.location.href = tempFileObj.url;
+                    window.open(tempFileObj.file);
                 } else {
                     this.$message({
                         showClose: true,
@@ -174,7 +173,7 @@
                 }
             },
             downloadAllFiles() {
-                //TODO
+                window.open('/api/collection/file/all/?collection_id=' + this.$route.params.id);
             },
             onCopy() {
                 this.$message({

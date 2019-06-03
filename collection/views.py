@@ -55,11 +55,10 @@ class CollectionDetailAPI(generics.RetrieveUpdateDestroyAPIView):
     更改指定文件集
     删除指定文件集
     """
-    permission_classes = (permissions.IsAuthenticated,)
     lookup_field = 'pk'
 
     def get_queryset(self):
-        return models.Collection.objects.filter(creator=self.request.user).order_by('create_datetime')
+        return models.Collection.objects.all().order_by('create_datetime')
 
     def get_serializer_class(self):
         if self.request.stream and self.request.stream.method == 'PUT':

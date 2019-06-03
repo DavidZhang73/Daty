@@ -14,5 +14,5 @@ urlpatterns = [
     path('forgetPasswordReset/', views.ForgetPasswordResetAPIView.as_view()),
     path('changePassword/', views.ChangePasswordAPIView.as_view()),
     path('signinActive/<uuid:uuid>', views.SigninActiveUser.as_view()),
-    path('forgetPasswordReset/<uuid:uuid>', views.ForgetPasswordResetAPIView.as_view()),
+    path('forgetPasswordReset/<uuid:uuid>', views.ForgetPasswordReset.as_view()),
 ]
