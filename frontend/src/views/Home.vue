@@ -1,7 +1,7 @@
 <template>
 	<div class="home-wrap">
-		<Background img-name="background.jpg"
-		            :blur="false"></Background>
+<!--		<Background img-name="background.jpg"-->
+<!--		            :blur="false"></Background>-->
 		<div class="home">
 			<img class="logo" src="../assets/home_logo.svg" alt="LOGO">
 			<div class="button-row">
@@ -35,25 +35,20 @@
 
 <style lang="stylus">
 	.home-wrap {
-		height 100%
-		background-size: contain;
-		background-color rgb(248, 250, 251)
+		background-size: contain
 
 		.home {
-			position relative
-			padding-top 200px
+			padding-top 25vh
 			margin 0 auto
-			width 500px
+			width 35vw
 
 			.logo {
-				width 512px
-				height 256px
-				margin-bottom 80px
+				width 100%
 			}
 
 			.button-row {
-				margin 0 auto
-				width 350px
+				margin 5vh auto
+				padding 0 3vw
 
 				button {
 					font-size 16px
@@ -68,6 +63,14 @@
 						clear both
 					}
 				}
+			}
+		}
+	}
+
+	@media (max-width: 1024px) {
+		.home-wrap {
+			.home {
+				width 85vw
 			}
 		}
 	}
