@@ -76,8 +76,9 @@ class SigninAPIView(CreateAPIView):
         url = '/api/user/signinActive/' + str(signin_user_info.id)
         send_email(
             subject=f'{settings.EMAIL_SUBJECT_PREFIX} 注册新账号',
-            message=f'请点击此链接完成注册：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
-            email=email
+            message=None,
+            email=email,
+            html_message=loader.render_to_string('emailSignin.html', {"url": f'{settings.HOST}{url}'})
         )
 
 
@@ -95,9 +96,9 @@ class ForgetPasswordAPIView(CreateAPIView):
         url = '/api/user/forgetPasswordReset/' + str(forgetPassword.id)
         send_email(
             subject=f'{settings.EMAIL_SUBJECT_PREFIX} 重置密码',
-            message=f'请点击此链接重置密码：\n{settings.HOST}{url}\n如果不是您本人的操作，请忽略这条邮件。',
+            message=None,
             email=user[0].email,
-            html_message=loader.render_to_string('', {})
+            html_message=loader.render_to_string('emailForgetPW.html', {"url": f'{settings.HOST}{url}'})
         )
 
 

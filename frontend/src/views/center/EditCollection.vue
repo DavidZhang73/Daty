@@ -187,6 +187,7 @@
                         let temp = {};
                         temp.key = data[i].id
                         temp.label = data[i].name
+                        temp.disabled = true
                         this.userGroups.push(temp);
                     }
                 });

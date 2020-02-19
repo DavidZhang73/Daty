@@ -142,9 +142,9 @@ export default {
 
     uploadFileById(fileListId, id) {
         return fetchAPI('/api/collection/file/' + fileListId + '/', 'put', {
-            id
+            file: id
         });
-    }
+    },
 }
 
 

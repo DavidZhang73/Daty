@@ -3,7 +3,6 @@ import zipfile
 from io import BytesIO
 
 from django.http.response import HttpResponse
-from rest_framework import permissions
 from rest_framework import views
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
@@ -13,7 +12,6 @@ from utils.models import UploadFile
 
 
 class UploadFileAPI(views.APIView):
-    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
         file = request.FILES['file']
@@ -22,8 +20,10 @@ class UploadFileAPI(views.APIView):
         f = UploadFile.objects.create(
             name=filename,
             file=file,
-            uploader=request.user
         )
+        if request.user.is_authenticated:
+            f.uploader = request.user
+            f.save()
         return Response({
             'id': f.id,
             'url': f.get_url()
@@ -42,7 +42,8 @@ class DownloadAllCollectionFileAPI(views.APIView):
             zip = BytesIO()
             with zipfile.ZipFile(zip, 'w', zipfile.ZIP_DEFLATED) as zf:
                 for file in file_list:
-                    zf.writestr(str(file), file)
+                    with open(file.path, 'rb') as f:
+                        zf.writestr(str(file), f.read())
         except Exception as e:
             raise APIException(e)
         return HttpResponse(zip.getvalue(), content_type="application/zip")
